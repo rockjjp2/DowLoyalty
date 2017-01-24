@@ -27,6 +27,7 @@ import com.dowloyalty.service.IRetailerService;
  *
  */
 @Controller
+@RequestMapping("/createproject")
 public class CreateProjectController {
 	@Resource
 	IProvinceService iProvinceService;
@@ -34,30 +35,35 @@ public class CreateProjectController {
 	IPromoterService iPromoterService;
 	@Resource
 	IRetailerService iRetailerService;
-	@RequestMapping("/example")
+	@RequestMapping("")
 	public String one(Model model){
 		List<Province> provinces = iProvinceService.getAllProvince();
 		model.addAttribute("provinces", provinces);
 		return "example";
 	}
+	/**
+	 * 创建活动中，省选项ajax后台
+	 * @param provinceID 省ID
+	 * @param response
+	 */
 	@RequestMapping("/provincesDetail")
 	@ResponseBody
 	public void getMsgByProvinceId(String provinceID,HttpServletResponse response) {
+		PrintWriter printWriter = null;
+		JsonDataBind jsonDataBind = null;
 		try {
 			int provinceId=Integer.valueOf(provinceID);
 			List<Retailer> retailers = iRetailerService.findRetailerByProvinceId(provinceId);
 			List<Promoter> promoters = iPromoterService.findPromoterByProvinceId(provinceId);
-			JsonDataBind jsonDataBind=new JsonDataBind(retailers,promoters);
+			jsonDataBind=new JsonDataBind(retailers,promoters);
 			String jsonString = JSON.toJSONString(jsonDataBind);
-			
-			PrintWriter printWriter=response.getWriter();
+			printWriter=response.getWriter();
 			printWriter.println(jsonString);
+		} catch (NumberFormatException | IOException e) {
+			e.getMessage();
+		} finally {
 			printWriter.flush();
 			printWriter.close();
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 }
