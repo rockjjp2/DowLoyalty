@@ -27,7 +27,7 @@ import com.dowloyalty.service.IRetailerService;
  *
  */
 @Controller
-public class Example {
+public class CreateProjectController {
 	@Resource
 	IProvinceService iProvinceService;
 	@Resource
