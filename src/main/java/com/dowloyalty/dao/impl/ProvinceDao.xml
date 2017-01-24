@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dowloyalty.dao.IProvinceDao">
+	<select id="getAllProvince"  parameterType="int"  resultType="com.dowloyalty.entity.Province">
+		select ID,Name,IsActive from province where IsActive=1
+	</select>
+</mapper>
