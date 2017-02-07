@@ -1,0 +1,66 @@
+﻿/********************气泡子菜单样式********************/
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    margin: 0;
+    padding: 0;
+}
+
+
+ul, ol {
+    list-style: none;
+}
+
+.cui-bubble-layer {
+    background: #fff;
+    border: #bcbcbc 1px solid;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
+    padding-top: 7px;
+    width:130px;
+    box-shadow: 3px 3px 3px #272626;
+    -webkit-box-shadow: 3px 3px 3px #272626;
+    -o-box-shadow: 3px 3px 3px #272626; /* Opera浏览器 */
+    -moz-box-shadow: 3px 3px 3px #272626; /* Firefox浏览器 */
+    filter: progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=0.7660444431189777, M12=-0.6427876096865394, M21=0.6427876096865398, M22=0.7660444431189779); /* IE都不兼容CSS3，所以我们只能通过IE的CSS滤镜来实现 */
+}
+
+    .cui-bubble-layer > li {
+        border:0px solid red;
+        clear:both;
+        width:130px;
+        text-align:center;
+        padding:7px 0px;
+        background-color: #fff;
+        color: #9B9B9B;
+        font-family: 微软雅黑;
+    }
+
+        .cui-bubble-layer > li:hover {
+            background-color: #E00034;
+            color: #fff;
+        }
+
+    .cui-bubble-layer:before {
+        position: absolute;
+        content: "";
+        width: 10px;
+        height: 10px;
+        background: #fff;
+        border-top: #bcbcbc 1px solid;
+        border-left: #bcbcbc 1px solid;
+        top: -6px;
+        left: 50%;
+        margin-left: -5px;
+        z-index: 1;
+        transform: rotate(45deg);
+        -o-transform: rotate(45deg); /* Opera浏览器 */
+        -webkit-transform: rotate(45deg); /* Webkit内核浏览器 */
+        -moz-transform: rotate(45deg); /* Firefox浏览器 */
+        filter: progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=0.7660444431189777, M12=-0.6427876096865394, M21=0.6427876096865398, M22=0.7660444431189779); /* IE都不兼容CSS3，所以我们只能通过IE的CSS滤镜来实现 */
+    }
+
+    .cui-bubble-layer li {
+    }
+

@@ -1,0 +1,15 @@
+﻿/********************礼品配置模块样式********************/
+
+#Add-gift {
+    float: left;
+    padding-left: 13%;
+    padding-top: 10px;
+    color: #B6BF00;
+    font-family: 微软雅黑;
+    font-size: 1em;
+    border: 0px solid red;
+}
+
+a:visited, a:link {
+    color: #B6BF00;
+}

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dowloyalty.dao.ExchangeRecordDao">
+	
+	<insert id="save" parameterType="com.dowloyalty.entity.ExchangeRecord">
+	insert into exchangerecord
+	(
+		RetailerID,GoodsID,
+		Amount,SubmitTime,SendOutTime,
+		CompleteTime,Status,ExchangePoints
+	)
+	values
+	(
+		#{RetailerID},#{GoodsID},
+		#{Amount},#{SubmitTime},#{SendOutTime},
+		#{CompleteTime},#{Status},#{ExchangePoints}
+	)
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from exchangerecord where ID = #{ID}
+	</delete>
+	
+	<update id="update" parameterType="com.dowloyalty.entity.ExchangeRecord">
+	update exchangerecord set
+	RetailerID = #{RetailerID},GoodsID = #{GoodsID},Amount = #{Amount},
+	SubmitTime = #{SubmitTime},SendOutTime = #{SendOutTime},CompleteTime = #{CompleteTime},
+	Status = #{Status},ExchangePoints = #{ExchangePoints}
+	where ID = #{ID}
+	</update>
+	
+	<select id="findAll" resultType="com.dowloyalty.entity.ExchangeRecord">
+	select
+		ID,RetailerID,GoodsID,
+		Amount,SubmitTime,SendOutTime,
+		CompleteTime,Status,ExchangePoints
+	from exchangerecord
+	</select>
+	
+	<select id = "findById" parameterType="int" resultType="com.dowloyalty.entity.ExchangeRecord">
+	select
+		ID,RetailerID,GoodsID,
+		Amount,SubmitTime,SendOutTime,
+		CompleteTime,Status,ExchangePoints
+	from exchangerecord
+	where ID = #{ID}
+	</select>
+</mapper>
+

@@ -26,11 +26,17 @@
 	<!-- 配置视图解析器 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- jsp 路径前缀 -->
-		<property name="prefix" value="/WEB-INF/view/" />
+		
+		<property name="prefix" value="/WEB-INF/view/WeChat/" />
+		
 		<!-- jsp 路径后缀 -->
 		<property name="suffix" value=".jsp"></property>
 	</bean>
-	
+	<!-- 
+		<property name="prefix" value="/WEB-INF/view/" />
+		<property name="prefix" value="/WEB-INF/view/WeChat/" />
+		<property name="prefix" value="/WEB-INF/view/PC/" />
+		 -->
 	<!-- 配置文件解析器 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize">

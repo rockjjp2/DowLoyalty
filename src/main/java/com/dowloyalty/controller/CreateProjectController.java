@@ -39,10 +39,10 @@ public class CreateProjectController {
 	public String one(Model model){
 		List<Province> provinces = iProvinceService.getAllProvince();
 		model.addAttribute("provinces", provinces);
-		return "example";
+		return "gift_Config";
 	}
 	/**
-	 * 创建活动中，省选项ajax后台
+	 * 锟斤拷锟斤拷锟筋动锟叫ｏ拷省选锟斤拷ajax锟斤拷台
 	 * @param provinceID 省ID
 	 * @param response
 	 */
