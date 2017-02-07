@@ -1,6 +1,7 @@
 package com.dowloyalty.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 public class Project implements Serializable {
 	/**
@@ -10,13 +11,13 @@ public class Project implements Serializable {
 	private int id;
 	private String name;
 	private int provinceID;
-	private boolean isActive;
 	private String placardPath;
 	private int assistantID;
-	private String startDate;
-	private String endDate;
+	private Timestamp startDate;
+	private Timestamp endDate;
 	private int adminID;
 	private boolean isVisible;
+	private boolean isActive;
 	
 	public Project() {
 		super();
@@ -24,7 +25,7 @@ public class Project implements Serializable {
 
 
 	public Project(int id, String name, int provinceID, boolean isActive, String placardPath, int assistantID,
-			String startDate, String endDate, int adminID, boolean isVisible) {
+			Timestamp startDate, Timestamp endDate, int adminID, boolean isVisible) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -87,19 +88,19 @@ public class Project implements Serializable {
 		this.assistantID = assistantID;
 	}
 
-	public String getStartDate() {
+	public Timestamp getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(String startDate) {
+	public void setStartDate(Timestamp startDate) {
 		this.startDate = startDate;
 	}
 
-	public String getEndDate() {
+	public Timestamp getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(String endDate) {
+	public void setEndDate(Timestamp endDate) {
 		this.endDate = endDate;
 	}
 

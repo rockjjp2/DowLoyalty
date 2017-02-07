@@ -8,7 +8,7 @@ public class ExchangeShop implements Serializable {
 	 */
 	private static final long serialVersionUID = 8306914937602103819L;
 	private int id;
-	private int provinceID;
+	private int projectID;
 	private int goodsID;
 	private int exchangePoints;
 	private boolean isActive;
@@ -20,7 +20,7 @@ public class ExchangeShop implements Serializable {
 	public ExchangeShop(int id, int provinceID, int goodsID, int exchangePoints, boolean isActive) {
 		super();
 		this.id = id;
-		this.provinceID = provinceID;
+		this.projectID = provinceID;
 		this.goodsID = goodsID;
 		this.exchangePoints = exchangePoints;
 		this.isActive = isActive;
@@ -34,12 +34,12 @@ public class ExchangeShop implements Serializable {
 		this.id = id;
 	}
 
-	public int getProvinceID() {
-		return provinceID;
+	public int getProjectID() {
+		return projectID;
 	}
 
-	public void setProvinceID(int provinceID) {
-		this.provinceID = provinceID;
+	public void setProjectID(int projectID) {
+		this.projectID = projectID;
 	}
 
 	public int getGoodsID() {
@@ -68,8 +68,10 @@ public class ExchangeShop implements Serializable {
 
 	@Override
 	public String toString() {
-		return "ExchangeShop [id=" + id + ", provinceID=" + provinceID + ", goodsID=" + goodsID + ", exchangePoints="
+		return "ExchangeShop [id=" + id + ", projectID=" + projectID + ", goodsID=" + goodsID + ", exchangePoints="
 				+ exchangePoints + ", isActive=" + isActive + "]";
 	}
+
+	
 	
 }

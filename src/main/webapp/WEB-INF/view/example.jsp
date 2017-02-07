@@ -12,17 +12,17 @@
 			var provinceId=$(this).val();
 			$.ajax({
 				type: "POST",
-				url: "createproject/provincesDetail", 
+				url: "provincesDetail", 
 				data:{"provinceID":provinceId},
 				dataType:"json",
 				success: function(data){
 					var jsonBind=eval(data);
-					jsonBind.promoters!=null?
+					jsonBind.promoters!=0?
 							fillPromoterData(jsonBind)
-						:$("#promoter").append("<span>无推广员信息</span>");
-					jsonBind.retailers!=null?
+						:$("#promoterMsg").html("无推广员信息");
+					jsonBind.retailers!=0?
 							fillRetailerData(jsonBind)
-						:$("#retailer").append("<span>无零售商信息</span>");
+						:$("#retailerMsg").html("无零售商信息");
 				}
 			});
 		})
@@ -69,8 +69,15 @@
 			</c:choose>
 		</select>
 			<div id="promoter">
+			<p id="promoterMsg"></p>
 			</div>
 			<div id="retailer">
+			<p id="retailerMsg"></p>
 			</div>
+			
+			<form action="fileUpload" method="post" enctype="multipart/form-data">  
+    选择文件:<input type="file" name="file">  
+    <input type="submit" value="提交">   
+</form>  
 </body>
 </html>

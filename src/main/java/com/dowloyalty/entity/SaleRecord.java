@@ -1,6 +1,7 @@
 package com.dowloyalty.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 public class SaleRecord implements Serializable {
 	/**
@@ -9,11 +10,10 @@ public class SaleRecord implements Serializable {
 	private static final long serialVersionUID = -2059308991403547165L;
 	private int id;
 	private int retailerID;
-	private int productSepcificationID;
-	private int amount;
+	private int productID;
 	private float totalPrice;
 	private int importerID;
-	private String submitDate;
+	private Timestamp submitDate;
 	private int projectID;
 	private int points;
 
@@ -21,13 +21,12 @@ public class SaleRecord implements Serializable {
 		super();
 	}
 
-	public SaleRecord(int id, int retailerID, int productSepcificationID, int amount, float totalPrice, int importerID,
-			String submitDate, int projectID, int points) {
+	public SaleRecord(int id, int retailerID, int productID, float totalPrice, int importerID, Timestamp submitDate,
+			int projectID, int points) {
 		super();
 		this.id = id;
 		this.retailerID = retailerID;
-		this.productSepcificationID = productSepcificationID;
-		this.amount = amount;
+		this.productID = productID;
 		this.totalPrice = totalPrice;
 		this.importerID = importerID;
 		this.submitDate = submitDate;
@@ -51,20 +50,12 @@ public class SaleRecord implements Serializable {
 		this.retailerID = retailerID;
 	}
 
-	public int getProductSepcificationID() {
-		return productSepcificationID;
+	public int getProductID() {
+		return productID;
 	}
 
-	public void setProductSepcificationID(int productSepcificationID) {
-		this.productSepcificationID = productSepcificationID;
-	}
-
-	public int getAmount() {
-		return amount;
-	}
-
-	public void setAmount(int amount) {
-		this.amount = amount;
+	public void setProductID(int productID) {
+		this.productID = productID;
 	}
 
 	public float getTotalPrice() {
@@ -83,11 +74,11 @@ public class SaleRecord implements Serializable {
 		this.importerID = importerID;
 	}
 
-	public String getSubmitDate() {
+	public Timestamp getSubmitDate() {
 		return submitDate;
 	}
 
-	public void setSubmitDate(String submitDate) {
+	public void setSubmitDate(Timestamp submitDate) {
 		this.submitDate = submitDate;
 	}
 
@@ -107,11 +98,12 @@ public class SaleRecord implements Serializable {
 		this.points = points;
 	}
 
+
 	@Override
 	public String toString() {
-		return "SaleRecord [id=" + id + ", retailerID=" + retailerID + ", productSepcificationID="
-				+ productSepcificationID + ", amount=" + amount + ", totalPrice=" + totalPrice + ", importerID="
-				+ importerID + ", submitDate=" + submitDate + ", projectID=" + projectID + ", points=" + points + "]";
+		return "SaleRecord [id=" + id + ", retailerID=" + retailerID + ", productID=" + productID + ", totalPrice="
+				+ totalPrice + ", importerID=" + importerID + ", submitDate=" + submitDate + ", projectID=" + projectID
+				+ ", points=" + points + "]";
 	}
 	
 }
