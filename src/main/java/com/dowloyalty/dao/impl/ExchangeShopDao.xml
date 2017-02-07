@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dowloyalty.dao.ExchangeShopDao">
+	
+	<insert id="save" parameterType="com.dowloyalty.entity.ExchangeShop">
+	insert into exchangeshop
+	(
+		ProvinceID,GoodsID,
+		ExchangePoints,IsActive
+	)
+	values
+	(
+		#{RetailerID},#{GoodsID},
+		#{ExchangePoints},#{IsActive}
+	)
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from exchangeshop where ID = #{ID}
+	</delete>
+	
+	<update id="update" parameterType="com.dowloyalty.entity.ExchangeShop">
+	update exchangeshop set
+	ProvinceID = #{ProvinceID},GoodsID = #{GoodsID},ExchangePoints = #{ExchangePoints},
+	IsActive = #{IsActive}
+	where ID = #{ID}
+	</update>
+	
+	<select id="findAll" resultType="com.dowloyalty.entity.ExchangeShop">
+	select
+		ID,ProvinceID,GoodsID,
+		ExchangePoints,IsActive
+	from exchangeshop
+	</select>
+	
+	<select id = "findById" parameterType="int" resultType="com.dowloyalty.entity.ExchangeShop">
+	select
+		ID,ProvinceID,GoodsID,
+		ExchangePoints,IsActive
+	from exchangeshop
+	where ID = #{ID}
+	</select>
+</mapper>
+

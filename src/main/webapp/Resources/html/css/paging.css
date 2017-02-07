@@ -1,0 +1,64 @@
+﻿/********************数据分页样式********************/
+
+#pagination-flickr li {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 11px;
+    list-style: none; /* savers */
+    float: left;
+    font-family: 微软雅黑;
+}
+
+#pagination-flickr a {
+    margin-right: 4px;
+}
+
+#pagination-flickr .previous-off, #pagination-flickr .next-off {
+    color: #666666;
+    display: block;
+    float: left;
+    padding: 3px 4px;
+    margin-right: 5px;
+}
+
+#pagination-flickr .next a, #pagination-flickr .previous a {
+    border: solid 1px #FFFFFF;
+}
+
+#pagination-flickr .active {
+    border: solid 1px #B6BF00;
+    background-color: #B6BF00;
+    color: #FFF;
+    font-weight: bold;
+    display: block;
+    float: left;
+    padding: 1px 5px;
+    margin-right: 3px;
+}
+
+#pagination-flickr a:link,
+#pagination-flickr a:visited {
+    color: #5C6F7D;
+    display: block;
+    float: left;
+    padding: 1px 5px;
+    text-decoration: none;
+}
+
+#pagination-flickr a:hover {
+    border: solid 1px #B6BF00;
+    /*background: #B6BF00;*/
+    color: #5C6F7D;
+}
+
+
+#pagination-flickr ul {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.datalist-paging {
+    float: right;
+}

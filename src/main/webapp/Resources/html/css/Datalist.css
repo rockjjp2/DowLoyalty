@@ -1,0 +1,96 @@
+﻿/********************数据表格样式********************/
+
+.content-flickr {
+    border: 0;
+    margin: 0 auto;
+    padding: 0;
+    /*width: 1024px;*/
+    overflow: auto;
+}
+/*搜索表格样式Start*/
+.top-table {
+    width: 100%;
+    height: auto;
+    line-height: 32px;
+    font-family: 微软雅黑;
+    font-weight: 500;
+    font-size: 1em;
+    margin-bottom: 30px;
+}
+
+#txtCardId {
+    border: 1px solid #C9CACC;
+    height: 24px;
+    width: 30%;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
+    background-image: url(/DowLoyalty/Resources/html/images/smallImg/Search.png);
+    background-size: 13% 80%;
+    background-repeat: no-repeat;
+    background-position: right;
+    padding-right: 8%;
+    padding-left: 5%;
+    float: right;
+    font-family: 微软雅黑;
+    font-size: 0.8em;
+}
+.content-title {
+    width:65%;font-size:1.2em
+}
+
+.btnOperate {
+    border: 1px solid #B6BF00;
+    height: 27px;
+    width: 90%;
+    color: white;
+    background-color: #B6BF00;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
+    float: right;
+    font-family: 'Arial Unicode MS';
+}
+
+
+/*搜索表格样式End*/
+/*内容表格样式Start*/
+.content-table {
+    width: 100%;
+    height: auto;
+    line-height: 32px;
+    font-family: 微软雅黑;
+    text-align: center;
+}
+
+    .content-table .thead_event {
+        background: url(/DowLoyalty/Resources/html/images/smallImg/triangle.png) no-repeat;
+        background-position: 70% center;
+        cursor: pointer;
+    }
+
+    .content-table tr {
+        font-size: 0.9em;
+        font-weight: 100;
+    }
+
+        .content-table tr td {
+            border-bottom: 1px solid #D5D3D4;
+            font-size: 0.9em;
+            font-weight: 100;
+        }
+
+.table-tr-odd {
+    background-color: #fff;
+}
+
+.table-tr-even {
+    background-color: #F1FAF7;
+}
+
+#endtr td {
+    border-bottom: 0px solid red;
+}
+/*内容表格样式End*/

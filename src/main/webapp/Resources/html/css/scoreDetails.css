@@ -1,0 +1,6 @@
+#filter{height: 2.5rem;font-size: 1.5rem;}
+.score{padding-left: 0;}
+.div-select{margin: auto 0.6rem;height: 2.3rem;border: 0.2rem solid #E0E0E0;border-radius: 0.5rem;padding: 0!important;overflow: hidden;}
+select{width: 110%;margin: auto 0.3rem;border: none;outline:none;}
+option{border: none;outline:none;}
+.div-select i{position: absolute;right: 10%;top:10%;}

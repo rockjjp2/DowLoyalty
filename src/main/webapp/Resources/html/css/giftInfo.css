@@ -1,0 +1,11 @@
+.numChange{height: 3rem;line-height: 3rem;margin: 2rem auto!important;}
+.numChange > *{padding: 0;}
+#amount{border: none;}
+#minus,#add{border: 0.1rem solid;margin: 0 0.5rem;}
+
+#cover{width: 100%;height: 100%;z-index: 50;position: absolute;
+    top: 0;opacity: 0.8;background-color: #AAAAAA;}
+#form{height: 70%;z-index: 100;position: absolute;top: 15%;background-color: #FFFFFF;box-shadow: 0 0 0.8rem #777;padding: 3.0rem 2rem;}
+#form label{font-size: 1.5rem;font-weight: normal;}
+#form input{height: 3.0rem;border-radius: 0.5rem;border: 0.1rem solid #D2D2D2;margin-bottom: 1.5rem;}
+#form button{height: 13%;margin-top: 5.0rem;}

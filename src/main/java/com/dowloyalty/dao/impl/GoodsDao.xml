@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dowloyalty.dao.GoodsDao">
+	
+	<insert id="save" parameterType="com.dowloyalty.entity.Goods">
+	insert into goods
+	(
+		Name,Description,ImagePath,
+		IsActive,GoodsCategoryID
+	)
+	values
+	(
+		#{Name},#{Description},#{ImagePath},
+		#{IsActive},#{GoodsCategoryID}
+	)
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from goods where ID = #{ID}
+	</delete>
+	
+	<update id="update" parameterType="com.dowloyalty.entity.Goods">
+	update goods set
+	Name = #{Name},Description = #{Description},IsActive = #{IsActive},
+	IsActive = #{IsActive},GoodsCategoryID = #{GoodsCategoryID}
+	where ID = #{ID}
+	</update>
+	
+	<select id="findAll" resultType="com.dowloyalty.entity.Goods">
+	select
+		ID,Name,Description,ImagePath,
+		IsActive,GoodsCategoryID
+	from goods
+	</select>
+	
+	<resultMap type="com.dowloyalty.pojo.GoodsVo" id="pointsMap">
+		<id column="goodsid" property="id"/>
+		<result column="exchangepoints" property="exchangePoints"/>
+		<association property="goods" javaType="com.dowloyalty.entity.Goods">
+			<id column="goodsid" property="id"/>
+			<result column="goodsname" property="name"/>
+			<result column="goodsip" property="imagePath"/>
+		</association>
+	</resultMap>
+	
+	<resultMap type="com.dowloyalty.pojo.GoodsVo" id="categoryMap">
+		<id column="goodsid" property="id"/>
+		<result column="goodsCategory" property="goodsCategory"/>
+		<association property="goods" javaType="com.dowloyalty.entity.Goods">
+			<id column="goodsid" property="id"/>
+			<result column="goodsname" property="name"/>
+			<result column="goodsip" property="imagePath"/>
+		</association>
+	</resultMap>
+	
+	<select id="findByRetailerId" parameterType="int" resultMap="pointsMap">
+	select
+		goods.ID goodsid,
+		goods.Name goodsname,
+		goods.ImagePath goodsip,
+		exchangeshop.ExchangePoints exchangepoints
+	from goods
+	right join exchangeshop
+	on goods.ID = exchangeshop.GoodsID
+	right join province
+	on province.ID = exchangeshop.ProvinceID
+	right join retailer
+	on retailer.ProvinceID = province.ID
+	where retailer.ID = #{ID}
+	</select>
+	
+	<select id = "findByGoodsId" parameterType="int" resultMap="pointsMap">
+	select
+		goods.ID goodsid,
+		goods.Name goodsname,
+		goods.ImagePath goodsip,
+		exchangeshop.ExchangePoints exchangepoints
+	from goods
+	left join exchangeshop
+	on goods.ID = exchangeshop.GoodsID
+	where goods.ID = #{ID}
+	</select>
+	
+	<select id = "findByProvinceId" parameterType="int" resultMap="categoryMap">
+	select
+		goods.ID goodsid,
+		goods.Name goodsname,
+		goodscategory.Name goodsCategory
+	from exchangeshop
+	left join goods
+	on exchangeshop.GoodsID = goods.ID
+	left join goodscategory
+	on goods.GoodsCategoryID = goodscategory.ID
+	where exchangeshop.ProvinceID = #{ID}
+	</select>
+	
+	<select id = "getGoodsAmount" resultType="int">
+	select
+		count(*)
+	from goods
+	</select>
+	
+	<select id = "findById" parameterType="int" resultType="com.dowloyalty.entity.Goods">
+	select
+		ID,Name,Description,ImagePath,
+		IsActive,GoodsCategoryID
+	from goods
+	where ID = #{ID}
+	</select>
+</mapper>
+

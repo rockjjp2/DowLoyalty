@@ -1,0 +1,57 @@
+﻿body { margin-top: -3px;}
+ul{list-style: none;}
+a {text-decoration: none; }
+li {height: 50px;}
+li>span{margin-left:-10px; border-right: 4px solid #FBFDF2;}
+li>a{margin-left: 5px;}
+
+/*左侧导航*/
+.nav-left {z-index:9;padding:0px;width:14%;margin-bottom:0; background:#FBFDF2;margin-left: -10px;float:left;}
+.a-Ycolor {color: #4E5045;}
+.a-Ncolor {color: #C7C8C0;}
+.li-Yspan { border-right: 4px solid #B3BC01;}
+.li-Nspan { border-right: 4px solid #FBFDF2;}
+
+/*右侧*/
+.actived{display:none;}
+.nav-right{float:left; width:86%}
+
+.table{margin-left: 5%;border-spacing: 20px;}
+.table button{margin-left:0;}
+
+.div-left{float:left; }
+
+/*左侧控件*/
+input[type=text],textarea,select{margin-right: 2%;}
+input[type=button],fieldset,button{margin-left:6%;margin-top: 3%;}
+button{margin-right:30%;}
+
+/*选择人员*/
+.field-div{width:10%;text-align:right;margin-top: 14px;margin-bottom: 14px;}
+.field-choose{width:15%;margin-top: 14px;margin-bottom: 14px;color: #333333; margin-left:20px;}
+.li_choose{cursor: pointer;}
+.li_choose span:hover{color:#B6BF00;}
+
+fieldset{border: 2px solid #B6BF00;padding: 2px; color:#B6BF00;border-radius: 10px;}
+fieldset>div>ul{margin:0;padding:0; float:left;width: 90%;list-style: inherit;margin-top: 14px;}
+fieldset>div>ul>li{float:left; margin-left:14%; color:#B6BF00;width:10%;}
+fieldset>div>ul>li>span{display:inline;list-style:initial;color:#333333;}
+
+/*礼品配置*/
+.td_line{background: #D4D2D3;}
+.arrow{background: url(/DowLoyalty/Resources/html/images/smallImg/triangle.png) no-repeat;background-position: 70% center;cursor: pointer;}
+.text-left{text-align: left;}
+.delete{color: #B6BF00; text-decoration: underline; }
+.delete:hover{color: #E00034;}
+
+td>a{cursor:pointer;}
+td>a>img{width: 10px;}
+td>a>div{margin-top: -30px;margin-left: 5%;text-decoration:underline;color:#B6BF00;}
+
+
+.table_content thead{background:#f9f9f9;}
+.table_content>thead>tr>th,.table_content>tbody>tr>td{padding: 7px 20px;}
+.paging{float: right; margin-right: 5%; margin-bottom:10px; }
+.person_submit{margin-bottom:10px; float:left;}
+
+
