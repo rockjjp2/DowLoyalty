@@ -10,9 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.dowloyalty.entity.GoodsCategory;
 import com.dowloyalty.pojo.GoodsVo;
-import com.dowloyalty.service.GoodsCategoryService;
 import com.dowloyalty.service.GoodsService;
 
 /**
@@ -25,8 +23,6 @@ import com.dowloyalty.service.GoodsService;
 public class WeChatController {
 	@Resource
 	GoodsService goodsService;
-	@Resource
-	GoodsCategoryService goodsCategoryService;
 	
 	/**
 	 * 零售商操作
@@ -35,15 +31,15 @@ public class WeChatController {
 	 * @return	礼品商城页面与所有初始化必须的信息，包括省份信息、礼品信息
 	 */
 	@RequestMapping("/retailer/exchangeshop")
-	public ModelAndView initShop(HttpServletRequest request, Model model)
+	public ModelAndView initShop(HttpServletRequest request)
 	{
 		//获取零售商所在省份礼品商城的所有礼品与分类信息
 		String retailerId = request.getParameter("retailerId");
 		List<GoodsVo> allGoods = goodsService.findByRetailerId(Integer.parseInt(retailerId));
 		
 		//获取所有礼品目录
-		List<GoodsCategory> allCategory = goodsCategoryService.findAll();
-		model.addAttribute("allCategory", allCategory);
+		//List<GoodsCategory> allCategory = goodsCategoryService.findAll();
+		//model.addAttribute("allCategory", allCategory);
 		
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("allGoods", allGoods);
