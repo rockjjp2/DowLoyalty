@@ -1,6 +1,7 @@
 package com.dowloyalty.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 public class ExchangeRecord implements Serializable {
 	/**
@@ -11,9 +12,9 @@ public class ExchangeRecord implements Serializable {
 	private int retailerID;
 	private int goodsID;
 	private int amount;
-	private String submitTime;
-	private String sendOutTime;
-	private String completeTime;
+	private Timestamp submitTime;
+	private Timestamp sendOutTime;
+	private Timestamp completeTime;
 	private int status;
 	private int exchangePoints;
 
@@ -21,8 +22,8 @@ public class ExchangeRecord implements Serializable {
 		super();
 	}
 
-	public ExchangeRecord(int id, int retailerID, int goodsID, int amount, String submitTime, String sendOutTime,
-			String completeTime, int status, int exchangePoints) {
+	public ExchangeRecord(int id, int retailerID, int goodsID, int amount, Timestamp submitTime, Timestamp sendOutTime,
+			Timestamp completeTime, int status, int exchangePoints) {
 		super();
 		this.id = id;
 		this.retailerID = retailerID;
@@ -67,27 +68,27 @@ public class ExchangeRecord implements Serializable {
 		this.amount = amount;
 	}
 
-	public String getSubmitTime() {
+	public Timestamp getSubmitTime() {
 		return submitTime;
 	}
 
-	public void setSubmitTime(String submitTime) {
+	public void setSubmitTime(Timestamp submitTime) {
 		this.submitTime = submitTime;
 	}
 
-	public String getSendOutTime() {
+	public Timestamp getSendOutTime() {
 		return sendOutTime;
 	}
 
-	public void setSendOutTime(String sendOutTime) {
+	public void setSendOutTime(Timestamp sendOutTime) {
 		this.sendOutTime = sendOutTime;
 	}
 
-	public String getCompleteTime() {
+	public Timestamp getCompleteTime() {
 		return completeTime;
 	}
 
-	public void setCompleteTime(String completeTime) {
+	public void setCompleteTime(Timestamp completeTime) {
 		this.completeTime = completeTime;
 	}
 

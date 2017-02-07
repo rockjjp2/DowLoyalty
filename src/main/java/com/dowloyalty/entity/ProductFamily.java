@@ -2,26 +2,28 @@ package com.dowloyalty.entity;
 
 import java.io.Serializable;
 
-public class GoodsCategory implements Serializable {
+public class ProductFamily implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3129441359446486789L;
+	private static final long serialVersionUID = 5117445105403178390L;
 	private int id;
 	private String name;
 	private String description;
+	private int categoryID;
 	private boolean isActive;
 
-	public GoodsCategory() {
+	public ProductFamily() {
 		super();
 	}
 
-	public GoodsCategory(int id, String name, String description, boolean isActive) {
+	public ProductFamily(int id, String name, String description, boolean isActive, int categoryID) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.isActive = isActive;
+		this.categoryID = categoryID;
 	}
 
 	public int getId() {
@@ -48,18 +50,26 @@ public class GoodsCategory implements Serializable {
 		this.description = description;
 	}
 
-	public boolean isActive() {
+	public boolean getIsActive() {
 		return isActive;
 	}
 
-	public void setActive(boolean isActive) {
+	public void setIsActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public int getCategoryID() {
+		return categoryID;
+	}
+
+	public void setCategoryID(int categoryID) {
+		this.categoryID = categoryID;
 	}
 
 	@Override
 	public String toString() {
-		return "GoodsCategory [id=" + id + ", name=" + name + ", description=" + description + ", isActive=" + isActive
-				+ "]";
+		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", isActive=" + isActive
+				+ ", categoryID=" + categoryID + "]";
 	}
 	
 }

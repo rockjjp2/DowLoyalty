@@ -1,75 +1,86 @@
 package com.dowloyalty.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 public class Product implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5117445105403178390L;
+	private static final long serialVersionUID = 1319194997173375526L;
 	private int id;
+	private String sfdcCode;
+	private int productFamilyID;
 	private String name;
 	private String description;
+	private Timestamp lastModifiedDate;
 	private boolean isActive;
-	private int categoryID;
-
+	
+	
+	
 	public Product() {
 		super();
 	}
-
-	public Product(int id, String name, String description, boolean isActive, int categoryID) {
+	public Product(int id, int productFamilyID, String name, String description, String sfdcCode,
+			Timestamp lastModifiedDate, boolean isActive) {
 		super();
 		this.id = id;
+		this.productFamilyID = productFamilyID;
 		this.name = name;
 		this.description = description;
+		this.sfdcCode = sfdcCode;
+		this.lastModifiedDate = lastModifiedDate;
 		this.isActive = isActive;
-		this.categoryID = categoryID;
 	}
-
+	
+	
 	public int getId() {
 		return id;
 	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	public int getProductFamilyID() {
+		return productFamilyID;
+	}
+	public void setProductFamilyID(int productFamilyID) {
+		this.productFamilyID = productFamilyID;
+	}
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	public String getDescription() {
 		return description;
 	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public boolean getIsActive() {
+	public String getSfdcCode() {
+		return sfdcCode;
+	}
+	public void setSfdcCode(String sfdcCode) {
+		this.sfdcCode = sfdcCode;
+	}
+	public Timestamp getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+	public void setLastModifiedDate(Timestamp lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+	public boolean isActive() {
 		return isActive;
 	}
-
-	public void setIsActive(boolean isActive) {
+	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
-
-	public int getCategoryID() {
-		return categoryID;
-	}
-
-	public void setCategoryID(int categoryID) {
-		this.categoryID = categoryID;
-	}
-
+	
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", isActive=" + isActive
-				+ ", categoryID=" + categoryID + "]";
+		return "Product [id=" + id + ", productFamilyID=" + productFamilyID + ", name=" + name + ", description="
+				+ description + ", sfdcCode=" + sfdcCode + ", lastModifiedDate=" + lastModifiedDate + ", isActive="
+				+ isActive + "]";
 	}
-	
 }
