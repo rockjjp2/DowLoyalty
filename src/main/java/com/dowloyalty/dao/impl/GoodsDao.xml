@@ -44,15 +44,6 @@
 		</association>
 	</resultMap>
 	
-	<resultMap type="com.dowloyalty.pojo.GoodsVo" id="categoryMap">
-		<id column="goodsid" property="id"/>
-		<result column="goodsCategory" property="goodsCategory"/>
-		<association property="goods" javaType="com.dowloyalty.entity.Goods">
-			<id column="goodsid" property="id"/>
-			<result column="goodsname" property="name"/>
-			<result column="goodsip" property="imagePath"/>
-		</association>
-	</resultMap>
 	
 	<select id="findByRetailerId" parameterType="int" resultMap="pointsMap">
 	select
@@ -63,11 +54,11 @@
 	from goods
 	right join exchangeshop
 	on goods.ID = exchangeshop.GoodsID
-	right join province
-	on province.ID = exchangeshop.ProvinceID
-	right join retailer
-	on retailer.ProvinceID = province.ID
-	where retailer.ID = #{ID}
+	right join project
+	on project.ID = exchangeshop.ProjectID
+	right join rprojectretailer
+	on project.ID = rprojectretailer.ProjectID
+	where rprojectretailer.RetailerID = #{ID}
 	</select>
 	
 	<select id = "findByGoodsId" parameterType="int" resultMap="pointsMap">
@@ -82,17 +73,18 @@
 	where goods.ID = #{ID}
 	</select>
 	
-	<select id = "findByProvinceId" parameterType="int" resultMap="categoryMap">
+	<select id = "findByProvinceId" parameterType="int" resultMap="pointsMap">
 	select
 		goods.ID goodsid,
 		goods.Name goodsname,
-		goodscategory.Name goodsCategory
+		goods.ImagePath goodsip,
+		exchangeshop.ExchangePoints exchangepoints
 	from exchangeshop
-	left join goods
+	right join goods
 	on exchangeshop.GoodsID = goods.ID
-	left join goodscategory
-	on goods.GoodsCategoryID = goodscategory.ID
-	where exchangeshop.ProvinceID = #{ID}
+	right join project
+	on exchangeshop.projectID = project.ID
+	where project.ProvinceID = #{ID}
 	</select>
 	
 	<select id = "getGoodsAmount" resultType="int">

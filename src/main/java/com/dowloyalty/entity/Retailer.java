@@ -12,7 +12,7 @@ public class Retailer implements Serializable {
 	private String chineseName;
 	private int provinceID;
 	private String mobile;
-	private String penID;
+	private String openID;
 	private String email;
 	private String loginCode;
 	private String sfdcCode;
@@ -23,14 +23,14 @@ public class Retailer implements Serializable {
 	public Retailer() {
 		super();
 	}
-	public Retailer(int id, String chineseName, int provinceID, String mobile, String penID, String email,
+	public Retailer(int id, String chineseName, int provinceID, String mobile, String openID, String email,
 			String loginCode, String sfdcCode, Timestamp lastUpdataData, boolean isActive) {
 		super();
 		this.id = id;
 		this.chineseName = chineseName;
 		this.provinceID = provinceID;
 		this.mobile = mobile;
-		this.penID = penID;
+		this.openID = openID;
 		this.email = email;
 		this.loginCode = loginCode;
 		this.sfdcCode = sfdcCode;
@@ -61,11 +61,11 @@ public class Retailer implements Serializable {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	public String getPenID() {
-		return penID;
+	public String getOpenID() {
+		return openID;
 	}
-	public void setPenID(String penID) {
-		this.penID = penID;
+	public void setOpenID(String openID) {
+		this.openID = openID;
 	}
 	public String getEmail() {
 		return email;
@@ -103,7 +103,7 @@ public class Retailer implements Serializable {
 	@Override
 	public String toString() {
 		return "Retailer [id=" + id + ", chineseName=" + chineseName + ", provinceID=" + provinceID + ", mobile="
-				+ mobile + ", penID=" + penID + ", email=" + email + ", loginCode=" + loginCode + ", sfdcCode="
+				+ mobile + ", penID=" + openID + ", email=" + email + ", loginCode=" + loginCode + ", sfdcCode="
 				+ sfdcCode + ", lastUpdataData=" + lastUpdataData + ", isActive=" + isActive + "]";
 	}
 	

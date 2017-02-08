@@ -11,19 +11,17 @@ public class GoodsVo implements Serializable {
 	private static final long serialVersionUID = 394518066806066653L;
 	private int id;
 	private String exchangePoints;
-	private String goodsCategory;
 	private Goods goods;
 
 	public GoodsVo() {
 		super();
 	}
 
-	public GoodsVo(int id, String exchangePoints, Goods goods, String goodsCategory) {
+	public GoodsVo(int id, String exchangePoints, Goods goods) {
 		super();
 		this.id = id;
 		this.exchangePoints = exchangePoints;
 		this.goods = goods;
-		this.goodsCategory = goodsCategory;
 	}
 
 	public int getId() {
@@ -48,14 +46,6 @@ public class GoodsVo implements Serializable {
 
 	public void setGoods(Goods goods) {
 		this.goods = goods;
-	}
-
-	public String getGoodsCategory() {
-		return goodsCategory;
-	}
-
-	public void setGoodsCategory(String goodsCategory) {
-		this.goodsCategory = goodsCategory;
 	}
 
 }

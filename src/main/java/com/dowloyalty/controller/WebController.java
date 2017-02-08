@@ -154,6 +154,6 @@ public class WebController {
 	@RequestMapping("/test")
 	public String dsf()
 	{
-		return "scoreDetails";
+		return "/PC/Addproject";
 	}
 }

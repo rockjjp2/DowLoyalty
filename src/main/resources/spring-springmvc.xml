@@ -27,7 +27,7 @@
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- jsp 路径前缀 -->
 		
-		<property name="prefix" value="/WEB-INF/view/WeChat/" />
+		<property name="prefix" value="/WEB-INF/view/" />
 		
 		<!-- jsp 路径后缀 -->
 		<property name="suffix" value=".jsp"></property>
