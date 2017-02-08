@@ -2,8 +2,8 @@
 /// <reference path="../ajaxjs/jquery.js" />
 /// <reference path="JquerySession.js" />
 
-document.write(" <script src='D:/Software/softwareProgram/Git Directory/DowLoyalty/src/main/webapp/Resources/html/js/Common.js'></script>");
-document.write(" <script src='D:/Software/softwareProgram/Git Directory/DowLoyalty/src/main/webapp/Resources/html/js/JquerySession.js'></script>");
+document.write(" <script src='/DowLoyalty/Resources/html/js/Common.js'></script>");
+document.write(" <script src='/DowLoyalty/Resources/html/js/JquerySession.js'></script>");
 
 
 $(function () {
@@ -158,75 +158,7 @@ var page = {
 
     },
 
-    /*选择礼品*/
-    $Goods: function () {
-        /*显示层*/
-        $("#Retailers,Person_Submit").click(function () { $("#goodslayer").css("display", "block"); $("#Person_UL").empty(); });//  
-
-        /*单击行选中 并将选中的数据记录于session*/
-        $("#People_Content").on("click", "tbody tr", function () {
-
-            var session = $.session.get("People_Content");
-            var id = $(this).find('td').data('id');
-            var name = $(this).find('td').data('content');
-            var Json = '{"id":"' + id + '","name":" ' + name + ' "}';
-
-            if ($(this).find('input[type=checkbox]').is(":checked")) {
-
-                $(this).find('input[type=checkbox]').prop("checked", false);
-
-                if (!App.Com.isnullorempty(session)) {
-
-                    var array = jQuery.parseJSON(session);
-                    var result = [];
-
-                    for (var i = 0; i < array.length; i++) { if (JSON.stringify(array[i]) != Json) result.push(array[i]); }
-
-                    $.session.set("People_Content", JSON.stringify(result) == "[]" ? "" : JSON.stringify(result));
-                }
-            } else {
-                $(this).find('input[type=checkbox]').prop("checked", true);
-
-                var result = [];
-                
-                if (!App.Com.isnullorempty(session)) { session = session.substring(0, session.length - 1); session = session.substring(1, session.Length); Json = session + ',' + Json; }
-
-                Json = '[' + Json + ']';
-
-                $.session.set("People_Content", Json);
-            }
-        });
-
-        /*鼠标移动*/
-        $("#People_Content tbody tr").mouseover(function () { $(this).css("background", "#f9f9f9"); }).mouseout(function () { $(this).css("background", "#FFFFFF"); });
-
-        /*确定选中零售商*/
-        $("#Person_Submit").click(function () {
-            /*关闭*/
-            page.$close();
-
-            /*显示被选人员*/
-            var session = $.session.get("People_Content");
-
-            var _html = '';
-
-            if (!App.Com.isnullorempty(session)) { $(jQuery.parseJSON(session)).each(function (index, item) { _html += "<li><span>" + item.name + "</span></li>"; }); }
-
-            $("#Person_UL").append(_html);
-
-        });
-
-        /*选择发货推广员*/
-        $(".li_choose span").click(function () {
-            $(".li_choose span").css("color", "#333333");
-            $(this).css("color", "#B6BF00");
-            $(".field-choose").text($(this).text());
-        });
-
-        /*关闭*/
-        $(".close").click(function () { page.$close(); });
-
-    },
+    
     
     /*关闭*/
     $close: function () {

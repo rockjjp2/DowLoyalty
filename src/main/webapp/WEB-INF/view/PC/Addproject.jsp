@@ -11,6 +11,8 @@
     <link href="/DowLoyalty/Resources/html/css//jquery.datetimepicker.css" rel="stylesheet" />
     <script src="/DowLoyalty/Resources/html/js/jquery.datetimepicker.js"></script>
     <script src="/DowLoyalty/Resources/html/js/Addproject.js"></script>
+    <script src="/DowLoyalty/Resources/html/js/Common.js"></script>
+    <script src="/DowLoyalty/Resources/html/js/JquerySession.js"></script>
     <link href="/DowLoyalty/Resources/html/css/Style.css" rel="stylesheet" />
 </head>
 <body>
