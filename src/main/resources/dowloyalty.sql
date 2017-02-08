@@ -1,22 +1,22 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : MySql
-Source Server Version : 50717
+Source Server         : localhost
+Source Server Version : 50552
 Source Host           : localhost:3306
 Source Database       : dowloyalty
 
 Target Server Type    : MYSQL
-Target Server Version : 50717
+Target Server Version : 50552
 File Encoding         : 65001
 
-Date: 2017-02-07 19:08:10
+Date: 2017-02-08 10:49:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for admin
+-- Table structure for `admin`
 -- ----------------------------
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
@@ -24,10 +24,14 @@ CREATE TABLE `admin` (
   `ChineseName` varchar(50) DEFAULT NULL,
   `IsActive` bit(1) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='????Ա?;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for exchangerecord
+-- Records of admin
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `exchangerecord`
 -- ----------------------------
 DROP TABLE IF EXISTS `exchangerecord`;
 CREATE TABLE `exchangerecord` (
@@ -39,16 +43,20 @@ CREATE TABLE `exchangerecord` (
   `SendOutTime` datetime DEFAULT NULL,
   `CompleteTime` datetime DEFAULT NULL,
   `Status` int(11) NOT NULL,
-  `ExchangePoints` int(11) NOT NULL COMMENT '?һ??ܻ?????',
+  `ExchangePoints` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `RetailerID_idx` (`RetailerID`),
   KEY `GoodsID_idx` (`GoodsID`),
   CONSTRAINT `GoodsID_fk2` FOREIGN KEY (`GoodsID`) REFERENCES `goods` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `RetailerID_fk1` FOREIGN KEY (`RetailerID`) REFERENCES `retailer` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='???ֶһ???¼?;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for exchangeshop
+-- Records of exchangerecord
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `exchangeshop`
 -- ----------------------------
 DROP TABLE IF EXISTS `exchangeshop`;
 CREATE TABLE `exchangeshop` (
@@ -62,10 +70,14 @@ CREATE TABLE `exchangeshop` (
   KEY `FK_shopfkgoods_idx` (`ProjectID`) USING BTREE,
   CONSTRAINT `FK_shopfkgoods` FOREIGN KEY (`ProjectID`) REFERENCES `project` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `GoodsID` FOREIGN KEY (`GoodsID`) REFERENCES `goods` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='?????̳Ǳ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for goods
+-- Records of exchangeshop
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `goods`
 -- ----------------------------
 DROP TABLE IF EXISTS `goods`;
 CREATE TABLE `goods` (
@@ -75,10 +87,14 @@ CREATE TABLE `goods` (
   `ImagePath` varchar(50) NOT NULL,
   `IsActive` bit(1) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='??Ʒ?;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for points
+-- Records of goods
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `points`
 -- ----------------------------
 DROP TABLE IF EXISTS `points`;
 CREATE TABLE `points` (
@@ -93,10 +109,14 @@ CREATE TABLE `points` (
   KEY `ProductID_idx` (`ProductID`) USING BTREE,
   CONSTRAINT `ProductID` FOREIGN KEY (`ProjectID`) REFERENCES `product` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `ProjectID` FOREIGN KEY (`ProjectID`) REFERENCES `project` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='???ֱ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for product
+-- Records of points
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `product`
 -- ----------------------------
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
@@ -105,15 +125,19 @@ CREATE TABLE `product` (
   `ProductFamilyID` int(11) NOT NULL,
   `Name` varchar(50) NOT NULL,
   `Description` varchar(50) NOT NULL,
-  `LastModifiedDate` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `LastModifiedDate` datetime DEFAULT NULL,
   `IsActive` bit(1) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `ProductFamilyID_idx` (`ProductFamilyID`) USING BTREE,
   CONSTRAINT `ProductFamilyID` FOREIGN KEY (`ProductFamilyID`) REFERENCES `productfamily` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='??Ʒ?????;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for productcategory
+-- Records of product
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `productcategory`
 -- ----------------------------
 DROP TABLE IF EXISTS `productcategory`;
 CREATE TABLE `productcategory` (
@@ -125,7 +149,11 @@ CREATE TABLE `productcategory` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
--- Table structure for productfamily
+-- Records of productcategory
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `productfamily`
 -- ----------------------------
 DROP TABLE IF EXISTS `productfamily`;
 CREATE TABLE `productfamily` (
@@ -140,19 +168,23 @@ CREATE TABLE `productfamily` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for project
+-- Records of productfamily
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `project`
 -- ----------------------------
 DROP TABLE IF EXISTS `project`;
 CREATE TABLE `project` (
   `ID` int(11) NOT NULL,
   `Name` varchar(50) NOT NULL,
   `ProvinceID` int(11) NOT NULL,
-  `PlacardPath` varchar(50) NOT NULL COMMENT '????·??',
+  `PlacardPath` varchar(50) NOT NULL,
   `AssistantID` int(11) DEFAULT NULL,
-  `StartDate` datetime NOT NULL COMMENT '???ʼʱ??',
-  `EndDate` datetime NOT NULL COMMENT '?????ʱ??',
+  `StartDate` datetime NOT NULL,
+  `EndDate` datetime NOT NULL,
   `AdminID` int(11) NOT NULL,
-  `IsVisible` bit(1) NOT NULL COMMENT 'ǰ̨?????ɼ???',
+  `IsVisible` bit(1) NOT NULL,
   `IsActive` bit(1) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `ProvinceID_idx` (`ProvinceID`),
@@ -161,10 +193,14 @@ CREATE TABLE `project` (
   CONSTRAINT `AdminID` FOREIGN KEY (`AdminID`) REFERENCES `admin` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `AssistantID` FOREIGN KEY (`AssistantID`) REFERENCES `promoter` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `ProvinceID` FOREIGN KEY (`ProvinceID`) REFERENCES `province` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='??;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for promoter
+-- Records of project
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `promoter`
 -- ----------------------------
 DROP TABLE IF EXISTS `promoter`;
 CREATE TABLE `promoter` (
@@ -173,10 +209,14 @@ CREATE TABLE `promoter` (
   `UserId` varchar(50) NOT NULL,
   `IsActive` bit(1) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8 COMMENT='?ƹ?Ա?;
+) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for province
+-- Records of promoter
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `province`
 -- ----------------------------
 DROP TABLE IF EXISTS `province`;
 CREATE TABLE `province` (
@@ -184,10 +224,14 @@ CREATE TABLE `province` (
   `Name` varchar(50) NOT NULL,
   `IsActive` bit(1) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='ʡ?ݱ;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for retailer
+-- Records of province
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `retailer`
 -- ----------------------------
 DROP TABLE IF EXISTS `retailer`;
 CREATE TABLE `retailer` (
@@ -204,10 +248,14 @@ CREATE TABLE `retailer` (
   PRIMARY KEY (`ID`),
   KEY `ProvinceID_idx` (`ProvinceID`),
   CONSTRAINT `Province_fk` FOREIGN KEY (`ProvinceID`) REFERENCES `province` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8 COMMENT='?????̱;
+) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for rprojectpromoter
+-- Records of retailer
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `rprojectpromoter`
 -- ----------------------------
 DROP TABLE IF EXISTS `rprojectpromoter`;
 CREATE TABLE `rprojectpromoter` (
@@ -220,10 +268,14 @@ CREATE TABLE `rprojectpromoter` (
   KEY `PromoterID_idx` (`PromoterID`),
   CONSTRAINT `Project_ID` FOREIGN KEY (`ProjectID`) REFERENCES `project` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `PromoterID` FOREIGN KEY (`PromoterID`) REFERENCES `promoter` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='?-?ƹ?Ա?????;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for rprojectretailer
+-- Records of rprojectpromoter
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `rprojectretailer`
 -- ----------------------------
 DROP TABLE IF EXISTS `rprojectretailer`;
 CREATE TABLE `rprojectretailer` (
@@ -236,10 +288,14 @@ CREATE TABLE `rprojectretailer` (
   KEY `RetailerID_fk2_idx` (`RetailerID`),
   CONSTRAINT `ProjectID_fk1` FOREIGN KEY (`ProjectID`) REFERENCES `project` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `RetailerID_fk2` FOREIGN KEY (`RetailerID`) REFERENCES `retailer` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='?-?????̹????;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for rpromoterprovince
+-- Records of rprojectretailer
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `rpromoterprovince`
 -- ----------------------------
 DROP TABLE IF EXISTS `rpromoterprovince`;
 CREATE TABLE `rpromoterprovince` (
@@ -252,10 +308,14 @@ CREATE TABLE `rpromoterprovince` (
   KEY `ProvinceID_idx` (`ProvinceID`),
   CONSTRAINT `Promoter_ID` FOREIGN KEY (`PromoterID`) REFERENCES `promoter` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `Province_ID` FOREIGN KEY (`ProvinceID`) REFERENCES `province` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='?ƹ?Ա-ʡ?ݹ????;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for salerecord
+-- Records of rpromoterprovince
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `salerecord`
 -- ----------------------------
 DROP TABLE IF EXISTS `salerecord`;
 CREATE TABLE `salerecord` (
@@ -276,5 +336,8 @@ CREATE TABLE `salerecord` (
   CONSTRAINT `ProductSepcificationID_fk2` FOREIGN KEY (`ProductID`) REFERENCES `product` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `ProjectID_fk4` FOREIGN KEY (`ProjectID`) REFERENCES `project` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `Retailer_fk1` FOREIGN KEY (`RetailerID`) REFERENCES `retailer` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='???ۼ?¼?;
-SET FOREIGN_KEY_CHECKS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of salerecord
+-- ----------------------------
