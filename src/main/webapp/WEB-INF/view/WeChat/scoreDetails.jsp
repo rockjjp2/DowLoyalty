@@ -4,17 +4,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DOW</title>
     <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/basic.css"/>
-    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/scoreDetails.css"/>
+    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/stockist/scoreDetails.css"/>
 </head>
 <body>
     <header>
         <img src="/DowLoyalty/Resources/html/images/backImg.png" alt=""/>
-        <h3>积分明细</h3>
+        <h4>积分明细</h4>
     </header>
     <div class="container">
         <!-- todo 用div重写select样式-->
@@ -31,24 +31,22 @@
         <!--</div>-->
         <div class="clearfix">
             <div class="col-xs-4 div-select style-deepGray">
-                    <select name="" id="selectMonth">
-                        <option value="" hidden>请选择月份</option>
-                        <option value="">1月</option>
-                        <option value="">2月</option>
-                        <option value="">3月</option>
-                    </select>
+                <select name="" id="selectMonth">
+                    <option value="" hidden>请选择月份</option>
+                    <option value="">1月</option>
+                    <option value="">2月</option>
+                    <option value="">3月</option>
+                </select>
                 <i class="fa fa-sort-down style-green"></i>
             </div>
-
             <div class="col-xs-4 div-select style-deepGray">
-                    <select name="" id="selectItem">
-                        <option value="" hidden>请选择事项</option>
-                        <option value="">兑换</option>
-                        <option value="">进货</option>
-                    </select>
+                <select name="" id="selectItem">
+                    <option value="" hidden>请选择事项</option>
+                    <option value="">兑换</option>
+                    <option value="">进货</option>
+                </select>
                 <i class="fa fa-sort-down style-green"></i>
             </div>
-
             <button id="filter" class="col-xs-3 style-bg-green">筛选</button>
         </div>
 

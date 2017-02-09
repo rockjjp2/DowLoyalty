@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.dowloyalty.entity.Goods;
 import com.dowloyalty.entity.Province;
 import com.dowloyalty.pojo.GoodsVo;
@@ -149,6 +150,31 @@ public class WebController {
 		mv.addObject("goodsInfo", goods);
 		mv.setViewName("goodsInfo");
 		return mv;
+	}
+	
+	/**
+	 * 管理员操作
+	 * 获取对应id的礼品
+	 * @param request	客户端请求
+	 * @param response	服务器响应
+	 * @return	对应id的礼品对象
+	 */
+	@RequestMapping("/goods/get")
+	public void getOneGoods(HttpServletRequest request,HttpServletResponse response)
+	{
+		//获取对应id的礼品信息并传至显示页面
+		String goodId = request.getParameter("goodId");
+		GoodsVo goods = goodsService.findByGoodsId(Integer.parseInt(goodId));
+		//测试用
+		//GoodsVo goods = goodsService.findByGoodsId(1);
+		JSONObject json = (JSONObject) JSONObject.toJSON(goods);
+		try {
+			PrintWriter out = response.getWriter();
+			out.println(json);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+		}
 	}
 	
 	@RequestMapping("/test")

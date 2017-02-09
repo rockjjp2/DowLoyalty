@@ -3,8 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8;">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DOW</title>
     <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/basic.css"/>
@@ -17,28 +17,53 @@
     </header>
 
     <div class="container txt-center">
-        <div class="txt-center">
+        <div class="txt-center clearfix">
             <p>尊敬的<span class="style-green">金卡会员</span></p>
             <p><span class="style-green">山东经销商A</span>，您好！</p>
         </div>
-        <div class="txt-center">
+        <div class="txt-center clearfix">
             <p>会员号：<span class="style-green">123456</span></p>
             <p>累计积分：<span class="style-green">5000</span>分</p>
             <p>可兑换积分：<span class="style-green">3000</span>分</p>
         </div>
         <div class="txt-center">
-            <i class="fa fa-trophy style-green"></i>
-            <span class="numInCup style-white">5</span>
+            <div class="cup">
+                <i class="fa fa-trophy style-green"></i>
+                <div id="numInCup" class="style-white">125</div>
+            </div>
             <p>您当前累计积分省内排名为：<span class="style-green">5</span></p>
             <p>距离第<span class="style-green">4</span>名只差<span class="style-green">20</span>分</p>
         </div>
         <div class="txt-center">
-            <i class="fa fa-circle-o style-green"></i>
-            <span class="numInCircle style-green">80%</span>
-            <p>已打败<span class="style-green">80%</span>的零售商</p>
+            <div class="circle">
+                <div class="circle-bl1 style-bg-green"></div>
+                <div class="circle-text style-green">70%</div>
+            </div>
+            <p>已打败<span class="style-green">60%</span>的零售商</p>
             <p>距离升级<span class="style-green">钻石卡会员</span>只差<span class="style-green">1000</span>积分</p>
         </div>
     </div>
+
+    <script src="/DowLoyalty/Resources/html/js/jquery-1.8.2.min.js"></script>
+    <script>
+        $(function(){
+            //按百分比显示环
+            var bl = parseInt($('.circle-text').html())*3.6;
+            var rotateNum = bl;
+            var blHtml = '';
+            if(bl > 180){
+                rotateNum = bl - 180;
+                blHtml += '<div class="circle-bl2 style-bg-green">';
+                blHtml += '<div class="circle-bl4" style="-webkit-transform:rotate(' + rotateNum + 'deg);transform:rotate(' + rotateNum + 'deg);"></div>';
+                blHtml += '</div>';
+                //$('.circle-bl1').remove($('.circle-bl3'));
+                $('.circle-bl1').after(blHtml);
+            }else{
+                blHtml += '<div class="circle-bl3" style="-webkit-transform:rotate(' + rotateNum + 'deg);transform:rotate(' + rotateNum + 'deg);"></div>';
+                $('.circle-bl1').append(blHtml);
+            }
+        })
+    </script>
 
 </body>
 

@@ -3,22 +3,22 @@
 /*.ui-mobile-viewport{ border:none;}*/
 /*.ui-page {padding: 0; margin: 0; outline: 0}*/
 
-html{font-size: 62.5%;height:100%;font-family:"Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;}
+html,body{font-size: 62.5%;height:100%;font-family:"Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;}
 body{height: 100%;}    /*1.2em=12px*/
-.clear-fix:after {content: ".";display: block;height: 0.5rem;clear: both;visibility: hidden;  }   /*撑开div便于设置样式属性*/
+.clearfix:after {content: ".";display: block;height: 0.5rem;clear: both;visibility: hidden;  }   /*撑开div便于设置样式属性*/
 .clearfix > div{padding: 0;}
 label,p{margin-bottom: 0.5rem;}
-header{height: 10%;}
-header img{height: 100%;width: 100%;}
-header h3{color: #FFF;position: absolute;top: 1%;margin-left: 12%;}  /*修改bootstrap内h1,h2...margin-top*/
+header{height: 10%;position: relative;}
+header img{height: 100%;width: 100%;position: absolute;}
+header h4{color: #FFF;position: absolute;bottom: 1%;left: 8%;}  /*修改bootstrap内h1,h2...margin-top*/
 
 .container > div{margin: 1.7rem 0;}
-.menu-btn{padding: 0;border:0.1rem solid #8FC400;border-radius: 0.4rem;text-align: center;}
+.menu-btn{padding: 0;border:0.1rem solid #B6BF00;border-radius: 0.4rem;text-align: center;}
 .item{box-shadow: 0 0.2rem #E0E0E0;}
 img{width: 100%;}
 input{outline:none;}
 /*button{font-size: 2.2rem;border-radius: 0.5rem;border: 0.1rem solid;height: 200%;line-height: 200%;}*/
-button{border: 0.1rem solid;border-radius: 0.8rem;height: 4.0rem;font-size: 2.0rem;outline:none;}
+button{border: 0.1rem solid;border-radius: 0.8rem;height: 2.5rem;font-size: 1.2rem;outline:none;}
 
 .txt-center{text-align: center;}
 
@@ -26,12 +26,12 @@ button{border: 0.1rem solid;border-radius: 0.8rem;height: 4.0rem;font-size: 2.0r
 
 
 /*color*/
-.style-bg-green{background-color: #8FC400;color: #FFF!important;}
+.style-bg-green{background-color: #B6BF00;color: #FFF!important;}
 .style-white{color: #FFF;}
-.style-green{color: #8FC400;}
+.style-green{color: #B6BF00;}
 .style-gray{color: #CDCDCD;}
 .style-deepGray{color: #9C9C9C;}
-.style-btn-green{color: #8FC400;border-color: #8FC400;}
+.style-btn-green{color: #B6BF00;border-color: #B6BF00;}
 .style-btn-gray{color: #CACACA;border-color: #CACACA;}
 .style-bg-gray{border-color: #F5F5F5!important;background-color: #F5F5F5;}
 

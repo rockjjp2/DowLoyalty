@@ -5,15 +5,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DOW</title>
+    <title>DOW</title>
     <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/basic.css"/>
-    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/addSaleRecord.css"/>
+    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/promoter/addSaleRecord.css"/>
 </head>
 <body>
     <header>
         <img src="/DowLoyalty/Resources/html/images/backImg.png" alt=""/>
-        <h3>增加销售记录</h3>
+        <h4>增加销售记录</h4>
     </header>
 
     <div class="container">

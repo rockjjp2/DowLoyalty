@@ -4,8 +4,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1">
- <title>DOW</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DOW</title>
     <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/basic.css"/>
     <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/deliverList.css"/>
@@ -13,7 +13,7 @@
 <body>
     <header>
         <img src="/DowLoyalty/Resources/html/images/backImg.png" alt=""/>
-        <h3>发货列表</h3>
+        <h4>发货列表</h4>
     </header>
 
     <div class="container">
@@ -26,7 +26,7 @@
 
         <div class="clearfix item">
             <div class="data col-xs-8 col-xs-offset-1">
-                <h4>xx省经销商1</h4>
+                <h5>xx省经销商1</h5>
 
                 <p class="prize">iPhone7</p>
             </div>
@@ -35,7 +35,7 @@
 
         <div class="clearfix item">
             <div class="data col-xs-8 col-xs-offset-1">
-                <h4>xx省经销商2</h4>
+                <h5>xx省经销商2</h5>
 
                 <p class="prize">滚筒洗衣机</p>
             </div>

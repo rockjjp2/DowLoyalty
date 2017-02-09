@@ -13,15 +13,15 @@
 <body>
     <header>
         <img src="/DowLoyalty/Resources/html/images/backImg.png" alt=""/>
-        <h3>礼品商城</h3>
+        <h4>礼品商城</h4>
     </header>
 
     <div class="container">
         <div class="clearfix">
             <div class="col-xs-2 menu-btn style-btn-gray style-bg-green">全部</div>
-            <div class="col-xs-2 menu-btn style-btn-gray">电器</div>
-            <div class="col-xs-2 menu-btn style-btn-gray">卡券</div>
-            <div class="col-xs-2 menu-btn style-btn-gray">汽车</div>
+            <!--<div class="col-xs-2 menu-btn style-btn-gray">电器</div>-->
+            <!--<div class="col-xs-2 menu-btn style-btn-gray">卡券</div>-->
+            <!--<div class="col-xs-2 menu-btn style-btn-gray">汽车</div>-->
         </div>
 
         <div class="clearfix">
