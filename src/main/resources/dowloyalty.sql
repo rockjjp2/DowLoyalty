@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50552
 File Encoding         : 65001
 
-Date: 2017-02-08 10:49:05
+Date: 2017-02-09 17:06:38
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,13 +29,14 @@ CREATE TABLE `admin` (
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
+INSERT INTO `admin` VALUES ('1', 'eee', '');
 
 -- ----------------------------
 -- Table structure for `exchangerecord`
 -- ----------------------------
 DROP TABLE IF EXISTS `exchangerecord`;
 CREATE TABLE `exchangerecord` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `RetailerID` int(11) NOT NULL,
   `GoodsID` int(11) NOT NULL,
   `Amount` int(11) NOT NULL,
@@ -60,7 +61,7 @@ CREATE TABLE `exchangerecord` (
 -- ----------------------------
 DROP TABLE IF EXISTS `exchangeshop`;
 CREATE TABLE `exchangeshop` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ProjectID` int(11) NOT NULL,
   `GoodsID` int(11) NOT NULL,
   `ExchangePoints` int(11) NOT NULL,
@@ -70,28 +71,36 @@ CREATE TABLE `exchangeshop` (
   KEY `FK_shopfkgoods_idx` (`ProjectID`) USING BTREE,
   CONSTRAINT `FK_shopfkgoods` FOREIGN KEY (`ProjectID`) REFERENCES `project` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `GoodsID` FOREIGN KEY (`GoodsID`) REFERENCES `goods` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of exchangeshop
 -- ----------------------------
+INSERT INTO `exchangeshop` VALUES ('1', '1', '1', '10', '');
+INSERT INTO `exchangeshop` VALUES ('2', '1', '2', '23', '');
+INSERT INTO `exchangeshop` VALUES ('3', '1', '3', '15', '');
+INSERT INTO `exchangeshop` VALUES ('4', '1', '4', '20', '');
 
 -- ----------------------------
 -- Table structure for `goods`
 -- ----------------------------
 DROP TABLE IF EXISTS `goods`;
 CREATE TABLE `goods` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(50) NOT NULL,
   `Description` varchar(255) DEFAULT NULL,
   `ImagePath` varchar(50) NOT NULL,
   `IsActive` bit(1) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of goods
 -- ----------------------------
+INSERT INTO `goods` VALUES ('1', '1000元加油卡', '100元加油卡，共10张，可以在任何加油站使用', '/DowLoyalty/Resources/html/images/fuelCard.png', '');
+INSERT INTO `goods` VALUES ('2', '海尔对开门冰箱', 'ssss', '/DowLoyalty/Resources/html/images/fridge.png', '');
+INSERT INTO `goods` VALUES ('3', '海尔变频滚筒洗衣机', null, '/DowLoyalty/Resources/html/images/washMachine.png', '');
+INSERT INTO `goods` VALUES ('4', '格力1.5匹节能空调', null, '/DowLoyalty/Resources/html/images/airCondition.png', '');
 
 -- ----------------------------
 -- Table structure for `points`
@@ -120,7 +129,7 @@ CREATE TABLE `points` (
 -- ----------------------------
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `SFDCCode` int(11) DEFAULT NULL,
   `ProductFamilyID` int(11) NOT NULL,
   `Name` varchar(50) NOT NULL,
@@ -157,7 +166,7 @@ CREATE TABLE `productcategory` (
 -- ----------------------------
 DROP TABLE IF EXISTS `productfamily`;
 CREATE TABLE `productfamily` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(50) NOT NULL,
   `Description` varchar(200) DEFAULT NULL,
   `IsActive` bit(1) NOT NULL,
@@ -176,7 +185,7 @@ CREATE TABLE `productfamily` (
 -- ----------------------------
 DROP TABLE IF EXISTS `project`;
 CREATE TABLE `project` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(50) NOT NULL,
   `ProvinceID` int(11) NOT NULL,
   `PlacardPath` varchar(50) NOT NULL,
@@ -193,11 +202,12 @@ CREATE TABLE `project` (
   CONSTRAINT `AdminID` FOREIGN KEY (`AdminID`) REFERENCES `admin` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `AssistantID` FOREIGN KEY (`AssistantID`) REFERENCES `promoter` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `ProvinceID` FOREIGN KEY (`ProvinceID`) REFERENCES `province` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of project
 -- ----------------------------
+INSERT INTO `project` VALUES ('1', '1', '1', '1', '1', '2017-02-08 15:02:48', '2017-02-09 15:02:52', '1', '', '');
 
 -- ----------------------------
 -- Table structure for `promoter`
@@ -209,11 +219,12 @@ CREATE TABLE `promoter` (
   `UserId` varchar(50) NOT NULL,
   `IsActive` bit(1) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of promoter
 -- ----------------------------
+INSERT INTO `promoter` VALUES ('1', 'www', '1', '');
 
 -- ----------------------------
 -- Table structure for `province`
@@ -224,11 +235,12 @@ CREATE TABLE `province` (
   `Name` varchar(50) NOT NULL,
   `IsActive` bit(1) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of province
 -- ----------------------------
+INSERT INTO `province` VALUES ('1', 'ttt', '');
 
 -- ----------------------------
 -- Table structure for `retailer`
@@ -248,11 +260,12 @@ CREATE TABLE `retailer` (
   PRIMARY KEY (`ID`),
   KEY `ProvinceID_idx` (`ProvinceID`),
   CONSTRAINT `Province_fk` FOREIGN KEY (`ProvinceID`) REFERENCES `province` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of retailer
 -- ----------------------------
+INSERT INTO `retailer` VALUES ('1', 'rrr', '1', null, null, null, null, null, null, '');
 
 -- ----------------------------
 -- Table structure for `rprojectpromoter`
@@ -288,18 +301,19 @@ CREATE TABLE `rprojectretailer` (
   KEY `RetailerID_fk2_idx` (`RetailerID`),
   CONSTRAINT `ProjectID_fk1` FOREIGN KEY (`ProjectID`) REFERENCES `project` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `RetailerID_fk2` FOREIGN KEY (`RetailerID`) REFERENCES `retailer` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of rprojectretailer
 -- ----------------------------
+INSERT INTO `rprojectretailer` VALUES ('1', '1', '1', '');
 
 -- ----------------------------
 -- Table structure for `rpromoterprovince`
 -- ----------------------------
 DROP TABLE IF EXISTS `rpromoterprovince`;
 CREATE TABLE `rpromoterprovince` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `PromoterID` int(11) NOT NULL,
   `ProvinceID` int(11) NOT NULL,
   `IsActive` bit(1) NOT NULL,
@@ -319,7 +333,7 @@ CREATE TABLE `rpromoterprovince` (
 -- ----------------------------
 DROP TABLE IF EXISTS `salerecord`;
 CREATE TABLE `salerecord` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `RetailerID` int(11) NOT NULL,
   `ProductID` int(11) NOT NULL,
   `TotalPrice` float NOT NULL,

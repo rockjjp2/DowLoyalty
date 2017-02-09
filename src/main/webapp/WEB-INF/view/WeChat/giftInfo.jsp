@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@taglib uri = "http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,32 +19,41 @@
     </header>
 
     <div class="container">
+		<form class = "exchangeGoods" method = "post" action = "">
+		<c:choose>
+		<c:when test="${not empty goods}">
         <div class="clearfix">
             <div class="img-div col-xs-6 col-xs-offset-3">
-                <img src="/DowLoyalty/Resources/html/images/deliverInfo.png" alt=""/>
+                <img src="${goods.goods.imagePath}" alt=""/>
             </div>
         </div>
-
-        <div class="txt-center">
-            <h5>1000元加油卡</h5>
-            <p class="style-gray"><span class="style-green" id="score">10</span> 积分</p>
-            <p class="style-gray">100元加油卡，共10张，可以在任何加油站使用</p>
+			<div class="txt-center">
+            <h5>${goods.goods.name}</h5>
+            <p class="style-gray"><span class="style-green" id="score">${goods.exchangePoints}</span> 积分</p>
+            <p class="style-gray">${goods.goods.description}</p>
         </div>
-
+		</c:when>
+		<c:otherwise>
+		Nothing
+		</c:otherwise>
+		</c:choose>
+		
         <div class="numChange txt-center">
             <label class="col-xs-3 col-xs-offset-2" for="amount">购买数量：</label>
             <div id="minus" class="col-xs-1 style-bg-gray">
                 <i class="fa fa-minus style-deepGray"></i>
             </div>
-            <input id="amount" type="text" class="col-xs-2 style-bg-gray txt-center" value="">
+            <input id="amount" name = "amount" type="text" class="col-xs-2 style-bg-gray txt-center" value="">
             <div id="add" class="col-xs-1 style-bg-gray">
                 <i class="fa fa-plus style-deepGray"></i>
             </div>
         </div>
-
+		</form>
+		
         <div class="clearfix">
             <button id="convert" class="col-xs-6 col-xs-offset-3 style-bg-green">兑换</button>
         </div>
+        
     </div>
     <script src="/DowLoyalty/Resources/html/js/jquery-1.8.2.min.js"></script>
     <script type="text/javascript">
@@ -53,7 +63,9 @@
             numOperate();
             convertPopup();
         });
-
+		
+       	 
+        
         function numOperate(){
             num = parseInt($("#amount").val());
             $("#minus").click(function(){
@@ -95,8 +107,13 @@
                 form.remove();
             });
             $("#doubleConvert").click(function(){
-                location.href = "giftStore.html";
-            })
+            	var amount = $("#amount").val();
+       		 $(".exchangeGoods").attr("action","/DowLoyalty/v1/WeChat/retailer/goods/exchange?retailerId=${retailerId}"+
+            	"&goodsId=${goods.goods.id}"+"&exchangePoints=${goods.exchangePoints}"+"&amount="+amount);
+       			
+       		$(".exchangeGoods").submit();
+            });
+            
         }
 
 

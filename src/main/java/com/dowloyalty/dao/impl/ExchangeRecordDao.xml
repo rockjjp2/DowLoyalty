@@ -12,9 +12,9 @@
 	)
 	values
 	(
-		#{RetailerID},#{GoodsID},
-		#{Amount},#{SubmitTime},#{SendOutTime},
-		#{CompleteTime},#{Status},#{ExchangePoints}
+		#{retailerID},#{goodsID},
+		#{amount},#{submitTime},#{sendOutTime},
+		#{completeTime},#{status},#{exchangePoints}
 	)
 	</insert>
 	

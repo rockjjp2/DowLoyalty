@@ -41,6 +41,7 @@
 			<id column="goodsid" property="id"/>
 			<result column="goodsname" property="name"/>
 			<result column="goodsip" property="imagePath"/>
+			<result column="description" property="description"/>
 		</association>
 	</resultMap>
 	
@@ -50,6 +51,7 @@
 		goods.ID goodsid,
 		goods.Name goodsname,
 		goods.ImagePath goodsip,
+		goods.Description description,
 		exchangeshop.ExchangePoints exchangepoints
 	from goods
 	right join exchangeshop
@@ -66,6 +68,7 @@
 		goods.ID goodsid,
 		goods.Name goodsname,
 		goods.ImagePath goodsip,
+		goods.Description description,
 		exchangeshop.ExchangePoints exchangepoints
 	from goods
 	left join exchangeshop
@@ -78,6 +81,7 @@
 		goods.ID goodsid,
 		goods.Name goodsname,
 		goods.ImagePath goodsip,
+		goods.Description description,
 		exchangeshop.ExchangePoints exchangepoints
 	from exchangeshop
 	right join goods
@@ -96,7 +100,7 @@
 	<select id = "findById" parameterType="int" resultType="com.dowloyalty.entity.Goods">
 	select
 		ID,Name,Description,ImagePath,
-		IsActive,GoodsCategoryID
+		IsActive
 	from goods
 	where ID = #{ID}
 	</select>

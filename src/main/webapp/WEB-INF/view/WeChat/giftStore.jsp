@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@taglib uri = "http://java.sun.com/jsp/jstl/core" prefix="c"%>
+    <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -23,44 +25,35 @@
             <!--<div class="col-xs-2 menu-btn style-btn-gray">卡券</div>-->
             <!--<div class="col-xs-2 menu-btn style-btn-gray">汽车</div>-->
         </div>
-
-        <div class="clearfix">
-            <div class="col-xs-5 img-div">
-                <img src="/DowLoyalty/Resources/html/images/fuelCard.png" alt=""/>
+		<c:choose>
+		<c:when test="${not empty allGoods}">
+		<c:forEach begin="0" end="${fn:length(allGoods)-1}" step="2" var="i">
+			<div class="clearfix">
+            <div class="col-xs-5 img-div" onclick = "getInfo('${allGoods[i].goods.id}')">
+                <img src="${allGoods[i].goods.imagePath}" alt=""/>
                 <p>
-                    1000元加油卡<br/>
-                    <span class="style-green">10</span>
+                    ${allGoods[i].goods.name}<br/>
+                    <span class="style-green">${allGoods[i].exchangePoints}</span>
                     积分
                 </p>
             </div>
-            <div class="col-xs-5 img-div">
-                <img src="/DowLoyalty/Resources/html/images/fridge.png" alt=""/>
+            <c:if test="${i+1 le fn:length(allGoods)-1}">
+            <div class="col-xs-5 img-div" onclick = "getInfo('${allGoods[i+1].goods.id}')">
+                <img src="${allGoods[i+1].goods.imagePath}" alt=""/>
                 <p>
-                    海尔对开门冰箱<br/>
-                    <span class="style-green">23</span>
+                    ${allGoods[i+1].goods.name}<br/>
+                    <span class="style-green">${allGoods[i+1].exchangePoints}</span>
                     积分
                 </p>
             </div>
+            </c:if>
         </div>
-
-        <div class="clearfix">
-            <div class="col-xs-5 img-div">
-                <img src="/DowLoyalty/Resources/html/images/washMachine.png" alt=""/>
-                <p>
-                    海尔变频滚筒洗衣机<br/>
-                    <span class="style-green">15</span>
-                    积分
-                </p>
-            </div>
-            <div class="col-xs-5 img-div">
-                <img src="/DowLoyalty/Resources/html/images/airCondition.png" alt=""/>
-                <p>
-                    格力1.5匹节能空调<br/>
-                    <span class="style-green">20</span>
-                    积分
-                </p>
-            </div>
-        </div>
+		</c:forEach>
+		</c:when>
+		<c:otherwise>
+		Nothing
+		</c:otherwise>
+		</c:choose>
     </div>
 
     <script src="/DowLoyalty/Resources/html/js/jquery-1.8.2.min.js"></script>
@@ -70,6 +63,11 @@
             $(".menu-btn").removeClass("style-bg-green");
             $(this).addClass("style-bg-green");
         })
+        
+        //跳转到具体礼品信息显示页面
+        function getInfo(id){
+        	location.href = "/DowLoyalty/v1/WeChat/retailer/goodsInfo?goodsId="+id;
+        }
     </script>
 </body>
 
