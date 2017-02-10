@@ -15,8 +15,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.dowloyalty.entity.ExchangeRecord;
 import com.dowloyalty.pojo.GoodsVo;
+import com.dowloyalty.pojo.PointsDetails;
 import com.dowloyalty.service.ExchangeRecordService;
 import com.dowloyalty.service.GoodsService;
+import com.dowloyalty.service.IRetailerService;
 
 /**
  * 微信端控制器
@@ -30,6 +32,7 @@ public class WeChatController {
 	GoodsService goodsService;
 	@Resource
 	ExchangeRecordService exchangeRecordService;
+	@Resource IRetailerService retailerService;
 	
 	/**
 	 * 零售商操作
@@ -100,4 +103,29 @@ public class WeChatController {
 		return "redirect:/v1/WeChat/retailer/exchangeshop";
 	}
 	
+	/**
+	 * 获取零售商积分明细
+	 * @param request 服务器请求
+	 * @param model 模型（传参用）
+	 * @return	积分明细页面
+	 */
+	@RequestMapping("/retailer/pointsDetails")
+	public ModelAndView getPointsDetails(HttpServletRequest request,Model model)
+	{
+		//获取零售商id、筛选条件（月份、事项）并查找数据
+		String month = request.getParameter("month");
+		String matter = request.getParameter("matter");
+		//String retailerId = request.getParameter("retailerId");
+		//测试用
+		String retailerId = "1";
+		List<PointsDetails> pointsDetails = retailerService.findByRetailerId(Integer.parseInt(retailerId), matter, month);
+		
+		//返回数据与视图
+		ModelAndView mv = new ModelAndView();
+		model.addAttribute("month", month);
+		model.addAttribute("matter", matter);
+		mv.addObject("pointsDetails", pointsDetails);
+		mv.setViewName("WeChat/scoreDetails");
+		return mv;
+	}
 }

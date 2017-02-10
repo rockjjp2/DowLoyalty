@@ -6,4 +6,48 @@
 		SELECT ID,ChineseName,ProvinceID,Mobile,WechatId,Email,IsActive
 			FROM retailer   WHERE   IsActive = 1 AND  ProvinceID = #{value}
 	</select>
+	
+	<select id="findByRetailerId" resultType="com.dowloyalty.pojo.PointsDetails">
+	select
+		name,DATE_FORMAT(submitTime,'%Y.%m') submitTime,points
+	from
+	(
+		select
+			goods.Name name,
+			exchangerecord.SubmitTime submitTime,
+			exchangerecord.ExchangePoints points,
+			exchangerecord.RetailerID retailerId
+		from
+			exchangerecord left join goods
+			on exchangerecord.GoodsID = goods.ID
+		union all
+		select
+			product.Name name,
+			salerecord.SubmitDate submitTime,
+			salerecord.Points points,
+			salerecord.RetailerID retailerId
+		from
+			salerecord left join product
+			on salerecord.ProductID = product.ID
+		) pointsdetails
+		where
+			retailerId = #{RetailerID}
+		<if test="month != null and month != ''">
+			and
+				MONTH(submitTime) = #{month}
+		</if>
+		<if test = "matter != null">
+			<if test = "matter == '进货'">
+				and
+					points > 0
+				
+			</if>
+			<if test = "matter == '兑换'">
+				and
+					points &lt; 0
+				
+			</if>
+		</if>
+		order by submitTime desc
+	</select>
 </mapper>
