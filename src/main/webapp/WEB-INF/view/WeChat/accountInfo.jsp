@@ -18,29 +18,29 @@
 
     <div class="container txt-center">
         <div class="txt-center clearfix">
-            <p>尊敬的<span class="style-green">金卡会员</span></p>
-            <p><span class="style-green">山东经销商A</span>，您好！</p>
+            <p>尊敬的<span class="style-green">${accountInfo.lvName}会员</span></p>
+            <p><span class="style-green">${accountInfo.provinceName}经销商${accountInfo.reName}</span>，您好！</p>
         </div>
         <div class="txt-center clearfix">
-            <p>会员号：<span class="style-green">123456</span></p>
-            <p>累计积分：<span class="style-green">5000</span>分</p>
-            <p>可兑换积分：<span class="style-green">3000</span>分</p>
+            <p>会员号：<span class="style-green">${accountInfo.reId}</span></p>
+            <p>累计积分：<span class="style-green">${accountInfo.totalPoints}</span>分</p>
+            <p>可兑换积分：<span class="style-green">${accountInfo.remainPoints}</span>分</p>
         </div>
         <div class="txt-center">
             <div class="cup">
                 <i class="fa fa-trophy style-green"></i>
                 <div id="numInCup" class="style-white">125</div>
             </div>
-            <p>您当前累计积分省内排名为：<span class="style-green">5</span></p>
-            <p>距离第<span class="style-green">4</span>名只差<span class="style-green">20</span>分</p>
+            <p>您当前累计积分省内排名为：<span class="style-green">${accountInfo.curRank}</span></p>
+            <p>距离第<span class="style-green">${accountInfo.nextRank}</span>名只差<span class="style-green">${accountInfo.toUpPersonRemainPoints}</span>分</p>
         </div>
         <div class="txt-center">
             <div class="circle">
                 <div class="circle-bl1 style-bg-green"></div>
-                <div class="circle-text style-green">70%</div>
+                <div class="circle-text style-green">${accountInfo.rankPercent}%</div>
             </div>
-            <p>已打败<span class="style-green">60%</span>的零售商</p>
-            <p>距离升级<span class="style-green">钻石卡会员</span>只差<span class="style-green">1000</span>积分</p>
+            <p>已打败<span class="style-green">${accountInfo.rankPercent}%</span>的零售商</p>
+            <p>距离升级<span class="style-green">${accountInfo.nextLv}会员</span>只差<span class="style-green">${accountInfo.toNextLvRemainPoints}</span>积分</p>
         </div>
     </div>
 

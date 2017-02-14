@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dowloyalty.dao.IRetailerDao">
+	<select id="findRetailerByProvinceId" resultType="com.dowloyalty.entity.Retailer" parameterType="int">
+		SELECT ID,ChineseName,ProvinceID,Mobile,OpenID,Email,LastUpdataData,SFDCCode,LoginCode,IsActive
+			FROM retailer   WHERE   IsActive = 1 AND  ProvinceID = #{value}
+	</select>
+	
+	<select id="findRetailerByOpenId" resultType="com.dowloyalty.entity.Retailer" parameterType="String">
+		SELECT ID,ChineseName,ProvinceID,Mobile,OpenID,Email,LastUpdataData,SFDCCode,LoginCode,IsActive
+			FROM retailer   WHERE   IsActive = 1 AND  OpenID = #{value}
+	</select>
+	
+	<select id="findRetailerByLoginCode" resultType="com.dowloyalty.entity.Retailer" parameterType="String">
+		SELECT ID,ChineseName,ProvinceID,Mobile,OpenID,Email,LastUpdataData,SFDCCode,LoginCode,IsActive
+			FROM retailer   WHERE   IsActive = 1 AND  LoginCode = #{value}
+	</select>
+	
+	<update id="updateOpenIdByLoginCode">
+		UPDATE `retailer` SET `OpenID`=#{openID} WHERE `IsActive`='1' AND LoginCode=#{loginCode}
+	</update>
+	
+	<select id="findByRetailerId" resultType="com.dowloyalty.pojo.PointsDetails">
+	select
+		name,DATE_FORMAT(submitTime,'%Y.%m') submitTime,points
+	from
+	(
+		select
+			goods.Name name,
+			exchangerecord.SubmitTime submitTime,
+			exchangerecord.ExchangePoints points,
+			exchangerecord.RetailerID retailerId
+		from
+			exchangerecord left join goods
+			on exchangerecord.GoodsID = goods.ID
+		union all
+		select
+			product.Name name,
+			salerecord.SubmitDate submitTime,
+			salerecord.Points points,
+			salerecord.RetailerID retailerId
+		from
+			salerecord left join product
+			on salerecord.ProductID = product.ID
+		) pointsdetails
+		where
+			retailerId = #{RetailerID}
+		<if test="month != null and month != ''">
+			and
+				MONTH(submitTime) = #{month}
+		</if>
+		<if test = "matter != null">
+			<if test = "matter == '进货'">
+				and
+					points > 0
+				
+			</if>
+			<if test = "matter == '兑换'">
+				and
+					points &lt; 0
+				
+			</if>
+		</if>
+		order by submitTime desc
+	</select>
+	
+	<select id="findById" parameterType="int" resultType="com.dowloyalty.entity.Retailer">
+		select
+			ID,ChineseName,ProvinceID,Mobile,
+			OpenID,Email,LastUpdataData,SFDCCode,
+			LoginCode,IsActive
+		from
+			retailer
+		where
+			ID = #{retailerID}
+	</select>
+</mapper>

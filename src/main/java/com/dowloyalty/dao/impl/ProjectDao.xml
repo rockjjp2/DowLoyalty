@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.dowloyalty.dao.ProjectDao">
+ 	
+ 	<select id="findActiveByRid" parameterType="int" resultType="String">
+ 		select
+ 			ProjectID
+ 		from
+ 			rprojectretailer
+ 		where
+ 			RetailerID = #{RetailerID}
+ 		and IsActive = 1
+ 	</select>
+ </mapper>

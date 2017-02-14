@@ -32,6 +32,8 @@
 		ID,Name,Description,ImagePath,
 		IsActive,GoodsCategoryID
 	from goods
+	where
+	IsActive = 1
 	</select>
 	
 	<resultMap type="com.dowloyalty.pojo.GoodsVo" id="pointsMap">
@@ -61,6 +63,14 @@
 	right join rprojectretailer
 	on project.ID = rprojectretailer.ProjectID
 	where rprojectretailer.RetailerID = #{ID}
+	and
+	goods.IsActive = 1
+	and
+	project.IsActive = 1
+	and
+	exchangeshop.IsActive = 1
+	and
+	rprojectretailer.IsActive = 1
 	</select>
 	
 	<select id = "findByGoodsId" parameterType="int" resultMap="pointsMap">
@@ -74,6 +84,10 @@
 	left join exchangeshop
 	on goods.ID = exchangeshop.GoodsID
 	where goods.ID = #{ID}
+	and
+	goods.IsActive = 1
+	and
+	exchangeshop.IsActive = 1
 	</select>
 	
 	<select id = "findByProvinceId" parameterType="int" resultMap="pointsMap">
@@ -89,12 +103,20 @@
 	right join project
 	on exchangeshop.projectID = project.ID
 	where project.ProvinceID = #{ID}
+	and
+	goods.IsActive = 1
+	and
+	project.IsActive = 1
+	and
+	exchangeshop.IsActive = 1
 	</select>
 	
 	<select id = "getGoodsAmount" resultType="int">
 	select
 		count(*)
 	from goods
+	where
+	goods.IsActive = 1
 	</select>
 	
 	<select id = "findById" parameterType="int" resultType="com.dowloyalty.entity.Goods">
@@ -103,6 +125,8 @@
 		IsActive
 	from goods
 	where ID = #{ID}
+	and
+	goods.IsActive = 1
 	</select>
 </mapper>
 
