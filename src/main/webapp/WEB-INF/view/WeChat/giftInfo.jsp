@@ -108,10 +108,26 @@
             });
             $("#doubleConvert").click(function(){
             	var amount = $("#amount").val();
-       		 $(".exchangeGoods").attr("action","/DowLoyalty/v1/WeChat/retailer/goods/exchange?retailerId=${retailerId}"+
-            	"&goodsId=${goods.goods.id}"+"&exchangePoints=${goods.exchangePoints}"+"&amount="+amount);
-       			
-       		$(".exchangeGoods").submit();
+            	$.ajax({
+            		type:"post",
+            		url:"/DowLoyalty/v1/WeChat/retailer/remainPoints/get",
+            		data:"retailerId="+${retailerId},
+            		dataType:"text",
+            		success:function(remainPoints)
+            		{
+            			if(remainPoints >= amount*${goods.exchangePoints})
+            			{
+			       		 $(".exchangeGoods").attr("action","/DowLoyalty/v1/WeChat/retailer/goods/exchange?retailerId=${retailerId}"+
+			            	"&goodsId=${goods.goods.id}"+"&exchangePoints=${goods.exchangePoints}"+"&amount="+amount);
+			       			
+			       		$(".exchangeGoods").submit();
+            			}
+            			else
+            			{
+            				alert("您的积分不足!");
+            			}
+            		}
+            	});
             });
             
         }

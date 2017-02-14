@@ -36,9 +36,4 @@ public class PointsLevelServiceImpl implements PointsLevelService {
 		return pointsLevelDao.findNexLvPByRetailerId(id, pId);
 	}
 
-	@Override
-	public String getRankPercent(int id, int pId) {
-		return pointsLevelDao.getRankPercent(id, pId);
-	}
-
 }

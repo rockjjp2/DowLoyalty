@@ -27,6 +27,13 @@ public class RetailerServiceImp implements IRetailerService {
 		return iRetailerDao.findRetailerByOpenId(openID)!=null?true:false;
 	}
 
+	
+	@Override
+	public Retailer findRetailerByOpenId(String openID) {
+		// TODO Auto-generated method stub
+		return iRetailerDao.findRetailerByOpenId(openID);
+	}
+	
 	@Override
 	public Retailer findRetailerByLoginCode(String LoginCode) {
 		return iRetailerDao.findRetailerByLoginCode(LoginCode);
@@ -46,6 +53,11 @@ public class RetailerServiceImp implements IRetailerService {
 	@Override
 	public Retailer findById(int id) {
 		return iRetailerDao.findById(id);
+	}
+	
+	@Override
+	public String getRankPercent(int id, int pId) {
+		return iRetailerDao.getRankPercent(id, pId);
 	}
 }
  

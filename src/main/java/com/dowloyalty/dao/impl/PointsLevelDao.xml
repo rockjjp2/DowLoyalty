@@ -58,7 +58,7 @@
 	retailer.ID retailerId,
 	province.Name provinceName,
 	sum(salerecord.Points) totalPoints,
-	sum(salerecord.Points)+sumEgPoints remainPoints
+	sum(salerecord.Points)+ifnull(sumEgPoints,0) remainPoints
 	from
 	retailer
 	left join province
@@ -85,49 +85,10 @@
  	</resultMap>
 	
 	<select id="findFurAccByRetailerId" resultMap="furAccMap">
-	select
-	count(allSumPoints) nextRank,
-	count(allSumPoints)+1 curRank,
-	min(allSumPoints)-
-	oneSum.oneSumPoints
-	remainPoints
-	from 
-	(
-			select
-					sum(Points) oneSumPoints
-				from salerecord
-				where salerecord.RetailerID = #{RetailerID}
-		) oneSum,
-	(
-		select
- 				sum(Points) allSumPoints,ProjectID
- 			from salerecord
- 			group by RetailerID
-			having
-			allSumPoints > 
-		(
-			select
-					sum(Points) oneSumPoints
-				from salerecord
-				where salerecord.RetailerID = #{RetailerID}
-		)
-	) allSum
-	where
-		allSum.ProjectID = #{ProjectID}
-	</select>
-	
-	<select id="getRankPercent" resultType="String">
 	select 
-	count(RetailerID)/((
-	select
-		count(ID)
-		from
-		retailer
-		where 
-		ProvinceID = #{ProvinceID}
-		and 
-		IsActive = 1
-))*100+'%'
+	count(allPoint) nextRank,
+	count(allPoint)+1 curRank,
+	min(allPoint-onePoint) remainPoints
 	from 
 	(
 	select
@@ -170,6 +131,6 @@
 	) onePoints
 	where 
 allPoints.allPoint > onePoints.onePoint
-	
 	</select>
+	
  </mapper>

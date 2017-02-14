@@ -75,4 +75,61 @@
 		where
 			ID = #{retailerID}
 	</select>
+	
+	<select id="getRankPercent" resultType="String">
+	select 
+	count(RetailerID)/((
+	select
+		count(ID)
+		from
+		retailer
+		where 
+		ProvinceID = #{ProvinceID}
+		and 
+		IsActive = 1
+))*100+'%'
+	from 
+	(
+	select
+		sum(salerecord.Points) allPoint,salerecord.RetailerID
+		from 
+		project
+		left join
+		salerecord
+		on
+		project.ID = salerecord.ProjectID
+		left join 
+		retailer
+		on
+		retailer.ID = salerecord.RetailerID
+		where
+		project.ProvinceID = #{ProvinceID}
+		and
+		project.IsActive = 1
+		group by salerecord.RetailerID
+	) allPoints,
+	(
+	select
+		sum(salerecord.Points) onePoint
+		from 
+		project
+		left join
+		salerecord
+		on
+		project.ID = salerecord.ProjectID
+		left join 
+		retailer
+		on
+		retailer.ID = salerecord.RetailerID
+		where
+		project.ProvinceID = #{ProvinceID}
+		and
+		project.IsActive = 1
+		and 
+		retailer.ID = #{RetailerID}
+	) onePoints
+	where 
+allPoints.allPoint > onePoints.onePoint
+	
+	</select>
 </mapper>

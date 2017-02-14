@@ -1,11 +1,14 @@
 package com.dowloyalty.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -139,35 +142,55 @@ public class WeChatController {
 		return mv;
 	}
 	
+	/**
+	 * 获取零售商账户信息
+	 * @param request 服务器请求
+	 * @param model 模型（传参用）
+	 * @return	零售商账户信息显示页面
+	 */
 	@RequestMapping("/retailer/accountInfo")
 	public String getAccountInfo(HttpServletRequest request,Model model)
 	{
 		//String retailerId = request.getParameter("retailerId");
-		String retailerId = "1";
+		String retailerId = "2";
 		
 		String projectId = projectService.findActiveByRid(Integer.parseInt(retailerId));
+		int pId;
+		
+		RetailerAccInfo reAcc = pointsLevelService.findAccInfoByRetailerId(Integer.parseInt(retailerId));
+		Retailer retailer = retailerService.findById(Integer.parseInt(retailerId));
+		String rankPercent = retailerService.getRankPercent(Integer.parseInt(retailerId), retailer.getProvinceID());
+		RetailerAccInfo reAccFur = pointsLevelService.findFurAccByRetailerId(Integer.parseInt(retailerId), retailer.getProvinceID());
+		PointsLevel pointsLevel;
 		if(null != projectId)
 		{
-			int pId = Integer.parseInt(projectId);
-			
-			PointsLevel pointsLevel = pointsLevelService.findNexLvPByRetailerId(Integer.parseInt(retailerId), pId);
+			pId = Integer.parseInt(projectId);
+			pointsLevel = pointsLevelService.findNexLvPByRetailerId(Integer.parseInt(retailerId), pId);
 			String lvName = pointsLevelService.findLvNameByRetailerId(Integer.parseInt(retailerId), pId);
 			
-			RetailerAccInfo reAccFur = pointsLevelService.findFurAccByRetailerId(Integer.parseInt(retailerId), pId);
-			RetailerAccInfo reAcc = pointsLevelService.findAccInfoByRetailerId(Integer.parseInt(retailerId));
-			
-			Retailer retailer = retailerService.findById(Integer.parseInt(retailerId));
-			String rankPercent = pointsLevelService.getRankPercent(Integer.parseInt(retailerId), retailer.getProvinceID());
-			reAcc.setCurRank(reAccFur.getCurRank());//当前排名
-			reAcc.setNextRank(reAccFur.getNextRank());//前一名名次
-			reAcc.setToUpPersonRemainPoints(reAccFur.getToUpPersonRemainPoints());//与前一名所差积分数
 			reAcc.setLvName(lvName);//当前积分等级名称
 			reAcc.setToNextLvRemainPoints(pointsLevel.getPoints()-reAcc.getTotalPoints());//与下一积分等级所差积分数
 			reAcc.setNextLv(pointsLevel.getName());//下一积分等级名称
+		}
+		reAcc.setCurRank(reAccFur.getCurRank());//当前排名
+		reAcc.setNextRank(reAccFur.getNextRank());//前一名名次
+		reAcc.setToUpPersonRemainPoints(reAccFur.getToUpPersonRemainPoints());//与前一名所差积分数
 			reAcc.setRankPercent(rankPercent);//排名百分比
 			model.addAttribute("accountInfo", reAcc);
 			return "WeChat/accountInfo";
+	}
+	
+	@RequestMapping("/retailer/remainPoints/get")
+	public void getRetailerCurPoints(HttpServletRequest request,HttpServletResponse response)
+	{
+		String retailerId = request.getParameter("retailerId");
+		RetailerAccInfo reAcc = pointsLevelService.findAccInfoByRetailerId(Integer.parseInt(retailerId));
+		try {
+			PrintWriter out = response.getWriter();
+			out.println(reAcc.getRemainPoints());
+			out.flush();
+			out.close();
+		} catch (IOException e) {
 		}
-		return "";
 	}
 }

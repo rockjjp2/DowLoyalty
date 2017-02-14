@@ -28,4 +28,12 @@ public interface IRetailerDao {
 	 * @return 零售商对象
 	 */
 	public Retailer findById(int id);
+	
+	/**
+	 * 通过零售商id和省份id获取零售商省内排名百分比
+	 * @param id	零售商id
+	 * @param pId	省份id
+	 * @return	零售商省内排名百分比
+	 */
+	public String getRankPercent(@Param("RetailerID")int id,@Param("ProvinceID")int pId);
 }
