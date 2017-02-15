@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -26,6 +27,8 @@
             <p>累计积分：<span class="style-green">${accountInfo.totalPoints}</span>分</p>
             <p>可兑换积分：<span class="style-green">${accountInfo.remainPoints}</span>分</p>
         </div>
+        <c:choose>
+        	<c:when test="${isVisible}">
         <div class="txt-center">
             <div class="cup">
                 <i class="fa fa-trophy style-green"></i>
@@ -42,8 +45,17 @@
             <p>已打败<span class="style-green">${accountInfo.rankPercent}%</span>的零售商</p>
             <p>距离升级<span class="style-green">${accountInfo.nextLv}会员</span>只差<span class="style-green">${accountInfo.toNextLvRemainPoints}</span>积分</p>
         </div>
+        	</c:when>
+        </c:choose>
     </div>
-
+	
+	<footer class="txt-center style-deepGray">
+        <div id="homePage" class="menu"><i class="fa fa-home"></i></div>
+        <div id="accountInfo" class="menu style-btnBg-green">账户信息</div>
+        <div id="exchangeshop" class="menu">礼品商城</div>
+        <div id="pointsDetails" class="menu">积分明细</div>
+    </footer>
+	
     <script src="/DowLoyalty/Resources/html/js/jquery-1.8.2.min.js"></script>
     <script>
         $(function(){
@@ -63,6 +75,13 @@
                 $('.circle-bl1').append(blHtml);
             }
         })
+        
+        /*点击菜单-页面跳转*/
+        $(".menu").click(function(){
+           var pageID = $(this).attr("id");
+           location.href = "/DowLoyalty/v1/WeChat/retailer/"+pageID;
+        });
+
     </script>
 
 </body>

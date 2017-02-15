@@ -1,6 +1,6 @@
 body{margin: 0;}
 header{height: 30%;}
-.container{margin-top: -15%;}
+.container{margin-top: -15%;overflow: inherit;}
 p{font-size: 1.5rem;margin: 0.4rem auto;}
 
 .cup{width: 5rem;height: 5.2rem;line-height: 5.2rem;position: relative;margin: 0 auto;}
@@ -8,10 +8,10 @@ p{font-size: 1.5rem;margin: 0.4rem auto;}
 #numInCup{font-size: 1.5rem;position: absolute;bottom: 22%;width: 100%;}
 /*.numInCircle{position: absolute;font-size: 1.3rem;right: 46%;bottom: 28%;}*/
 
-.circle{ width: 6rem; height: 6rem; margin:0 auto; box-sizing:border-box;text-align:center; background-color:#f1f1f1; border-radius:50%; position:relative;}
+.circle{ width: 5rem; height: 5rem; margin:0 auto; box-sizing:border-box;text-align:center; background-color:#f1f1f1; border-radius:50%; position:relative;}
 .circle-bl1 , .circle-bl2 , .circle-bl3 , .circle-bl4{ width:100%; height:100%; border-radius:50%; position:absolute; left:0; top:0;}
 .circle-bl1 , .circle-bl2{ -webkit-box-shadow:0 0 1px 1px #fff inset; box-shadow:0 0 1px 1px #fff inset;}
 .circle-bl3 , .circle-bl4{ background-color:#f1f1f1;}
-.circle-bl1 , .circle-bl3{ clip:rect(0 6rem 3rem 0);}
-.circle-bl2 , .circle-bl4{ clip:rect(3rem 6rem 6rem 0);}
-.circle-text{ width: 4.0rem; height: 4.0rem; line-height:4.0rem; box-sizing:border-box; top: 16%; margin:0 auto; font-size:1.2rem; background-color: #FFF;border-radius:50%; position:relative;}
+.circle-bl1 , .circle-bl3{ clip:rect(0 5rem 3rem 0);}
+.circle-bl2 , .circle-bl4{ clip:rect(3rem 5rem 5rem 0);}
+.circle-text{ width: 3.6rem; height: 3.6rem; line-height:3.6rem; box-sizing:border-box; top: 14%; margin:0 auto; font-size:1.2rem; background-color: #FFF;border-radius:50%; position:relative;}

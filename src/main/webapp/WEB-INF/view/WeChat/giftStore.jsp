@@ -56,8 +56,21 @@
 		</c:choose>
     </div>
 
+	<footer class="txt-center style-deepGray">
+        <div id="homePage" class="menu"><i class="fa fa-home"></i></div>
+        <div id="accountInfo" class="menu style-btnBg-green">账户信息</div>
+        <div id="exchangeshop" class="menu">礼品商城</div>
+        <div id="pointsDetails" class="menu">积分明细</div>
+    </footer>
+
     <script src="/DowLoyalty/Resources/html/js/jquery-1.8.2.min.js"></script>
     <script type="text/javascript">
+    /*点击菜单-页面跳转*/
+    $(".menu").click(function(){
+       var pageID = $(this).attr("id");
+       location.href = "/DowLoyalty/v1/WeChat/retailer/"+pageID;
+    });
+    
         <!-- 按钮点击后样式改变-->
         $(".menu-btn").click(function(){
             $(".menu-btn").removeClass("style-bg-green");

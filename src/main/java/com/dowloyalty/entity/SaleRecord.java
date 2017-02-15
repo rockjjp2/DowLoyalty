@@ -16,13 +16,17 @@ public class SaleRecord implements Serializable {
 	private Timestamp submitDate;
 	private int projectID;
 	private int points;
+	private int amount;
+
+	private Retailer retailer;
+	private Product product;
 
 	public SaleRecord() {
 		super();
 	}
 
 	public SaleRecord(int id, int retailerID, int productID, float totalPrice, int importerID, Timestamp submitDate,
-			int projectID, int points) {
+			int projectID, int points, int amount) {
 		super();
 		this.id = id;
 		this.retailerID = retailerID;
@@ -32,6 +36,22 @@ public class SaleRecord implements Serializable {
 		this.submitDate = submitDate;
 		this.projectID = projectID;
 		this.points = points;
+		this.amount = amount;
+	}
+
+	public SaleRecord(int id, int retailerID, int productID, float totalPrice, int importerID, Timestamp submitDate,
+			int projectID, int points, Retailer retailer, Product product) {
+		super();
+		this.id = id;
+		this.retailerID = retailerID;
+		this.productID = productID;
+		this.totalPrice = totalPrice;
+		this.importerID = importerID;
+		this.submitDate = submitDate;
+		this.projectID = projectID;
+		this.points = points;
+		this.retailer = retailer;
+		this.product = product;
 	}
 
 	public int getId() {
@@ -98,6 +118,21 @@ public class SaleRecord implements Serializable {
 		this.points = points;
 	}
 
+	public Retailer getRetailer() {
+		return retailer;
+	}
+
+	public void setRetailer(Retailer retailer) {
+		this.retailer = retailer;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
 
 	@Override
 	public String toString() {
@@ -105,5 +140,13 @@ public class SaleRecord implements Serializable {
 				+ totalPrice + ", importerID=" + importerID + ", submitDate=" + submitDate + ", projectID=" + projectID
 				+ ", points=" + points + "]";
 	}
-	
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
 }

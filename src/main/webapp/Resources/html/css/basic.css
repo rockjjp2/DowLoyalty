@@ -12,6 +12,7 @@ header{height: 10%;position: relative;}
 header img{height: 100%;width: 100%;position: absolute;}
 header h4{color: #FFF;position: absolute;bottom: 1%;left: 8%;}  /*修改bootstrap内h1,h2...margin-top*/
 
+.container{height: 82%;overflow: auto;}
 .container > div{margin: 1.7rem 0;}
 .menu-btn{padding: 0;border:0.1rem solid #B6BF00;border-radius: 0.4rem;text-align: center;}
 .item{box-shadow: 0 0.2rem #E0E0E0;}
@@ -30,10 +31,21 @@ button{border: 0.1rem solid;border-radius: 0.8rem;height: 2.5rem;font-size: 1.2r
 .style-white{color: #FFF;}
 .style-green{color: #B6BF00;}
 .style-gray{color: #CDCDCD;}
-.style-deepGray{color: #9C9C9C;}
+.style-deepGray{color: #9b9b9b;background-color: #FFF;}
 .style-btn-green{color: #B6BF00;border-color: #B6BF00;}
+.style-btnBg-green{background-color: #B6BF00;color: #FFF;border-color: #B6BF00;}
 .style-btn-gray{color: #CACACA;border-color: #CACACA;}
 .style-bg-gray{border-color: #F5F5F5!important;background-color: #F5F5F5;}
+.style-red{color: red;}
+
+footer{margin: 0;font-size: 0;width: 100%;height: 8%;position: fixed;bottom: 0;}
+footer div{margin: 0;font-size: 1.3rem;display: inline-block;border: 0.1rem solid;height: 100%;}
+footer p{margin: 0;}
+footer div:after{display: inline-block;width: 0;height: 100%;vertical-align: middle;content: "";}
+.menu{width: 30%;}
+#homePage{width: 6.5%;}
+/*.menu{width: 31%;}*/
+/*#homePage{width: 7%;}*/
 
 /*用div重写select样式*/
 /*.select{margin: auto 0.6rem;height: 2.3rem;}*/

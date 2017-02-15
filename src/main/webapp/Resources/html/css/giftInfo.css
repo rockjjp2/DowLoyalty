@@ -7,5 +7,6 @@
 #cover{width: 100%;height: 100%;z-index: 50;position: absolute;
     top: 0;opacity: 0.8;background-color: #AAAAAA;}
 #contain{z-index: 100;position: absolute;top: 20%;background-color: #FFFFFF;box-shadow: 0 0 0.8rem #777;padding: 3.0rem 2rem;}
-#contain button{margin-top: 8%;}
+#close{position: absolute;right: 5%;top: 10%;}
+#contain button{margin-top: 5%;}
 .dBtn{margin-left: 10%;}

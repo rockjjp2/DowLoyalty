@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.dowloyalty.entity.ExchangeRecord;
 import com.dowloyalty.entity.PointsLevel;
+import com.dowloyalty.entity.Project;
 import com.dowloyalty.entity.Retailer;
 import com.dowloyalty.pojo.GoodsVo;
 import com.dowloyalty.pojo.PointsDetails;
@@ -94,7 +95,7 @@ public class WeChatController {
 	/**
 	 * 零售商操作
 	 * 兑换礼品
-	 * @param request 服务器请求
+	 * @param request 客户端请求
 	 * @return 兑换结果(成功或失败)页面
 	 */
 	@RequestMapping("/retailer/goods/exchange")
@@ -118,7 +119,7 @@ public class WeChatController {
 	
 	/**
 	 * 获取零售商积分明细
-	 * @param request 服务器请求
+	 * @param request 客户端请求
 	 * @param model 模型（传参用）
 	 * @return	积分明细页面
 	 */
@@ -144,7 +145,7 @@ public class WeChatController {
 	
 	/**
 	 * 获取零售商账户信息
-	 * @param request 服务器请求
+	 * @param request 客户端请求
 	 * @param model 模型（传参用）
 	 * @return	零售商账户信息显示页面
 	 */
@@ -154,7 +155,8 @@ public class WeChatController {
 		//String retailerId = request.getParameter("retailerId");
 		String retailerId = "2";
 		
-		String projectId = projectService.findActiveByRid(Integer.parseInt(retailerId));
+		Project project = projectService.findActiveByRid(Integer.parseInt(retailerId));
+		boolean isVisible = false;
 		int pId;
 		
 		RetailerAccInfo reAcc = pointsLevelService.findAccInfoByRetailerId(Integer.parseInt(retailerId));
@@ -162,9 +164,10 @@ public class WeChatController {
 		String rankPercent = retailerService.getRankPercent(Integer.parseInt(retailerId), retailer.getProvinceID());
 		RetailerAccInfo reAccFur = pointsLevelService.findFurAccByRetailerId(Integer.parseInt(retailerId), retailer.getProvinceID());
 		PointsLevel pointsLevel;
-		if(null != projectId)
+		if(null != project)
 		{
-			pId = Integer.parseInt(projectId);
+			pId = project.getId();
+			isVisible = project.isVisible();
 			pointsLevel = pointsLevelService.findNexLvPByRetailerId(Integer.parseInt(retailerId), pId);
 			String lvName = pointsLevelService.findLvNameByRetailerId(Integer.parseInt(retailerId), pId);
 			
@@ -177,9 +180,15 @@ public class WeChatController {
 		reAcc.setToUpPersonRemainPoints(reAccFur.getToUpPersonRemainPoints());//与前一名所差积分数
 			reAcc.setRankPercent(rankPercent);//排名百分比
 			model.addAttribute("accountInfo", reAcc);
+			model.addAttribute("isVisible", isVisible);
 			return "WeChat/accountInfo";
 	}
 	
+	/**
+	 * 获取对应id的零售商剩余积分以判断是否满足兑换条件
+	 * @param request	客户端请求
+	 * @param response	服务器响应
+	 */
 	@RequestMapping("/retailer/remainPoints/get")
 	public void getRetailerCurPoints(HttpServletRequest request,HttpServletResponse response)
 	{
