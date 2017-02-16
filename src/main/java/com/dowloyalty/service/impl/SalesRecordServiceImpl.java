@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.dowloyalty.dao.ISaleRecordDao;
 import com.dowloyalty.entity.SaleRecord;
+import com.dowloyalty.pojo.webSale;
 import com.dowloyalty.pojo.SendSaleRecord;
 import com.dowloyalty.service.ISalesRecordService;
 
@@ -17,12 +18,12 @@ public class SalesRecordServiceImpl implements ISalesRecordService{
 	@Resource
 	private ISaleRecordDao saleRecordDao;
 	@Override
-	public List<SaleRecord> selectSalesRecord() {
+	public List<webSale> selectSalesRecord() {
 		// TODO Auto-generated method stub
 		return saleRecordDao.selectSalesRecord();
 	}
 	@Override
-	public List<SaleRecord> findNewInsertSalesRecord(int id) {
+	public List<webSale> findNewInsertSalesRecord(int id) {
 		// TODO Auto-generated method stub
 		return saleRecordDao.findNewInsertSalesRecord(id);
 	}
@@ -32,8 +33,8 @@ public class SalesRecordServiceImpl implements ISalesRecordService{
 		return saleRecordDao.selectWeChatSaleRecords();
 	}
 	@Override
-	public List<SendSaleRecord> findAllSaleRecord() {
-		return saleRecordDao.findAllSaleRecord();
+	public List<SendSaleRecord> findAllSaleRecord(String time) {
+		return saleRecordDao.findAllSaleRecord(time);
 	}
 
 }

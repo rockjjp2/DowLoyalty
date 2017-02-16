@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
@@ -22,9 +23,10 @@ public class SendToSaleForceController {
 	ISalesRecordService salesRecordService;
 	
 	@RequestMapping("/salerecord/get")
-	public void sendSaleRecordJson(HttpServletResponse response)
+	public void sendSaleRecordJson(HttpServletRequest request, HttpServletResponse response)
 	{
-		List<SendSaleRecord> records = salesRecordService.findAllSaleRecord();
+		String time = request.getParameter("time");
+		List<SendSaleRecord> records = salesRecordService.findAllSaleRecord(time);
 		JSONArray json = (JSONArray)JSONArray.toJSON(records);
 		try {
 			PrintWriter out = response.getWriter();
