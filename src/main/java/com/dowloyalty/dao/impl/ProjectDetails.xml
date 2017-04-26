@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.dowloyalty.dao.IProjectDetailsDao">
+ 
+ <resultMap type="com.dowloyalty.pojo.ProjectProvince" id="ProjectMap">
+   <result column="provinceId" property="provinceId"/>
+   <result column="provinceName" property="provinceName"/>
+   <result column="projectTitle" property="projectTitle"/>
+   <result column="startDate" property="startDate"/>
+   <result column="endDate" property="endDate"/>
+   <result column="description" property="description"/>
+   <result column="placardPath" property="placardPath"/>
+   <result column="backgroundPath" property="backgroundPath"/>
+ </resultMap>
+ 
+ <!-- 根据项目id查找项目和省份的相关信息 -->
+ <select id="findProjectById" parameterType="int" resultMap="ProjectMap">
+ select
+   prov.id provinceId,
+   prov.name provinceName,
+   proj.name projectTitle,
+   DATE_FORMAT(proj.startDate,'%Y/%m/%d') startDate,
+   DATE_FORMAT(proj.endDate,'%Y/%m/%d') endDate,
+   proj.description description,
+   proj.placardPath placardPath,
+   proj.backgroundPath backgroundPath
+ from
+   project proj                            
+   inner join 
+   province prov 
+ on
+   proj.provinceID=prov.id 
+ where
+   proj.id=#{projectId}
+ and
+   proj.isActive=prov.isActive=1
+ </select>
+ 
+ <!-- 根据项目id查找零售商相关信息 -->
+ <select id="findRetaileByProjectId" parameterType="int" resultType="com.dowloyalty.entity.Retailer">
+ select r.* 
+ from retailer r 
+ inner join rprojectretailer rpr 
+ on rpr.retailerID=r.id 
+ where rpr.projectID=#{projectId}
+ and r.isActive=rpr.isActive=1
+ </select>
+ 
+ <!-- 根据项目id查找零售商相关信息 -->
+ <select id="findPromoterByProjectId" parameterType="int" resultType="com.dowloyalty.entity.Promoter">
+ select p.* 
+ from Promoter p 
+ inner join rprojectpromoter rpp 
+ on rpp.PromoterID=p.id 
+ where rpp.projectID=#{projectId}
+ and p.isActive=rpp.isActive=1
+ </select>
+ 
+ <select id="findDelivPromoterByProjectId" parameterType="int" resultType="com.dowloyalty.entity.Promoter" >
+  select prom.* from project proj
+  inner join promoter prom 
+  on prom.id = proj.assistantID
+  where proj.id=#{projectId} 
+  and proj.isActive = prom.isActive
+ </select>
+ 
+ <select id="findGoodsByProjectId" parameterType="int" resultType="com.dowloyalty.pojo.ExchangeshopGoods">
+    select ex.GoodsID goodsId,ex.exchangePoints exPoints,g.name gName 
+    from exchangeshop ex 
+    inner  join goods g 
+    on g.id=ex.GoodsID 
+    where ex.projectID=#{projectId} 
+    and ex.isActive=g.isActive=1 
+ </select>
+ </mapper>

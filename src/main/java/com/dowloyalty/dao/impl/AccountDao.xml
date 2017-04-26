@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dowloyalty.dao.IAccountDao">
+
+	<insert id="insertAccountMapping" parameterType="com.dowloyalty.pojo.AccountMapping">
+	INSERT INTO `account` (`id`, `url`, `name`, `shippingState`, `phone`, `lastModiFieddate`)
+		VALUES (#{id}, #{url}, #{name}, #{shippingState}, #{phone}, #{lastModifiedDate})
+	</insert>
+	<select id="findLastModifiedDate" resultType="String">
+	SELECT lastModiFieddate FROM account ORDER BY lastModiFieddate DESC LIMIT 1
+	</select>
+	<select id="findAccountMappingById" parameterType="String" resultType="com.dowloyalty.pojo.AccountMapping">
+	SELECT * FROM account WHERE id=#{value} AND IsActive=1
+	</select>
+	<update id="updateAccountMappingById" parameterType="com.dowloyalty.pojo.AccountMapping">
+	UPDATE `account` SET 	`url` = #{url}, 
+							`name`= #{name}, 
+							`shippingState` = #{shippingState}, 
+							`phone`= #{phone},
+							 `lastModiFieddate`= #{lastModifiedDate}
+					WHERE (`id`=#{id}) LIMIT 1
+	</update>
+	<select id="findUpdateAccount"  resultType="com.dowloyalty.pojo.AccountMapping">
+		SELECT a.id,a.url,a.`name`,a.shippingState,a.phone,a.lastModiFieddate FROM retailer r,account a WHERE r.SFDCCode=a.id AND a.IsActive=1
+	</select>
+	<select id="findNewAccount"  resultType="com.dowloyalty.pojo.AccountMapping">
+		SELECT * FROM account WHERE IsActive=1
+	</select>
+	<update id="releaseAccount" parameterType="String">
+		UPDATE `account` SET isActive=0
+			WHERE (`id`=#{id}) AND isActive=1 LIMIT 1
+	</update>
+</mapper>
+

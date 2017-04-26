@@ -1,0 +1,109 @@
+body {
+      padding: 0;
+         margin:0;
+}
+#IntegralItemHome {
+    margin-top: 30px;
+    padding: 0;
+}
+
+    #IntegralItemHome ul {
+        padding: 0;
+         margin:0;
+        border: 0px solid blue;
+    }
+
+    #IntegralItemHome li {
+          padding: 0;
+         margin:0;
+        border: 0px solid red;
+        width: 31%;
+        height: 400px;
+        float: left;
+        /*margin-left: 2%;*/
+        background-size: cover;
+        list-style: none;
+        margin-bottom: 30px;
+    }
+
+#SD_Shouguang, #SD_Shouguang2 {
+    margin-left: 1.5%;
+    background-image: url(../images/BigImg/sdsg.png);
+    background-size: cover;
+}
+
+#SC_Ganju, #SC_Ganju2 {
+    background-image: url(../images/BigImg/scgj.png);
+    background-size: cover;
+}
+
+#SD_Pingguo, #SD_Pingguo2 {
+    background-image: url(../images/BigImg/scgj.png);
+    background-size: cover;
+}
+
+.integralitem-content {
+    color: white;
+    font-family: ΢���ź�;
+}
+
+.integralitem-content-title {
+    font-size: 1.9em;
+}
+
+.Sales-img {
+    border: 0;
+    padding: 1em;
+    background-image: url(../images/smallImg/Sales_before.png);
+     background-position: center;
+   background-position: center;
+     background-repeat: no-repeat;
+   
+    background-size: 80% 47%;
+    -webkit-background-size: 80% 47%; /* webkit����� */
+    -o-background-size: 80% 47%; /* Opera����� */
+    -moz-background-size: 80% 47%; /* Firefox����� */
+        
+        
+ 
+}
+
+.detail-img {
+    border: 0;
+    padding: 1em;
+    background-image: url(../images/smallImg/Detail.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 80% 47%;
+    -webkit-background-size: 80% 47%; /* webkit����� */
+    -o-background-size: 80% 47%; /* Opera����� */
+    -moz-background-size: 80% 47%; /* Firefox����� */
+}
+
+.integralitem-content {
+    margin-top: 85px;
+}
+
+    .integralitem-content p {
+        border: 0px solid red;
+        text-align: center;
+        line-height: 45px;
+    }
+
+.checkimg {
+    border: 1px solid #FFFFFF;
+    background-color: #FFFFFF;
+    padding: 8px 10% 8px 10%;
+    border-radius: 4px;
+    -webkit-border-radius:  4px;
+    -o-border-radius:  4px;
+    -moz-border-radius:  4px;
+    opacity: 0.8;
+    color: #333331;
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+}

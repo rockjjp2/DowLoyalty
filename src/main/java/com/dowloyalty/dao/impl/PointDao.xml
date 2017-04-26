@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dowloyalty.dao.IPointsDao">
+	
+	<select id="findPointByPrjectIdAndProductId" resultType="com.dowloyalty.entity.Points" parameterType="int">
+		SELECT * FROM `points` WHERE ProjectID=#{projectID} AND ProductID=#{productID}
+	</select>
+	
+	<insert id="save" parameterType="com.dowloyalty.entity.Points">
+		insert into points
+		(
+			ProjectID,ProductID,SalesAmount,Points,IsActive
+		)
+		values
+		(
+			#{projectID},#{productID},#{salesAmount},#{points},#{isActive}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.dowloyalty.entity.Points">
+		update points set
+	ProjectID = #{projectID},ProductID = #{productID},SalesAmount = #{salesAmount},Points = #{points},
+	IsActive = #{isActive}
+	where ID = #{id}
+	</update>
+	<select id="findPointMappingByProject" resultType="com.dowloyalty.pojo.PointMapping" parameterType="int">
+	SELECT @rownum:=@rownum+1 Rownum,a.* FROM (SELECT  rprojectretailer.RetailerID,rprojectretailer.ProjectID,IFNULL(pointsview.SalesPoint,0) SalesPoint,IFNULL(pointsview.Initpoint,0) Initpoint,IFNULL(pointsview.TotalPoint,0) TotalPoint
+	FROM rprojectretailer LEFT JOIN (SELECT * , SalesPoint+Initpoint TotalPoint FROM generalpointsview) pointsview
+	ON rprojectretailer.RetailerID=pointsview.RetailerID AND rprojectretailer.ProjectID=pointsview.ProjectID
+	WHERE rprojectretailer.ProjectID=#{projectId} ORDER BY pointsview.TotalPoint DESC) a, (select @rownum:=0) t
+	</select>
+	
+	<insert id="patchAddProducts">
+	insert into points
+		(
+			ProjectID,ProductID,SalesAmount,Points,IsActive
+		)
+		values
+			<foreach collection="ids" item="item" separator=",">
+				(
+					#{Points.projectID},#{item},#{Points.salesAmount},#{Points.points},#{Points.isActive}
+				)
+			</foreach>
+	</insert>
+	
+	<select id="findAllPointsByProjectId" parameterType="String" resultType="String">
+		select
+			ProductID
+		from
+			points
+		where
+			ProjectID = #{ProjectID}
+	</select>
+	
+</mapper>
+

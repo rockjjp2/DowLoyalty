@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.dowloyalty.dao.ISaleRecordDao">
+    <!-- 查询导入的销售记录 -->
+    <select id="findNewInsertSalesRecord" parameterType="int"  resultType="com.dowloyalty.pojo.webSale">
+	select t1.projectName,DATE_FORMAT(t1.submitDates,'%Y.%m.%d')
+	submitDate,t1.retaileName,t1.categoryName,t1.productName,t1.familyName,t1.totalPrice,t1.amount
+	from
+	( (SELECT PROJ.NAME projectName,S.SUBMITDATE submitDates,R.CHINESENAME
+	retaileName,PC.NAME categoryName,P.NAME productName,PF.NAME
+	familyName,S.TOTALPRICE totalPrice,S.AMOUNT amount
+	FROM SALERECORD S,PRODUCT P,PRODUCTCATEGORY PC,PRODUCTFAMILY PF,RETAILER
+	R,PROJECT PROJ
+	WHERE P.ID=S.PRODUCTID
+	AND PF.ID=P.PRODUCTFAMILYID
+	AND PC.ID=PF.CATEGROYID
+	AND S.PROJECTID = PROJ.ID
+	AND S.RETAILERID=R.ID
+	AND S.IMPORTERID=#{promoterId}
+	AND S.ID > #{id}
+	AND PF.ISACTIVE=PC.ISACTIVE=P.ISACTIVE=R.ISACTIVE=PROJ.ISACTIVE=1
+	)
+
+	union all
+	( SELECT null projectName,S.SUBMITDATE submitDates,R.CHINESENAME
+	retaileName,PC.NAME categoryName,P.NAME productName,PF.NAME
+	familyName,S.TOTALPRICE totalPrice,S.AMOUNT amount
+	FROM SALERECORD S,PRODUCT P,PRODUCTCATEGORY PC,PRODUCTFAMILY PF,RETAILER R
+	WHERE P.ID=S.PRODUCTID
+	AND PF.ID=P.PRODUCTFAMILYID
+	AND PC.ID=PF.CATEGROYID
+	AND S.RETAILERID=R.ID
+	AND S.IMPORTERID=#{promoterId}
+	AND S.ID > #{id}
+	AND S.PROJECTID IS NULL
+	AND PF.ISACTIVE=PC.ISACTIVE=P.ISACTIVE=R.ISACTIVE=1
+	) )t1
+	ORDER BY submitDates DESC
+    </select>
+    
+    
+    <!-- <select id="selectSalesRecord"  parameterType="int" resultType="com.dowloyalty.pojo.webSale" >
+      SELECT S.SUBMITDATE submitDate,R.CHINESENAME retaileName,PC.NAME categoryName,P.NAME productName,PF.NAME familyName,S.TOTALPRICE totalPrice,S.AMOUNT amount 
+      FROM SALERECORD S,PRODUCT P,PRODUCTCATEGORY PC,PRODUCTFAMILY PF,RETAILER R
+      WHERE P.ID=S.PRODUCTID 
+      AND PF.ID=P.PRODUCTFAMILYID 
+      AND PC.ID=PF.CATEGROYID
+      AND S.RETAILERID=R.ID
+      AND S.IMPORTERID=#{promoterId}
+      AND PF.ISACTIVE=PC.ISACTIVE=P.ISACTIVE=R.ISACTIVE=1
+      ORDER BY S.SUBMITDATE DESC;
+      LIMIT #{startindex},#{pagesize}
+    </select> -->
+    
+    <select id="selectWeChatSaleRecords"  parameterType="int" resultMap="saleRecord" >
+       SELECT S.SUBMITDATE,R.CHINESENAME,S.TOTALPRICE 
+      FROM SALERECORD S 
+      INNER JOIN RETAILER R 
+      ON S.RETAILERID=R.ID
+      WHERE R.ISACTIVE=1 
+      AND S.IMPORTERID=#{promoterId}
+      ORDER BY SUBMITDATE DESC;
+    </select>
+    <!-- <select id="selectSalesRecord"  parameterType="int" resultMap="saleRecord" >
+      SELECT S.SUBMITDATE,R.CHINESENAME,PC.NAME,P.NAME,PF.NAME,S.TOTALPRICE 
+      FROM SALERECORD S,PRODUCT P,PRODUCTCATEGORY PC,PRODUCTFAMILY PF,RETAILER R
+      WHERE P.ID=S.PRODUCTID 
+      AND PF.ID=P.PRODUCTFAMILYID 
+      AND PC.ID=PF.CATEGROYID
+      AND S.RETAILERID=R.ID
+      AND PF.ISACTIVE=PC.ISACTIVE=P.ISACTIVE=R.ISACTIVE=1
+      limit #{startindex},#{pagesize}
+    </select> -->
+    
+    
+    <resultMap type="com.dowloyalty.pojo.PojoSaleRecord" id="saleRecord">
+      <id property="ID" column="id" />
+      <result property="totalPrice" column="totalPrice"/>
+      <result property="submitDate" column="submitDate"/>
+      <result property="points" column="points"/>
+      <association property="retailer" column="retailerID" javaType="com.dowloyalty.entity.Retailer">
+        <id property="id" column="ID"/>
+        <result property="chineseName" column="chineseName"/>
+        <result property="isActive" column="isActive"/>
+        <result property="mobile" column="mobile"/>
+        <result property="openID" column="openID"/>
+        <result property="email" column="email"/>
+        <result property="loginCode" column="loginCode"/>
+        <result property="sfdcCode" column="sfdcCode"/>
+        <result property="lastUpdataData" column="lastUpdataData"/>
+        <result property="provinceID" column="provinceID"/>
+      </association>
+      <association property="product" column="productID" javaType="com.dowloyalty.pojo.PojoProduct">
+          <id property="id" column="ID"/>
+          <result property="name" column="name"/>
+          <result property="description" column="description"/>
+          <result property="sfdcCode" column="sfdcCode"/>
+          <result property="lastModifiedDate" column="lastModifiedDate"/>
+          <result property="isActive" column="isActive"/>
+          <association property="productFamily" column="productFamilyID" javaType="com.dowloyalty.pojo.PojoProductFamily">
+          <id property="id" column="ID"/>
+            <result property="name" column="name"/>
+            <result property="description" column="description"/>
+            <result property="isActive" column="isActive"/>
+            <association property="productCategory" column="categoryID" javaType="com.dowloyalty.entity.ProductCategory">
+               <id property="id" column="ID"/>
+               <result property="name" column="name"/>
+               <result property="description" column="description"/>
+               <result property="isActive" column="isActive"/>
+            </association>
+          </association>
+        </association>
+    </resultMap>
+    
+ </mapper>

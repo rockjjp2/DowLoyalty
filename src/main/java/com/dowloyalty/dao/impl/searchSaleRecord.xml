@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dowloyalty.dao.ISearchSaleRecordDao">
+
+	<!-- PC端根据项目名\时间\零售商名 字段搜索销售记录 -->
+	<select id="findWebSaleRecordByQuery" parameterType="Object"
+		resultType="com.dowloyalty.pojo.webSale">
+	select t1.projectName,DATE_FORMAT(t1.submitDates,'%Y.%m.%d')
+	submitDate,t1.retaileName,t1.categoryName,t1.productName,t1.familyName,t1.totalPrice,t1.amount
+	from
+	( (SELECT PROJ.NAME projectName,S.SUBMITDATE submitDates,R.CHINESENAME
+	retaileName,PC.NAME categoryName,P.NAME productName,PF.NAME
+	familyName,S.TOTALPRICE totalPrice,S.AMOUNT amount
+	FROM SALERECORD S,PRODUCT P,PRODUCTCATEGORY PC,PRODUCTFAMILY PF,RETAILER
+	R,PROJECT PROJ
+	WHERE P.ID=S.PRODUCTID
+	AND PF.ID=P.PRODUCTFAMILYID
+	AND PC.ID=PF.CATEGROYID
+	AND S.PROJECTID = PROJ.ID
+	AND S.RETAILERID=R.ID
+	AND PF.ISACTIVE=PC.ISACTIVE=P.ISACTIVE=R.ISACTIVE=PROJ.ISACTIVE=1
+	<if test="promoterId != 0">
+		AND S.IMPORTERID=#{promoterId}
+	</if>
+	<if test="projectId != 0">
+		AND S.PROJECTID = #{projectId}
+	</if>
+	<if test="startDate != null and startDate !=''">
+		AND S.SUBMITDATE &gt;= #{startDate}
+	</if>
+	<if test="endDate != null and endDate !=''">
+		AND S.SUBMITDATE &lt;= #{endDate}
+	</if>
+	<if test="retailerName != null and retailerName != ''">
+		AND R.CHINESENAME like '%${retailerName}%'
+	</if>
+	)
+	union all
+	( SELECT null projectName,S.SUBMITDATE submitDates,R.CHINESENAME
+	retaileName,PC.NAME categoryName,P.NAME productName,PF.NAME
+	familyName,S.TOTALPRICE totalPrice,S.AMOUNT amount
+	FROM SALERECORD S,PRODUCT P,PRODUCTCATEGORY PC,PRODUCTFAMILY PF,RETAILER R
+	WHERE P.ID=S.PRODUCTID
+	AND PF.ID=P.PRODUCTFAMILYID
+	AND PC.ID=PF.CATEGROYID
+	AND S.RETAILERID=R.ID
+	and s.projectid is null
+	AND PF.ISACTIVE=PC.ISACTIVE=P.ISACTIVE=R.ISACTIVE=1
+	<if test="promoterId != 0">
+		AND S.IMPORTERID=#{promoterId}
+	</if>
+	<if test="projectId != 0">
+		AND S.PROJECTID = #{projectId}
+	</if>
+	<if test="startDate != null and startDate !=''">
+		AND S.SUBMITDATE &gt;= #{startDate}
+	</if>
+	<if test="endDate != null and endDate !=''">
+		AND S.SUBMITDATE &lt;= #{endDate}
+	</if>
+	<if test="retailerName != null and retailerName != ''">
+		AND R.CHINESENAME like '%${retailerName}%'
+	</if>
+	) )t1
+	ORDER BY submitDates DESC
+	LIMIT #{startindex},#{pagesize}
+	</select>
+
+	<select id="findWebSaleRecords" parameterType="Object"
+		resultType="com.dowloyalty.pojo.webSale">
+	select t1.projectName,DATE_FORMAT(t1.submitDates,'%Y.%m.%d')
+	submitDate,t1.retaileName,t1.categoryName,t1.productName,t1.familyName,t1.totalPrice,t1.amount
+	from
+	( (SELECT PROJ.NAME projectName,S.SUBMITDATE submitDates,R.CHINESENAME
+	retaileName,PC.NAME categoryName,P.NAME productName,PF.NAME
+	familyName,S.TOTALPRICE totalPrice,S.AMOUNT amount
+	FROM SALERECORD S,PRODUCT P,PRODUCTCATEGORY PC,PRODUCTFAMILY PF,RETAILER
+	R,PROJECT PROJ
+	WHERE P.ID=S.PRODUCTID
+	AND PF.ID=P.PRODUCTFAMILYID
+	AND PC.ID=PF.CATEGROYID
+	AND S.PROJECTID = PROJ.ID
+	AND S.RETAILERID=R.ID
+	AND PF.ISACTIVE=PC.ISACTIVE=P.ISACTIVE=R.ISACTIVE=PROJ.ISACTIVE=1
+	<if test="promoterId != 0">
+		AND S.IMPORTERID=#{promoterId}
+	</if>
+	<if test="projectId != 0">
+		AND S.PROJECTID = #{projectId}
+	</if>
+	<if test="startDate != null and startDate !=''">
+		AND S.SUBMITDATE &gt;= #{startDate}
+	</if>
+	<if test="endDate != null and endDate !=''">
+		AND S.SUBMITDATE &lt;= #{endDate}
+	</if>
+	<if test="retailerName != null and retailerName != ''">
+		AND R.CHINESENAME like '%${retailerName}%'
+	</if>
+	)
+	union all
+	( SELECT null projectName,S.SUBMITDATE submitDates,R.CHINESENAME
+	retaileName,PC.NAME categoryName,P.NAME productName,PF.NAME
+	familyName,S.TOTALPRICE totalPrice,S.AMOUNT amount
+	FROM SALERECORD S,PRODUCT P,PRODUCTCATEGORY PC,PRODUCTFAMILY PF,RETAILER R
+	WHERE P.ID=S.PRODUCTID
+	AND PF.ID=P.PRODUCTFAMILYID
+	AND PC.ID=PF.CATEGROYID
+	AND S.RETAILERID=R.ID
+	and s.projectid is null
+	AND PF.ISACTIVE=PC.ISACTIVE=P.ISACTIVE=R.ISACTIVE=1
+	<if test="promoterId != 0">
+		AND S.IMPORTERID=#{promoterId}
+	</if>
+	<if test="projectId != 0">
+		AND S.PROJECTID = #{projectId}
+	</if>
+	<if test="startDate != null and startDate !=''">
+		AND S.SUBMITDATE &gt;= #{startDate}
+	</if>
+	<if test="endDate != null and endDate !=''">
+		AND S.SUBMITDATE &lt;= #{endDate}
+	</if>
+	<if test="retailerName != null and retailerName != ''">
+		AND R.CHINESENAME like '%${retailerName}%'
+	</if>
+	) )t1
+	ORDER BY submitDates DESC
+	</select>
+	
+
+	<select id="getSaleRecordCount" parameterType="Object"
+		resultType="int">
+		SELECT count(s.id)
+		FROM SALERECORD S,PRODUCT P,PRODUCTCATEGORY PC,PRODUCTFAMILY PF,RETAILER R
+		WHERE P.ID=S.PRODUCTID
+		AND PF.ID=P.PRODUCTFAMILYID
+		AND PC.ID=PF.CATEGROYID
+		AND S.RETAILERID=R.ID
+		AND PF.ISACTIVE=PC.ISACTIVE=P.ISACTIVE=R.ISACTIVE=1
+		<if test="promoterId != 0">
+		AND S.IMPORTERID=#{promoterId}
+		</if>
+		<if test="projectId != null and projectId !=''">
+			AND S.PROJECTID = #{projectId}
+		</if>
+		<if test="startDate != null and startDate !=''">
+			AND S.SUBMITDATE &gt;= #{startDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			AND S.SUBMITDATE &lt;= #{endDate}
+		</if>
+		<if test="retailerName != null and retailerName != ''">
+			AND R.CHINESENAME like '%${retailerName}%'
+		</if>
+	</select>
+
+	<select id="findWebSaleRecordByProject" parameterType="int"
+		resultType="com.dowloyalty.pojo.webSale">
+		SELECT PROJ.NAME projectName,DATE_FORMAT(S.SUBMITDATE,'%Y.%m.%d') submitDate,R.CHINESENAME
+		retaileName,PC.NAME categoryName,P.NAME productName,PF.NAME
+		familyName,S.TOTALPRICE totalPrice,S.AMOUNT amount
+		FROM SALERECORD S,PRODUCT P,PRODUCTCATEGORY PC,PRODUCTFAMILY PF,RETAILER R,PROJECT PROJ
+		WHERE P.ID=S.PRODUCTID
+		AND PF.ID=P.PRODUCTFAMILYID
+		AND PC.ID=PF.CATEGROYID
+		AND S.PROJECTID = PROJ.ID
+		AND S.RETAILERID=R.ID
+		AND PF.ISACTIVE=PC.ISACTIVE=P.ISACTIVE=R.ISACTIVE=PROJ.ISACTIVE=1
+		AND S.IMPORTERID=#{promoterId}
+		AND S.PROJECTID = #{projectId}
+		ORDER BY s.SUBMITDATE DESC
+	</select>
+
+	<!-- weChat端根据时间\零售商名 字段搜索销售记录 -->
+	<select id="findWeChatSaleRecordByQuery" parameterType="String"
+		resultType="com.dowloyalty.pojo.webSale">
+		SELECT DATE_FORMAT(S.SUBMITDATE,'%Y.%m.%d') submitDate,R.CHINESENAME
+		retaileName,S.TOTALPRICE totalPrice
+		FROM SALERECORD S
+		INNER JOIN RETAILER R
+		ON S.RETAILERID=R.ID
+		WHERE R.ISACTIVE=1
+		AND S.IMPORTERID=#{promoterId}
+		<if test="startDate != null and startDate !=''">
+			AND S.SUBMITDATE &gt;= #{startDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			AND S.SUBMITDATE &lt;= #{endDate}
+		</if>
+		<if test="retailerName != null and retailerName != ''">
+			AND R.CHINESENAME like '%${retailerName}%'
+		</if>
+		ORDER BY s.SUBMITDATE DESC
+	</select>
+
+	<resultMap type="com.dowloyalty.entity.Project" id="projectBase64Map">
+ 	<result column="projectID" property="id"/>
+ 	<result column="projectName" property="name"/>
+ 	<result column="provinceID" property="provinceID"/>
+ 	<result column="placardPath" property="placardPath"/>
+ 	<result column="backgroundPath" property="backgroundPath"/>
+ 	<result column="assistantID" property="assistantID"/>
+ 	<result column="startDate" property="startDate"/>
+ 	<result column="endDate" property="endDate"/>
+ 	<result column="adminID" property="adminID"/>
+ 	<result column="description" property="description"/>
+ 	<result column="isActive" property="isActive"/>
+ 	<result column="isVisible" property="isVisible"/>
+ 	</resultMap>
+
+	<select id="findProjectByPromoterId" parameterType="int"
+		resultMap="projectBase64Map">
+	select
+      project.ID projectID,
+      project.Name projectName,
+      project.ProvinceID provinceID,
+      project.PlacardPath placardPath,
+      project.BackgroundPath backgroundPath,
+      project.AssistantID assistantID,
+      project.StartDate startDate,
+      project.EndDate endDate,
+      project.AdminID adminID,
+      project.IsVisible isVisible,
+      project.IsActive isActive,
+      project.Description description
+	from 
+	  project
+	inner join
+      rprojectpromoter rpp
+	on
+      rpp.projectID=project.ID
+	where
+      rpp.isActive=project.isActive=1
+	and
+      rpp.promoterID=#{promoterId}
+	order by project.ID desc
+	</select>
+	
+	<select id="findProject" resultMap="projectBase64Map">
+	select
+	  project.ID projectID,
+      project.Name projectName,
+      project.ProvinceID provinceID,
+      project.PlacardPath placardPath,
+      project.BackgroundPath backgroundPath,
+      project.AssistantID assistantID,
+      project.StartDate startDate,
+      project.EndDate endDate,
+      project.AdminID adminID,
+      project.IsVisible isVisible,
+      project.IsActive isActive,
+      project.Description description
+    from
+      project
+    order by id desc
+	</select>	
+</mapper>

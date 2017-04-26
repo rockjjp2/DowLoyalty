@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.dowloyalty.dao.ISaleRecordDao">
+ 	<select id="findAllSaleRecord" resultType="com.dowloyalty.pojo.SendSaleRecord">
+ 		select 
+			salerecord.SubmitDate submitDate,
+			retailer.SFDCCode retailerId,
+			salerecord.ID salerecordId,
+			product.SFDCCode productId,
+			product.Name productName,
+			salerecord.amount amount,
+			salerecord.TotalPrice totalPrice
+			from
+			salerecord
+			left join 
+			product
+			on
+			salerecord.ProductID = product.ID
+			left join 
+			retailer
+			on
+			salerecord.RetailerID = retailer.ID
+			where
+			salerecord.Status = 0
+			order by salerecord.SubmitDate
+ 	</select>
+ 	
+ 	<update id="update" parameterType="com.dowloyalty.entity.SaleRecord">
+ 		update
+ 			salerecord
+ 		set
+			RetailerID = #{retailerID},
+			ProductID = #{productID},
+			TotalPrice = #{totalPrice},
+			ImporterID = #{importerID},
+			SubmitDate = #{submitDate},
+			<if test="projectID == 0">
+			ProjectID = null,
+			</if>
+			<if test="projectID != 0">
+			ProjectID = #{projectID},
+			</if>
+			Points = #{points},
+			Amount = #{amount},
+			Status = #{status},
+			OppId = #{oppId}
+		where
+			ID = #{id}
+ 	</update>
+ 	
+ 	<select id="findById" parameterType="int" resultType="com.dowloyalty.entity.SaleRecord">
+ 	select
+ 		ID,RetailerID,ProductID,TotalPrice,
+ 		ImporterID,SubmitDate,ProjectID,Points,
+ 		Amount,Status,OppId
+ 	from
+ 		salerecord
+ 	where
+ 		ID = #{ID}
+ 	</select>
+ 	
+ 	
+ </mapper>

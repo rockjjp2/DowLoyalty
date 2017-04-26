@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.dowloyalty.dao.ICreateProjectDao">
+ <insert id="insertProjectInfo" parameterType="com.dowloyalty.entity.Project">
+   insert into project(Name,ProvinceID,PlacardPath,StartDate,EndDate,AdminID,IsVisible,IsActive,BackgroundPath,Description)
+   values(#{name},#{provinceID},#{placardPath},#{startDate},#{endDate},#{adminID},#{isVisible},#{isActive},#{backgroundPath},#{description})
+ </insert>
+ 
+ <update id="updateProjectInfo" parameterType="com.dowloyalty.entity.Project">
+ update project set Name=#{name},ProvinceID=#{provinceID},PlacardPath=#{placardPath},BackgroundPath=#{backgroundPath},Description=#{description} where id=#{value}
+ </update>
+ <insert id="insertRProjectRetailer" parameterType="com.dowloyalty.entity.RProjectRetailer">
+  insert into rprojectretailer(ProjectID, RetailerID, IsActive) values(#{projectID}, #{retailerID}, #{isActive})
+ </insert>
+ 
+ <insert id="insertRProjectPromoter" parameterType="com.dowloyalty.entity.RProjectPromoter">
+  insert into rprojectpromoter(ProjectID, PromoterID, IsActive) values(#{projectID}, #{promoterID}, #{isActive})
+ </insert>
+ 
+ <update id="updateDeliveryGoodsPromoter" parameterType="int">
+  update project set AssistantID = #{promoterId} where id=#{projectId}
+ </update>
+ 
+ <resultMap type="com.dowloyalty.entity.Project" id="projectBase64Map">
+ 	<result column="projectID" property="id"/>
+ 	<result column="projectName" property="name"/>
+ 	<result column="provinceID" property="provinceID"/>
+ 	<result column="placardPath" property="placardPath"/>
+ 	<result column="backgroundPath" property="backgroundPath"/>
+ 	<result column="assistantID" property="assistantID"/>
+ 	<result column="startDate" property="startDate"/>
+ 	<result column="endDate" property="endDate"/>
+ 	<result column="adminID" property="adminID"/>
+ 	<result column="description" property="description"/>
+ 	<result column="isActive" property="isActive"/>
+ 	<result column="isVisible" property="isVisible"/>
+ 	</resultMap>
+ 
+ <select id="findProjectByInfo" parameterType="Object" resultMap="projectBase64Map">
+  select
+    project.ID projectID,
+    project.Name projectName,
+    project.ProvinceID provinceID,
+    project.PlacardPath placardPath,
+    project.BackgroundPath backgroundPath,
+    project.AssistantID assistantID,
+    project.StartDate startDate,
+    project.EndDate endDate,
+    project.AdminID adminID,
+    project.IsVisible isVisible,
+    project.IsActive isActive,
+    project.Description description
+  from
+    project 
+  where
+    ProvinceID=#{provinceId} 
+  and
+    name=#{projectName} 
+  <if test="sDate != null and sDate != ''">
+  and
+    StartDate=#{sDate} 
+  </if>
+  <if test="eDate != null and eDate != ''">
+  and
+    EndDate =#{eDate}
+   </if>
+  and
+    isActive = 1 
+ </select>
+ 
+ <!-- 根据projectId找到与之关联的零售商id -->
+ <select id="findRetailerIdByProjectId" parameterType="int" resultType="int">
+ 
+  select RetailerID from rprojectretailer where ProjectID=#{projectId} and isActive=1
+ </select>
+ 
+ <select id="findPromoterIdByProjectId" parameterType="int" resultType="int">
+ 
+  select PromoterID from rprojectpromoter where ProjectID=#{projectId} and isActive=1
+ </select>
+ 
+ <update id="updateRProjRetailer" parameterType="com.dowloyalty.entity.RProjectRetailer">
+update rprojectretailer set IsActive=#{isActive} where ProjectID=#{projectId} and  RetailerID=#{retailerId}
+ </update>
+ 
+ <update id="updateRProjPromoter" parameterType="com.dowloyalty.entity.RProjectPromoter">
+update rprojectpromoter set IsActive=#{isActive} where ProjectID=#{projectId} and  PromoterID=#{promoterId}
+ </update>
+ 
+ 
+ 
+ </mapper>

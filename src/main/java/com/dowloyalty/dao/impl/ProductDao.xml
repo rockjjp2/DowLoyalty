@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dowloyalty.dao.IProductDao">
+	<select id="findAllProduct" resultType="com.dowloyalty.entity.Product">
+	SELECT * FROM product WHERE IsActive=1
+	</select>
+	<select id="findProductByProjectId" parameterType="int" resultType="com.dowloyalty.entity.Product">
+	SELECT * FROM product WHERE ID IN 
+			(SELECT ID FROM points WHERE ProjectID=#{value} AND IsActive=1)
+	AND IsActive=1
+	</select>
+	<select id="findProductByPromoterId" parameterType="int" resultType="com.dowloyalty.entity.Product">
+	SELECT * FROM product WHERE ID IN 
+			(SELECT ProductID FROM points WHERE ProjectID IN 
+				(SELECT ID FROM project WHERE ID IN
+					(SELECT ProjectID FROM rprojectpromoter WHERE PromoterID=#{value} AND IsActive=1) 
+				AND IsActive=1)
+			AND IsActive=1)
+	AND IsActive=1
+	</select>
+	<select id="findProductByCategroyID" parameterType="int" resultType="com.dowloyalty.entity.Product">
+	SELECT product.ID,product.SFDCCode,product.ProductFamilyID,product.`Name`,product.Description,product.LastModifiedDate,product.IsActive
+		FROM product,productfamily WHERE product.ProductFamilyID=productfamily.ID
+	AND productfamily.CategroyID=#{value} AND productfamily.IsActive=1 AND product.IsActive=1
+	</select>
+	
+	<select id="findProductByCategroyIdOrProjectIdAndPromoterId" parameterType="int" resultType="com.dowloyalty.entity.Product">
+	SELECT * FROM product WHERE 
+	<!-- product符合项目或者promoter要求的产品  start -->
+	ID IN 
+		(SELECT ProductID FROM points WHERE ProjectID IN 
+			(SELECT ID FROM project WHERE
+			<choose>
+				<when test="projectId!=0">
+				ID =#{projectId}
+				</when>
+				<otherwise>
+				ID IN
+				(SELECT ProjectID FROM rprojectpromoter WHERE PromoterID=#{promoterId} AND IsActive=1) 
+				</otherwise>
+			</choose>
+			AND IsActive=1)
+		AND IsActive=1)
+	<!-- 符合项目或者promoter要求的产品  end -->
+	AND ProductFamilyID IN
+		(SELECT ID FROM productfamily WHERE CategroyID=#{categroyId} AND IsActive=1)
+	AND IsActive=1
+	</select>
+	<select id="findProductByFamilyIdAndProjectId" resultType="com.dowloyalty.entity.Product">
+	SELECT product.* FROM product,productfamily,points WHERE product.ProductFamilyID=productfamily.ID AND
+	points.ProductID=product.ID AND productfamily.ID=#{productFamilyId} AND points.ProjectID=#{projectId} AND points.IsActive=1
+	AND product.IsActive=1 AND productfamily.IsActive=1
+	</select>
+	<select id="findProductByFamilyIdOrProjectIdAndPromoterId" parameterType="int" resultType="com.dowloyalty.entity.Product">
+	SELECT * FROM product WHERE 
+	<!-- product符合项目或者promoter要求的产品  start -->
+	ID IN 
+		(SELECT ProductID FROM points WHERE ProjectID IN 
+			(SELECT ID FROM project WHERE
+			<choose>
+				<when test="projectId!=0">
+				ID =#{projectId}
+				</when>
+				<otherwise>
+				ID IN
+				(SELECT ProjectID FROM rprojectpromoter WHERE PromoterID=#{promoterId} AND IsActive=1) 
+				</otherwise>
+			</choose>
+			AND IsActive=1)
+		AND IsActive=1)
+	<!-- 符合项目或者promoter要求的产品  end -->
+	AND ProductFamilyID=#{familyId}
+	AND IsActive=1
+	</select>
+	
+	<select id="findProductFamilyByProjectId" parameterType="int" resultType="com.dowloyalty.entity.ProductFamily">
+	SELECT * FROM productfamily WHERE ID IN
+		(SELECT ProductFamilyID FROM product WHERE ID IN 
+			(SELECT ProductID FROM points WHERE ProjectID=#{value} AND IsActive=1)
+		AND IsActive=1)
+	AND IsActive=1
+	</select>
+	
+	<select id="findAllProductFamily" resultType="com.dowloyalty.entity.ProductFamily">
+	SELECT * FROM productfamily WHERE IsActive=1
+	</select>
+	
+	<select id="findProductFamilyByPromoterId" parameterType="int" resultType="com.dowloyalty.entity.ProductFamily">
+	SELECT * FROM productfamily WHERE ID IN
+		(SELECT ProductFamilyID FROM product WHERE ID IN 
+				(SELECT ProductID FROM points WHERE ProjectID IN 
+					(SELECT ID FROM project WHERE ID IN
+						(SELECT ProjectID FROM rprojectpromoter WHERE PromoterID=#{value} AND IsActive=1) 
+					AND IsActive=1)
+				AND IsActive=1)
+		AND IsActive=1)
+	AND IsActive=1
+	</select>
+	<select id="findProductFamilyByCategroyID" parameterType="int" resultType="com.dowloyalty.entity.ProductFamily">
+	SELECT * FROM productfamily WHERE CategroyID=#{value} AND IsActive=1
+	</select>
+	<select id="findProductFamilyByCategroyIdAndProjectId" resultType="com.dowloyalty.entity.ProductFamily">
+	SELECT distinct productfamily.ID,productfamily.`Name`,productfamily.Description,productfamily.IsActive,
+	productfamily.CategroyID FROM points,product,productfamily
+	WHERE product.ID=points.ProductID AND productfamily.ID=product.ProductFamilyID
+	AND points.ProjectID=#{projectId} AND productfamily.CategroyID=#{categroyId}
+	AND points.IsActive=1 AND product.IsActive=1 AND productfamily.IsActive=1
+	</select>
+	
+	<select id="findProductFamilyByCategroyIdOrProjectIdAndPromoterId" parameterType="int" resultType="com.dowloyalty.entity.ProductFamily">
+	SELECT * FROM productfamily WHERE ID IN
+		(SELECT ProductFamilyID FROM product WHERE 
+		<!-- product符合项目或者promoter要求的产品  start -->
+		ID IN 
+			(SELECT ProductID FROM points WHERE ProjectID IN 
+				(SELECT ID FROM project WHERE
+				<choose>
+					<when test="projectId!=0">
+					ID =#{projectId}
+					</when>
+					<otherwise>
+					ID IN
+					(SELECT ProjectID FROM rprojectpromoter WHERE PromoterID=#{promoterId} AND IsActive=1) 
+					</otherwise>
+				</choose>
+				AND IsActive=1)
+			AND IsActive=1)
+		<!-- 符合项目或者promoter要求的产品  end -->
+		AND ProductFamilyID IN
+			(SELECT ID FROM productfamily WHERE CategroyID=#{categroyId} AND IsActive=1)
+		AND IsActive=1)
+	AND IsActive=1
+	</select>
+	
+	<select id="findProductCategoryByProjectId" parameterType="int" resultType="com.dowloyalty.entity.ProductCategory">
+	SELECT * FROM productcategory WHERE ID IN
+		(SELECT CategroyID FROM productfamily WHERE ID IN
+			(SELECT ProductFamilyID FROM product WHERE ID IN 
+					(SELECT ProductID FROM points WHERE ProjectID=#{value} AND IsActive=1)
+			AND IsActive=1)
+		AND IsActive=1)
+	AND IsActive=1
+	</select>
+	<select id="findProductCategoryByPromoterId" parameterType="int" resultType="com.dowloyalty.entity.ProductCategory">
+	SELECT * FROM productcategory WHERE ID IN
+		(SELECT CategroyID FROM productfamily WHERE ID IN
+			(SELECT ProductFamilyID FROM product WHERE ID IN 
+					(SELECT ID FROM points WHERE ProjectID IN 
+						(SELECT ID FROM project WHERE ID IN
+							(SELECT ProjectID FROM rprojectpromoter WHERE PromoterID=#{value} AND IsActive=1) 
+						AND IsActive=1)
+					AND IsActive=1)
+			AND IsActive=1)
+		AND IsActive=1)
+	AND IsActive=1
+	</select>
+	
+	<select id="findAllProductCategory" resultType="com.dowloyalty.entity.ProductCategory">
+		SELECT * FROM productcategory where IsActive=1
+	</select>
+	
+	<select id="findProductByFamilyId" resultType="com.dowloyalty.entity.Product">
+		select * from product where ProductFamilyID = #{ProductFamilyID} and IsActive=1
+	</select>
+	
+	<select id="findProductInfosByProjectId" parameterType="int" resultType="com.dowloyalty.pojo.ProductInfos">
+		select
+			product.ID productId,
+			product.Name productName,
+			productcategory.Name productCategory,
+			productfamily.Name productFamily,
+			points.SalesAmount salesAmount
+		from
+			product
+		left join 
+			productfamily
+		on
+			product.ProductFamilyID = productfamily.ID
+		left join 
+			productcategory
+		on 
+			productcategory.ID = productfamily.CategroyID
+		left join
+			points
+		on 
+			product.ID = points.ProductID
+		where 
+			points.ProjectID = #{ProjectID}
+		and
+			product.IsActive = 1
+		and 
+			productfamily.IsActive = 1
+		and 
+			productcategory.IsActive = 1
+		and 
+			points.IsActive = 1
+	</select>
+</mapper>
+

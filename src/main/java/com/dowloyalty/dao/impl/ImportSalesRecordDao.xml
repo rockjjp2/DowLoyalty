@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.dowloyalty.dao.IImportSalesRecordDao">
+ 
+    <resultMap type="com.dowloyalty.entity.Project" id="projectBase64Map">
+ 	<result column="projectID" property="id"/>
+ 	<result column="projectName" property="name"/>
+ 	<result column="provinceID" property="provinceID"/>
+ 	<result column="placardPath" property="placardPath"/>
+ 	<result column="backgroundPath" property="backgroundPath"/>
+ 	<result column="assistantID" property="assistantID"/>
+ 	<result column="startDate" property="startDate"/>
+ 	<result column="endDate" property="endDate"/>
+ 	<result column="adminID" property="adminID"/>
+ 	<result column="description" property="description"/>
+ 	<result column="isActive" property="isActive"/>
+ 	<result column="isVisible" property="isVisible"/>
+ 	</resultMap>
+ 
+    <select id="findByProjectName" parameterType="Object" resultMap="projectBase64Map">
+    SELECT
+      project.ID projectID,
+      project.Name projectName,
+      project.ProvinceID provinceID,
+      project.PlacardPath placardPath,
+      project.BackgroundPath backgroundPath,
+      project.AssistantID assistantID,
+      project.StartDate startDate,
+      project.EndDate endDate,
+      project.AdminID adminID,
+      project.ID isVisible,
+      project.IsActive isActive,
+      project.Description description
+    FROM
+      PROJECT
+    WHERE
+      replace(NAME,' ','')=#{projectName}
+    AND
+      ProvinceID=#{provinceID}
+    AND
+      ISACTIVE=1
+   </select>
+   
+   <!-- 根据零售商名和省份找零售商 -->
+   <select id="findRetailerByProvId" parameterType="Object" resultType="com.dowloyalty.entity.Retailer">
+       select * from retailer where provinceId=#{provinceId} and replace(chineseName,' ','')=#{retailerName}
+   </select>
+   <!-- 根据零售商名和项目id找零售商 -->
+   <select id="findByRetailerName" parameterType="Object" resultType="com.dowloyalty.entity.Retailer">
+      SELECT R.* 
+      FROM RPROJECTRETAILER RPR 
+      INNER JOIN RETAILER R 
+      ON R.ID = RPR.RETAILERID 
+      WHERE RPR.PROJECTID=#{projectId} 
+      AND replace(R.CHINESENAME,' ','')=#{retailerName} 
+      AND RPR.ISACTIVE=R.ISACTIVE=1
+   </select>
+   
+   <select id="findProvIdByPromId" parameterType="int" resultType="int">
+     select rpp.ProvinceID from Promoter p inner join rpromoterprovince rpp on p.id=rpp.PromoterID and p.id=#{promoterId}
+   </select>
+   
+   <select id="findByProductCategoryName" parameterType="String" resultType="com.dowloyalty.entity.ProductCategory">
+      SELECT * FROM PRODUCTCATEGORY WHERE replace(NAME,' ','')=#{categoryname} AND ISACTIVE=1
+   </select>
+   
+   <select id="findByProductFamilyName" parameterType="String" resultType="com.dowloyalty.entity.ProductFamily">
+      SELECT * FROM PRODUCTFAMILY WHERE replace(NAME,' ','')=#{familyname} AND ISACTIVE=1
+   </select>
+   
+   <select id="findByProductName" parameterType="String" resultType="com.dowloyalty.entity.Product">
+      SELECT * FROM PRODUCT WHERE replace(NAME,' ','')=#{productname} AND ISACTIVE=1
+   </select>
+   
+   <select id="findProductIDByName" parameterType="Object" resultType="com.dowloyalty.entity.Product">
+     SELECT * FROM PRODUCT 
+      WHERE replace(NAME,' ','')=#{productname}
+      AND PRODUCTFamilyID=(
+      SELECT ID 
+      FROM PRODUCTFAMILY 
+      WHERE replace(NAME,' ','')=#{productfamilyname} 
+      AND CATEGROYID=(
+      SELECT ID 
+      FROM PRODUCTCATEGORY 
+      WHERE replace(NAME,' ','')=#{categoryname} 
+      AND ISACTIVE=1) 
+      AND ISACTIVE=1) 
+      AND ISACTIVE=1
+   </select>
+   <select id="findProductIDByNameAndProjId" parameterType="Object" resultType="com.dowloyalty.entity.Product">
+   select p.* from points poi,
+      ( SELECT * FROM PRODUCT 
+      WHERE replace(NAME,' ','')=#{productname}
+      AND PRODUCTFamilyID=(
+      SELECT ID 
+      FROM PRODUCTFAMILY 
+      WHERE replace(NAME,' ','')=#{productfamilyname} 
+      AND CATEGROYID=(
+      SELECT ID 
+      FROM PRODUCTCATEGORY 
+      WHERE replace(NAME,' ','')=#{categoryname} 
+      AND ISACTIVE=1) 
+      AND ISACTIVE=1) 
+      AND ISACTIVE=1) p 
+      WHERE POI.PROJECTID=#{projectId}
+      AND P.ID IN (POI.PRODUCTID)
+      AND POI.ISACTIVE=1;
+   </select>
+   
+   <!-- 计算积分 -->
+   <select id="findPointById" parameterType="int" resultType="float">
+     SELECT points/SalesAmount  
+     FROM POINTS 
+     WHERE PROJECTID=#{projectid} 
+     AND PRODUCTID=#{productid} 
+     AND ISACTIVE=1
+   </select>
+   
+   <!-- 推广员插入销售记录 -->
+   <!--  插入参加活动的销售记录  -->
+   <insert id="addSaleRecord" parameterType="com.dowloyalty.entity.SaleRecord">
+      INSERT INTO 
+      SALERECORD(RETAILERID,PRODUCTID,TOTALPRICE,IMPORTERID,SUBMITDATE,PROJECTID,POINTS,AMOUNT,STATUS)
+      VALUES(#{retailerid},#{productid},#{totalprice},#{importerid},#{submitdate},#{projectid},#{points},#{amount},#{status})
+   </insert>
+ <!--  插入不参加活动的销售记录  -->
+   <insert id="addSaleRecordNoPoint" parameterType="com.dowloyalty.entity.SaleRecord">
+      INSERT INTO 
+      SALERECORD(RETAILERID,PRODUCTID,TOTALPRICE,IMPORTERID,SUBMITDATE,POINTS,AMOUNT,STATUS)
+      VALUES(#{retailerid},#{productid},#{totalprice},#{importerid},#{submitdate},0,#{amount},#{status})
+   </insert>
+   
+    <!-- 管理员插入销售记录 -->
+    <!--  插入参加活动的销售记录  -->
+   <insert id="addSaleRecordByAdmin" parameterType="com.dowloyalty.entity.SaleRecord">
+      INSERT INTO 
+      SALERECORD(RETAILERID,PRODUCTID,TOTALPRICE,SUBMITDATE,PROJECTID,POINTS,AMOUNT,STATUS)
+      VALUES(#{retailerid},#{productid},#{totalprice},#{submitdate},#{projectid},#{points},#{amount},#{status})
+   </insert>
+ <!--  插入不参加活动的销售记录  -->
+   <insert id="addSaleRecordNoPointByAdmin" parameterType="com.dowloyalty.entity.SaleRecord">
+      INSERT INTO 
+      SALERECORD(RETAILERID,PRODUCTID,TOTALPRICE,SUBMITDATE,AMOUNT,STATUS)
+      VALUES(#{retailerid},#{productid},#{totalprice},#{submitdate},#{amount},#{status})
+   </insert>
+   
+   
+   <select id="findMaxSaleRecordID" parameterType="int" resultType="int">
+     SELECT MAX(ID) FROM SALERECORD WHERE IMPORTERID=#{promoterId}
+   </select>
+   
+   
+   <!-- weChat -->
+   <select id="findProject" parameterType="int"  resultMap="projectBase64Map">
+   select
+     project.ID projectID,
+     project.Name projectName,
+     project.ProvinceID provinceID,
+     project.PlacardPath placardPath,
+     project.BackgroundPath backgroundPath,
+     project.AssistantID assistantID,
+     project.StartDate startDate,
+     project.EndDate endDate,
+     project.AdminID adminID,
+     project.ID isVisible,
+     project.IsActive isActive,
+     project.Description description
+   from
+     Project
+   where
+     provinceID = #{provinceId}
+   and
+     isActive=1
+   </select>
+   
+   <select id="findRetailer" resultType="com.dowloyalty.pojo.RetailerProvince">
+       select r.id retailerId,r.ChineseName retailerName,p.Name provinceName from retailer r inner join province  p on r.provinceID=p.id  where p.isActive=r.isActive=1
+   </select>
+    <select id="findRetailerLikeName" parameterType="String" resultType="com.dowloyalty.pojo.RetailerProvince">
+       select r.id retailerId,r.ChineseName retailerName,p.Name provinceName from retailer r inner join province  p on r.provinceID=p.id  where r.chineseName like %#{retailerName}% and p.isActive=r.isActive=1
+   </select>
+   <select id="findRetailerByProject" parameterType="int" resultType="com.dowloyalty.pojo.RetailerProvince">
+       select r.id retailerId,r.chinesename retailername,pv.name provincename 
+       from retailer r, province  pv ,project pj,rprojectretailer rpr
+       where pj.id=#{projectId}
+       and pj.id=rpr.projectid 
+       and rpr.retailerid=r.id 
+       and r.provinceid=pj.provinceid
+       and r.provinceid=pv.id
+       and pj.provinceid=pv.id
+       and pj.isactive=rpr.isactive=r.isactive=pv.isactive=1 
+   </select>
+   
+   <select id="findProductcategory" resultType="com.dowloyalty.entity.ProductCategory">
+      select * from productcategory where isActive=1
+   </select>
+   
+   <select id="findProductFamily" resultType="com.dowloyalty.entity.ProductFamily">
+      select * from PRODUCTFAMILY where isActive=1
+   </select>
+   
+    <select id="findProduct" resultType="com.dowloyalty.entity.Product">
+      select * from PRODUCT where isActive=1
+   </select>
+   
+   <select id="findProductByProject" parameterType="int" resultType="com.dowloyalty.entity.Product">
+      select pd.* from points poi,project pro,product pd
+      where poi.projectID = pro.id
+      and poi.productID=pd.id
+      and pro.id=#{projectId}
+      and poi.isActive=pro.isActive=pd.isActive=1;
+   </select>
+   
+   <select id="findProductFamilyByCName" parameterType="String" resultType="com.dowloyalty.entity.ProductFamily">
+      SELECT pf.* FROM PRODUCTCATEGORY PC 
+      INNER JOIN PRODUCTFAMILY PF 
+      ON  PC.ID=PF.CATEGROYID 
+      WHERE PC.NAME=#{categoryname} 
+      AND PC.ISACTIVE=PF.ISACTIVE=1
+   </select>
+   
+   <select id="findProductByFName" parameterType="String" resultType="com.dowloyalty.entity.Product">
+      SELECT * FROM PRODUCTFAMILY PF 
+      INNER JOIN PRODUCT P 
+      ON PF.ID=P.PRODUCTFAMILYID 
+      WHERE PF.NAME=#{familyname} 
+      AND PF.ISACTIVE=P.ISACTIVE=1
+   </select>
+ </mapper>
