@@ -10,5 +10,8 @@ public interface IProvinceDao {
 	 * @return	省份对象集合
 	 */
 	public List<Province> getAllProvince();
+	public Province findProvinceByPromoterId(int promoterID);
+	public int findProvinceIdByEnName(String enName);
 	
+	public Province findProvinceById(int provinceId);
 }

@@ -29,8 +29,7 @@ public class ExchangeShopServiceImpl implements ExchangeShopService {
 
 	@Override
 	public void update(ExchangeShop exchangeShop) {
-		// TODO Auto-generated method stub
-
+		exchangeShopDao.update(exchangeShop);
 	}
 
 	@Override
@@ -40,9 +39,8 @@ public class ExchangeShopServiceImpl implements ExchangeShopService {
 	}
 
 	@Override
-	public ExchangeShop findById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ExchangeShop findById(int projectId, int goodsId) {
+		return exchangeShopDao.findById(projectId, goodsId);
 	}
 
 }

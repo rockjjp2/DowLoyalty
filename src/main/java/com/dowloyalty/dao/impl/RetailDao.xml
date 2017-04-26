@@ -5,6 +5,43 @@
 	<select id="findRetailerByProvinceId" resultType="com.dowloyalty.entity.Retailer" parameterType="int">
 		SELECT ID,ChineseName,ProvinceID,Mobile,OpenID,Email,LastUpdataData,SFDCCode,LoginCode,IsActive
 			FROM retailer   WHERE   IsActive = 1 AND  ProvinceID = #{value}
+			order by id 
+	</select>
+	<select id="findCountByProvinceId" resultType="int" parameterType="Object">
+		SELECT count(id)
+			FROM retailer   WHERE   IsActive = 1 AND  ProvinceID = #{value}
+			<if test="retailerName != null and retailerName !=''">
+		and ChineseName like '%${retailerName}%' 
+		</if>
+	</select>
+	<select id="searchRetailerByRetailerName" resultType="com.dowloyalty.entity.Retailer" parameterType="Object">
+		SELECT ID,ChineseName,ProvinceID,Mobile,OpenID,Email,LastUpdataData,SFDCCode,LoginCode,IsActive
+			FROM retailer   WHERE   IsActive = 1 AND  ProvinceID = #{value}
+			<if test="retailerName != null and retailerName !=''">
+		and ChineseName like '%${retailerName}%' 
+		</if>
+		order by id  limit #{startNum},#{pageNum}
+	</select>
+	<select id="searchRetailerByRetailerNameAndProvinceId" resultType="com.dowloyalty.entity.Retailer">
+		SELECT ID,ChineseName,ProvinceID,Mobile,OpenID,Email,LastUpdataData,SFDCCode,LoginCode,IsActive
+			FROM retailer   WHERE   IsActive = 1 AND  ProvinceID = #{provinceId}
+			<if test="retailerName != null and retailerName !=''">
+			and ChineseName like '%${retailerName}%' 
+			</if>
+			limit 30
+	</select>
+	<select id="findRetailerByProjectID" resultType="com.dowloyalty.entity.Retailer" parameterType="int">
+		SELECT * FROM retailer WHERE ID IN
+			(SELECT RetailerID FROM rprojectretailer WHERE ProjectID=#{value} AND IsActive=1) 
+		AND IsActive=1
+	</select>
+	<select id="findRetailerBySFDCCode" resultType="com.dowloyalty.entity.Retailer" parameterType="String">
+		SELECT ID,ChineseName,ProvinceID,Mobile,OpenID,Email,LastUpdataData,SFDCCode,LoginCode,IsActive
+			FROM retailer   WHERE   IsActive = 1 AND  SFDCCode = #{value}
+	</select>
+	<select id="findRetailerByProjectIdAndRetailerName" resultType="com.dowloyalty.entity.Retailer">
+		SELECT retailer.* FROM retailer,rprojectretailer WHERE retailer.ID=rprojectretailer.RetailerID AND
+		rprojectretailer.ProjectID=#{projectId} AND rprojectretailer.IsActive=1 AND retailer.ChineseName like concat('%',#{retailername},'%') AND retailer.IsActive=1
 	</select>
 	
 	<select id="findRetailerByOpenId" resultType="com.dowloyalty.entity.Retailer" parameterType="String">
@@ -12,43 +49,61 @@
 			FROM retailer   WHERE   IsActive = 1 AND  OpenID = #{value}
 	</select>
 	
-	<select id="findRetailerByLoginCode" resultType="com.dowloyalty.entity.Retailer" parameterType="String">
+	<select id="findRetailerByMobile" resultType="com.dowloyalty.entity.Retailer" parameterType="String">
 		SELECT ID,ChineseName,ProvinceID,Mobile,OpenID,Email,LastUpdataData,SFDCCode,LoginCode,IsActive
-			FROM retailer   WHERE   IsActive = 1 AND  LoginCode = #{value}
+			FROM retailer   WHERE   IsActive = 1 AND  Mobile = #{value}
 	</select>
 	
 	<update id="updateOpenIdByLoginCode">
-		UPDATE `retailer` SET `OpenID`=#{openID} WHERE `IsActive`='1' AND LoginCode=#{loginCode}
+		UPDATE `retailer` SET `OpenID`=#{openID} WHERE `IsActive`='1' AND Mobile=#{mobile}
 	</update>
 	
 	<select id="findByRetailerId" resultType="com.dowloyalty.pojo.PointsDetails">
 	select
-		name,DATE_FORMAT(submitTime,'%Y.%m') submitTime,points
+		name,DATE_FORMAT(RsubmitTime,'%Y.%m') submitTime,points
 	from
 	(
 		select
 			goods.Name name,
-			exchangerecord.SubmitTime submitTime,
+			exchangerecord.SubmitTime RsubmitTime,
 			exchangerecord.ExchangePoints points,
 			exchangerecord.RetailerID retailerId
 		from
 			exchangerecord left join goods
 			on exchangerecord.GoodsID = goods.ID
+		where
+			goods.IsActive = 1
+		<!-- 将销售数据和 -->
 		union all
 		select
 			product.Name name,
-			salerecord.SubmitDate submitTime,
+			salerecord.SubmitDate RsubmitTime,
 			salerecord.Points points,
 			salerecord.RetailerID retailerId
 		from
 			salerecord left join product
 			on salerecord.ProductID = product.ID
+		where
+			product.IsActive = 1
+		and
+			salerecord.Points != 0
+			
+		union all
+		select 
+			initpoints.Reason name,
+			initpoints.SubmitDate RsubmitTime,
+			initpoints.Points points,
+			initpoints.RetailerID retailerId
+		from 
+			initpoints
+		where 
+			initpoints.IsActive = 1
 		) pointsdetails
 		where
 			retailerId = #{RetailerID}
 		<if test="month != null and month != ''">
 			and
-				MONTH(submitTime) = #{month}
+				MONTH(RsubmitTime) = #{month}
 		</if>
 		<if test = "matter != null">
 			<if test = "matter == '进货'">
@@ -62,7 +117,7 @@
 				
 			</if>
 		</if>
-		order by submitTime desc
+		order by RsubmitTime desc
 	</select>
 	
 	<select id="findById" parameterType="int" resultType="com.dowloyalty.entity.Retailer">
@@ -74,62 +129,336 @@
 			retailer
 		where
 			ID = #{retailerID}
+		and
+			retailer.IsActive = 1
 	</select>
 	
 	<select id="getRankPercent" resultType="String">
 	select 
-	count(RetailerID)/((
-	select
-		count(ID)
-		from
-		retailer
-		where 
-		ProvinceID = #{ProvinceID}
-		and 
-		IsActive = 1
-))*100+'%'
+		if(
+			(
+		select 
+			count(ID)
+			from
+			rprojectretailer
+			where 
+			ProjectID = #{ProjectID}
+			and 
+			IsActive = 1
+	) = 0,100,floor(count(RetailerID)/(
+					(
+		select 
+			count(ID)
+			from
+			rprojectretailer
+			where 
+			ProjectID = #{ProjectID}
+			and 
+			IsActive = 1
+		)-1)*100)+'%') percent
 	from 
 	(
 	select
-		sum(salerecord.Points) allPoint,salerecord.RetailerID
-		from 
-		project
-		left join
-		salerecord
-		on
-		project.ID = salerecord.ProjectID
-		left join 
+		sum(ifnull(salerecord.Points,0))+ifnull(initpoints.Points,0) allPoint,
+		rprojectretailer.RetailerID
+	from 
+		rprojectretailer
+	left join
 		retailer
-		on
+	on
+		rprojectretailer.RetailerID = retailer.ID
+	left join 
+		salerecord
+	on
 		retailer.ID = salerecord.RetailerID
-		where
-		project.ProvinceID = #{ProvinceID}
-		and
-		project.IsActive = 1
-		group by salerecord.RetailerID
+	left join 
+		initpoints
+	on
+		initpoints.RetailerID = salerecord.RetailerID
+	where
+		rprojectretailer.ProjectID = #{ProjectID}
+	and
+		rprojectretailer.IsActive = 1
+	and
+		retailer.IsActive = 1
+	group by
+		rprojectretailer.RetailerID
 	) allPoints,
 	(
-	select
-		sum(salerecord.Points) onePoint
+		select
+			sum(ifnull(salerecord.Points,0))+
+				ifnull((
+					select
+						Points
+					from 
+						initpoints
+					where 
+						RetailerID = #{RetailerID}
+					and
+						ProjectID =	#{ProjectID}
+				),0) 
+				onePoint
 		from 
-		project
+			rprojectretailer
 		left join
-		salerecord
+			retailer
 		on
-		project.ID = salerecord.ProjectID
+			rprojectretailer.RetailerID = retailer.ID
 		left join 
-		retailer
+			salerecord
 		on
-		retailer.ID = salerecord.RetailerID
+			retailer.ID = salerecord.RetailerID
 		where
-		project.ProvinceID = #{ProvinceID}
+			rprojectretailer.ProjectID = #{ProjectID}
 		and
-		project.IsActive = 1
+			rprojectretailer.IsActive = 1
+		and
+			retailer.IsActive = 1
 		and 
-		retailer.ID = #{RetailerID}
+			rprojectretailer.RetailerID = #{RetailerID}
 	) onePoints
 	where 
-allPoints.allPoint > onePoints.onePoint
+	allPoints.allPoint &lt; onePoints.onePoint
+	</select>
 	
+	<resultMap type="com.dowloyalty.pojo.RetailerAccInfo" id="retailerMap">
+		<result column="retailerId" property="reId"/>
+		<result column="retailerName" property="reName"/>
+		<result column="totalPrice" property="totalPrice"/>
+		<result column="provinceName" property="provinceName"/>
+	</resultMap>
+	
+	<select id="findByConditions" resultMap="retailerMap">
+		select 
+			retailer.ID retailerId,
+			retailer.ChineseName retailerName,
+			sum(salerecord.TotalPrice) totalPrice,
+			province.Name provinceName
+		from 
+			retailer
+		left join 
+			salerecord
+		on
+			retailer.ID = salerecord.RetailerID
+		left join 
+			province
+		on
+			retailer.ProvinceID = province.ID
+		where
+		retailer.IsActive = 1
+		and
+		province.IsActive = 1
+		group by retailer.ID
+		<if test="RetailerID != null">
+		having
+			retailer.ID like "%${RetailerID}%"
+		</if>
+		<if test="RetailerName != null and RetailerName != ''">
+		having
+			retailer.ChineseName like "%${RetailerName}%"
+		</if>
+		order by retailer.ID
+		limit #{PageNum},#{ShowNum}
+	</select>
+	
+	<select id="getCount" resultType="int">
+		select 
+			count(distinct retailer.ID)
+		from 
+			retailer
+		left join 
+			salerecord
+		on
+			retailer.ID = salerecord.RetailerID
+		left join 
+			province
+		on
+			retailer.ProvinceID = province.ID
+		<if test="RetailerID != null">
+		where
+			retailer.ID like "%${RetailerID}%"
+		and
+		retailer.IsActive = 1
+		and
+		province.IsActive = 1
+		</if>
+		<if test="RetailerName != null and RetailerName != ''">
+		where
+			retailer.ChineseName like "%${RetailerName}%"
+		and
+		retailer.IsActive = 1
+		and
+		province.IsActive = 1
+		</if>
+		<if test="RetailerName == null and RetailerID == null or RetailerName == ''">
+		where
+		retailer.IsActive = 1
+		and
+		province.IsActive = 1
+		</if>
+		order by retailer.ID
+	</select>
+	
+	<!-- <select id="selectAllRanks">
+		select 
+	@num:=@num+1 curRank,
+	allPoints.retailerId retailerId
+from
+(
+	select
+		sum(ifnull(salerecord.Points,0)) allPoint,
+		rprojectretailer.RetailerID retailerId
+	from 
+		rprojectretailer
+	left join
+		retailer
+	on
+		rprojectretailer.RetailerID = retailer.ID
+	left join 
+		salerecord
+	on
+		retailer.ID = salerecord.RetailerID
+	where
+		rprojectretailer.ProjectID = 
+	(
+					select
+						project.ID
+					from 
+						project	
+					left join 
+					rprojectretailer
+					on 
+					project.ID = rprojectretailer.ProjectID
+					where
+						rprojectretailer.RetailerID = 1001
+					and 
+						project.IsActive = 1
+					and 
+						rprojectretailer.IsActive = 1
+					and
+						project.StartDate <= current_date()
+					and
+						project.EndDate >= current_date()
+					order by project.StartDate desc 
+						limit 0,1
+				)
+	and
+		rprojectretailer.IsActive = 1
+	and
+		retailer.IsActive = 1
+	group by rprojectretailer.RetailerID
+	order by allPoint desc
+	) allPoints,
+(
+select
+	@num:=@num+1
+from
+	(select @num:=-1)addRow
+)addRow
+	</select> -->
+	
+	<select id="findRetailerByPromoterId" parameterType="int" resultType="com.dowloyalty.entity.Retailer">
+	SELECT ID,ChineseName,ProvinceID,Mobile,OpenID,Email,LastUpdataData,SFDCCode,LoginCode,IsActive
+	 FROM retailer WHERE ID IN(
+	 	SELECT RetailerID FROM rprojectretailer
+			WHERE ProjectID IN
+				(SELECT ID FROM project WHERE ID IN
+					(SELECT ProjectID FROM rprojectpromoter WHERE PromoterID=#{value} AND IsActive=1)
+				AND IsActive=1)
+			AND IsActive=1)
+	AND IsActive=1
+	</select>
+	<select id="findRetailerByPromoterIdAndRetailerName" resultType="com.dowloyalty.entity.Retailer">
+	SELECT ID,ChineseName,ProvinceID,Mobile,OpenID,Email,LastUpdataData,SFDCCode,LoginCode,IsActive
+	 FROM retailer WHERE ID IN(
+	 	SELECT RetailerID FROM rprojectretailer
+			WHERE ProjectID IN
+				(SELECT ID FROM project WHERE ID IN
+					(SELECT ProjectID FROM rprojectpromoter WHERE PromoterID=#{promoterId} AND IsActive=1)
+				AND IsActive=1)
+			AND IsActive=1)
+	AND ChineseName like concat('%',#{retailername},'%') AND IsActive=1
+	</select>
+	<update id="updateRetailerByAccount">
+	UPDATE  retailer,(SELECT a.id accid,a.url,a.`name`,a.shippingState,a.phone,a.lastModiFieddate FROM retailer r,account a WHERE r.SFDCCode=a.id AND a.isActive=1) acc
+		SET retailer.ChineseName=acc.`name`,
+			retailer.Email=acc.url,
+			retailer.LastUpdataData=acc.lastModiFieddate,
+			retailer.Mobile=acc.phone,
+			retailer.ProvinceID=(SELECT ID FROM province WHERE IsActive=1 AND enName=acc.shippingState),
+			retailer.SFDCCode=acc.accid
+	where retailer.SFDCCode=acc.accid;
+	</update>
+	<update id="updateRetailerByRetailer" parameterType="com.dowloyalty.entity.Retailer">
+	UPDATE retailer SET ChineseName=#{chineseName},
+						ProvinceID=#{provinceID},
+						Email=#{email},
+						LastUpdataData=#{lastUpdataData},
+						Mobile=#{mobile}
+		WHERE SFDCCode=#{sfdcCode}
+	</update>
+	<insert id="insertRetailer" parameterType="com.dowloyalty.entity.Retailer">
+		INSERT INTO `retailer` (`ChineseName`, `ProvinceID`, `Mobile`, `Email`, `LastUpdataData`, `SFDCCode`, `LoginCode`, `IsActive`)
+			VALUES (#{chineseName}, #{provinceID}, #{mobile},#{email} , #{lastUpdataData},#{sfdcCode},#{loginCode}, 1)
+	</insert>
+	
+	<select id="findAllRetailersByProjectId" resultType="com.dowloyalty.entity.Retailer">
+	select
+		retailer.ID id,
+		retailer.ChineseName chineseName,
+		retailer.ProvinceID provinceID,
+		retailer.Mobile mobile,
+		retailer.OpenID openID,
+		retailer.Email email,
+		retailer.LastUpdataData lastUpdataData,
+		retailer.SFDCCode sfdcCode,
+		retailer.LoginCode loginCode,
+		retailer.IsActive isActive
+	from
+		retailer
+	left join
+		project
+	on
+		retailer.ProvinceID = project.ProvinceID
+	where
+		retailer.IsActive = 1
+	and
+		project.IsActive = 1
+	and
+		project.ID = #{ProjectID}
+	</select>
+	
+	<insert id="patchInsertRelationBetweenRetailerAndProject">
+			insert into rprojectretailer(ProjectID,RetailerID,IsActive)
+			values
+			<foreach collection="ids" item="retailerId" separator=",">
+				<if test="retailerId != ''">
+				(#{projectId},#{retailerId},1)
+				</if>
+			</foreach>
+	</insert>
+	
+	<delete id="patchDeleteRelationBetweenRetailerAndProject">
+			delete from rprojectretailer
+			where
+				ProjectID = #{projectId}
+			and
+				RetailerID in
+			<foreach collection="ids" item="retailerId" open = "(" close = ")" separator=",">
+				<if test="retailerId != ''">
+					#{retailerId}
+				</if>
+			</foreach>
+	</delete>
+	
+	<select id="findAllRetailerByProjectId" parameterType="String" resultType="String">
+		select
+	        RetailerID
+	    from
+	        rprojectretailer
+	    where
+	        ProjectID = #{ProjectID}
+	    and
+	        IsActive = 1
 	</select>
 </mapper>

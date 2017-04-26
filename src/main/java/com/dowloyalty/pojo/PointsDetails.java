@@ -2,8 +2,6 @@ package com.dowloyalty.pojo;
 
 import java.io.Serializable;
 
-import com.dowloyalty.entity.ExchangeRecord;
-import com.dowloyalty.entity.SaleRecord;
 
 /**
  * 积分明细类

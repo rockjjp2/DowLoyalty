@@ -38,10 +38,11 @@ public interface GoodsService {
 	/**
 	 * 根据礼品ID获取礼品信息
 	 * 包括ID，名称，图片地址和礼品的积分
-	 * @param	礼品ID
+	 * @param retailerId	零售商ID
+	 * @param goodsId	礼品ID
 	 * @return	礼品对象
 	 */
-	public GoodsVo findByGoodsId(int goodsId);
+	public GoodsVo findByGoodsId(int retailerId, int goodsId);
 	
 	/**
 	 * 根据省份ID获取该省礼品商城所有礼品信息
@@ -58,4 +59,9 @@ public interface GoodsService {
 	
 	public Goods findById(int id);
 	
+	/**
+	 * 批量插入礼品信息
+	 * @param goodsList 礼品集合
+	 */
+	public void batchGoodsInfo(List<Goods> goodsList);
 }

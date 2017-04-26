@@ -3,9 +3,30 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  <mapper namespace="com.dowloyalty.dao.ProjectDao">
  	
- 	<select id="findActiveByRid" parameterType="int" resultType="com.dowloyalty.entity.Project">
+ 	<resultMap type="com.dowloyalty.entity.Project" id="projectMap">
+ 	<result column="projectID" property="id"/>
+ 	<result column="isVisible" property="isVisible"/>
+ 	</resultMap>
+ 	
+ 	<resultMap type="com.dowloyalty.entity.Project" id="projectBase64Map">
+ 	<result column="projectID" property="id"/>
+ 	<result column="projectName" property="name"/>
+ 	<result column="provinceID" property="provinceID"/>
+ 	<result column="placardPath" property="placardPath"/>
+ 	<result column="backgroundPath" property="backgroundPath"/>
+ 	<result column="assistantID" property="assistantID"/>
+ 	<result column="startDate" property="startDate"/>
+ 	<result column="endDate" property="endDate"/>
+ 	<result column="adminID" property="adminID"/>
+ 	<result column="description" property="description"/>
+ 	<result column="isActive" property="isActive"/>
+ 	<result column="isVisible" property="isVisible"/>
+ 	</resultMap>
+ 	
+ 	<select id="findActiveByRid" parameterType="int" resultMap="projectMap">
  		select
  			project.ID projectID,
+ 			project.PlacardPath placardPath,
  			project.IsVisible isVisible
  		from
  			rprojectretailer
@@ -16,8 +37,248 @@
  		where
  			RetailerID = #{RetailerID}
  		and
+ 			rprojectretailer.ProjectID =
+		(
+			select
+				project.ID
+			from 
+				project	
+			left join 
+			rprojectretailer
+			on 
+			project.ID = rprojectretailer.ProjectID
+			where
+				rprojectretailer.RetailerID = #{RetailerID}
+			and
+				project.StartDate &lt;= current_date()
+			and
+				project.EndDate >= current_date()
+			and 
+				project.IsActive = 1
+			and 
+				rprojectretailer.IsActive = 1
+			order by project.StartDate desc 
+				limit 0,1
+		)
+ 		and
  			project.IsActive = 1
  		and
+ 			rprojectretailer.IsActive = 1
+ 		and
  			project.IsVisible = 1
+ 	</select>
+ 	<select id="findProjectByRetailerId" parameterType="int" resultMap="projectBase64Map">
+ 	select 
+      project.ID projectID,
+      project.Name projectName,
+      project.ProvinceID provinceID,
+      project.PlacardPath placardPath,
+      project.BackgroundPath backgroundPath,
+      project.AssistantID assistantID,
+      project.StartDate startDate,
+      project.EndDate endDate,
+      project.AdminID adminID,
+      project.IsVisible isVisible,
+      project.IsActive isActive,
+      project.Description description
+ 	FROM
+      rprojectretailer,
+      project
+ 	WHERE
+      rprojectretailer.ProjectID = project.ID
+    AND
+      RetailerID = #{value}
+ 	AND
+      project.IsActive = 1
+    AND
+      rprojectretailer.IsActive = 1
+    ORDER BY project.StartDate DESC
+ 	</select>
+ 	<select id="findProjectByPromoterId" parameterType="int" resultMap="projectBase64Map">
+ 	SELECT
+      project.ID projectID,
+      project.Name projectName,
+      project.ProvinceID provinceID,
+      project.PlacardPath placardPath,
+      project.BackgroundPath backgroundPath,
+      project.AssistantID assistantID,
+      project.StartDate startDate,
+      project.EndDate endDate,
+      project.AdminID adminID,
+      project.IsVisible isVisible,
+      project.IsActive isActive,
+      project.Description description
+    FROM
+      project,rprojectpromoter
+	WHERE
+      project.ID=rprojectpromoter.ProjectID
+    AND
+      rprojectpromoter.PromoterID=#{value}
+	AND
+      project.IsActive=1
+    AND
+      rprojectpromoter.IsActive=1
+    ORDER BY project.StartDate DESC
+    limit 1
+ 	</select>
+ 	<select id="findActiveProjectByPromoterId" parameterType="int" resultMap="projectBase64Map">
+ 	SELECT
+ 	  project.ID projectID,
+      project.Name projectName,
+      project.ProvinceID provinceID,
+      project.PlacardPath placardPath,
+      project.BackgroundPath backgroundPath,
+      project.AssistantID assistantID,
+      project.StartDate startDate,
+      project.EndDate endDate,
+      project.AdminID adminID,
+      project.IsVisible isVisible,
+      project.IsActive isActive,
+      project.Description description
+    FROM
+      project,rprojectpromoter
+	WHERE
+      project.ID=rprojectpromoter.ProjectID
+    AND
+      rprojectpromoter.PromoterID=#{value}
+	AND
+      project.IsActive=1
+    AND
+      rprojectpromoter.IsActive=1
+	AND
+      project.StartDate &lt;= current_date()
+	AND
+      project.EndDate >= current_date()
+    limit 1
+ 	</select>
+<!--  	<select id="findProjectByPromoterId" parameterType="int" resultType="com.dowloyalty.entity.Project">
+ 	SELECT `ID`, `Name`, `ProvinceID`, `PlacardPath`, `AssistantID`, `StartDate`, `EndDate`, `AdminID`, `IsVisible`, `IsActive` FROM project
+		WHERE ID IN
+			(SELECT ProjectID FROM rprojectpromoter WHERE PromoterID=#{value})
+		AND IsActive=1
+ 	</select> -->
+ 	
+ 	<select id="findProjectByProjectId" parameterType="int" resultMap="projectBase64Map">
+ 	select
+ 	  project.ID projectID,
+      project.Name projectName,
+      project.ProvinceID provinceID,
+      project.PlacardPath placardPath,
+      project.BackgroundPath backgroundPath,
+      project.AssistantID assistantID,
+      project.StartDate startDate,
+      project.EndDate endDate,
+      project.AdminID adminID,
+      project.IsVisible isVisible,
+      project.IsActive isActive,
+      project.Description description
+    from
+      Project
+    where
+      IsActive = 1
+    and
+      ID=#{projectId}
+ 	</select>
+ 	<select id="findProjectByAssistantId" parameterType="int" resultMap="projectBase64Map">
+ 	select
+ 	  project.ID projectID,
+      project.Name projectName,
+      project.ProvinceID provinceID,
+      project.PlacardPath placardPath,
+      project.BackgroundPath backgroundPath,
+      project.AssistantID assistantID,
+      project.StartDate startDate,
+      project.EndDate endDate,
+      project.AdminID adminID,
+      project.IsVisible isVisible,
+      project.IsActive isActive,
+      project.Description description
+    from
+      Project
+    where
+      AssistantID=#{value}
+ 	</select>
+ 	
+ 	<update id="update" parameterType="com.dowloyalty.entity.Project">
+ 		update
+ 		    Project
+ 		set
+ 		    Name = #{name},
+ 		    ProvinceID = #{provinceID},
+ 		    PlacardPath = #{placardPath},
+ 		    BackgroundPath = #{backgroundPath},
+ 		<if test="assistantID == 0">
+ 			AssistantID = null,
+ 		</if>
+ 		<if test="assistantID != 0">
+ 		    AssistantID = #{assistantID},
+ 		</if>
+ 		    StartDate = #{startDate},
+ 		    EndDate = #{endDate},
+ 		    AdminID = #{adminID},
+ 		    Description = #{description},
+ 		    IsVisible = #{isVisible},
+ 		    IsActive = #{isActive}
+ 		where
+ 		    ID = #{id}
+ 	</update>
+ 	
+ 	<select id="findProjectByProvinceIdAndName" resultMap="projectBase64Map">
+ 	select
+ 	  project.ID projectID,
+      project.Name projectName,
+      project.ProvinceID provinceID,
+      project.PlacardPath placardPath,
+      project.BackgroundPath backgroundPath,
+      project.AssistantID assistantID,
+      project.StartDate startDate,
+      project.EndDate endDate,
+      project.AdminID adminID,
+      project.isVisible isVisible,
+      project.IsActive isActive,
+      project.Description description
+    from
+      project
+    where
+      ProvinceID = #{ProvinceID}
+    and
+      Name = #{Name}
+    and
+      IsActive = 1
+ 	</select>
+ 	
+ 	<insert id="save" parameterType="com.dowloyalty.entity.Project">
+ 	insert into project
+ 	(
+ 	  Name,ProvinceID,PlacardPath,BackgroundPath,
+ 	  AssistantID,StartDate,EndDate,AdminID,
+ 	  isVisible,IsActive,Description
+ 	)
+ 	values
+ 	(
+ 	  #{name},#{provinceID},#{placardPath},#{backgroundPath},
+ 	  null,#{startDate},#{endDate},#{adminID},
+ 	  #{isVisible},#{isActive},#{description}
+ 	)
+ 	</insert>
+ 	
+ 	<select id="findAllActiveProjects" resultMap="projectBase64Map">
+ 	select
+ 	  project.ID projectID,
+      project.Name projectName,
+      project.ProvinceID provinceID,
+      project.PlacardPath placardPath,
+      project.BackgroundPath backgroundPath,
+      project.AssistantID assistantID,
+      project.StartDate startDate,
+      project.EndDate endDate,
+      project.AdminID adminID,
+      project.isVisible isVisible,
+      project.IsActive isActive,
+      project.Description description
+    from
+      project
+    where
+      IsActive = 1
  	</select>
  </mapper>

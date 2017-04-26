@@ -1,4 +1,4 @@
-﻿html,body,table{ height:100%; width:100%; }
+﻿html,body,table{ height:100%; width:100%;/*height:auto*/ }
 body,input[type=button],button {font-family: "微软雅黑", "黑体", "宋体";}
 li {border-left: 3px solid transparent; font-size:1rem; }
 
@@ -6,7 +6,7 @@ table>tbody>tr>td{text-align:center;}
 
 input[type=text],textarea,select{width: 60%;border: 1px solid #C9CACC;padding: 10px 12px;border-radius: 4px;display: block;font-size: 14px;color: #555;background-color: #fff;background-image: none;}
 textarea{height:70px; resize:none}
-select{width:63%;}
+select{width:64%;}
 input[type=button],button{height: 35px;width: 140px;background-color: #ACB317;color: white;border: 1px solid #BCA36A;border-radius: 5px;margin-bottom:5px;}
 
 

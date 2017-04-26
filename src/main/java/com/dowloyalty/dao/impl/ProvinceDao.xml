@@ -5,4 +5,15 @@
 	<select id="getAllProvince"  parameterType="int"  resultType="com.dowloyalty.entity.Province">
 		select ID,Name,IsActive from province where IsActive=1
 	</select>
+	<select id="findProvinceByPromoterId" parameterType="int" resultType="com.dowloyalty.entity.Province">
+	SELECT ID,`Name`,IsActive  FROM province WHERE IsActive=1 AND
+			ID= (SELECT ProvinceID FROM rpromoterprovince WHERE PromoterID=#{value} AND IsActive=1)
+	</select>
+	<select id="findProvinceIdByEnName" parameterType="String" resultType="int">
+	SELECT ID from province where IsActive=1 AND enName=#{value}
+	</select>
+	
+	<select id="findProvinceById" parameterType="int" resultType="com.dowloyalty.entity.Province">
+	  select * from province where id=#{provinceId}
+	</select>
 </mapper>

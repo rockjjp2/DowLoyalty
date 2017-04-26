@@ -2,12 +2,175 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dowloyalty.dao.IPromoterDao">
-	<select id="findPromoterByProvinceId" resultType="com.dowloyalty.entity.Promoter" parameterType="int">
-	SELECT ID,ChineseName,WechatId,IsActive
+	<!-- <select id="findPromoterByProvinceId" resultType="com.dowloyalty.pojo.PromoterProvince" parameterType="int">
+	SELECT prom.ID promoterId,prom.ChineseName promoterName,prov.name provinceName
+	FROM promoter prom,province prov,rpromoterprovince rpp  
+    WHERE prom.id = rpp.promoterID 
+    and prov.id = rpp.provinceID 
+    and rpp.provinceID=#{value}
+    and prom.IsActive =prov.IsActive = rpp.IsActive= 1 
+	</select> -->
+	<select id="findCountByProvinceId" resultType="int" parameterType="Object">
+	SELECT count(id)
 	FROM promoter   WHERE   IsActive = 1 AND
 	ID IN (
 		SELECT ID FROM rpromoterprovince
 		WHERE ProvinceID = #{value} AND IsActive = 1 
 	)
+	<if test="promoterName != null and promoterName !=''">
+	and ChineseName like '%${promoterName}%'
+	</if>
 	</select>
+	<select id="findPromoterByProvinceId" resultType="com.dowloyalty.entity.Promoter" parameterType="int">
+	SELECT ID,ChineseName,UserId,IsActive
+	FROM promoter   WHERE   IsActive = 1 AND
+	ID IN (
+		SELECT ID FROM rpromoterprovince
+		WHERE ProvinceID = #{value} AND IsActive = 1 
+	)
+	order by id
+	</select>
+	<select id="searchPromoterByPromoterName" resultType="com.dowloyalty.entity.Promoter" parameterType="Object">
+	SELECT ID,ChineseName,UserId,IsActive
+	FROM promoter   WHERE   IsActive = 1 AND
+	ID IN (
+		SELECT ID FROM rpromoterprovince
+		WHERE ProvinceID = #{value} AND IsActive = 1 
+	)
+	<if test="promoterName != null and promoterName !=''">
+	and ChineseName like '%${promoterName}%'
+	</if>
+	order by id  limit #{startNum},#{pageNum}
+	</select>
+	
+	<select id="findPromoterByUserId" resultType="com.dowloyalty.entity.Promoter" parameterType="String">
+	SELECT ID,ChineseName,UserId,IsActive
+	FROM promoter   WHERE UserId = #{UserId} AND IsActive = 1
+	</select>
+	<select id="findPromoterByProjectId" resultType="com.dowloyalty.entity.Promoter" parameterType="String">
+	SELECT * FROM promoter WHERE ID IN 
+		(SELECT PromoterID FROM rprojectpromoter WHERE ProjectID=#{value} AND IsActive=1)
+	AND IsActive=1
+	</select>
+	
+	
+	<select id="findAllPromotersByProjectId" resultType="com.dowloyalty.entity.Promoter">
+	select
+		promoter.ID id,
+		promoter.ChineseName chineseName,
+		promoter.UserId userId,
+		promoter.IsActive isActive
+	from
+		promoter
+	left join
+		rpromoterprovince
+	on
+		promoter.ID = rpromoterprovince.PromoterID
+	left join
+		project
+	on
+		rpromoterprovince.ProvinceID = project.ProvinceID
+	where
+		promoter.IsActive = 1
+	and
+		project.IsActive = 1
+	and
+		rpromoterprovince.IsActive = 1
+	and
+		project.ID = #{ProjectID}
+	</select>
+	
+	<insert id="patchInsertRelationBetweenPromoterAndProject">
+			insert into rprojectpromoter(ProjectID,PromoterID,IsActive)
+			values
+			<foreach collection="ids" item="promoterId" separator=",">
+				<if test="promoterId != ''">
+				(#{projectId},#{promoterId},1)
+				</if>
+			</foreach>
+	</insert>
+	
+	<delete id="patchDeleteRelationBetweenPromoterAndProject">
+			delete from rprojectpromoter
+			where
+				ProjectID = #{projectId}
+			and
+				PromoterID in
+			<foreach collection="ids" item="promoterId" open = "(" close = ")" separator=",">
+				<if test="promoterId != ''">
+					#{promoterId}
+				</if>
+			</foreach>
+	</delete>
+	
+	<select id="findAllPromoterByProjectId" parameterType="String" resultType="String">
+		select
+	        PromoterID
+	    from
+	        rprojectpromoter
+	    where
+	        ProjectID = #{ProjectID}
+	    and
+	        IsActive = 1
+	</select>
+	
+	<select id="findAllActivePromoters" resultType="com.dowloyalty.entity.Promoter">
+	select
+	  ID,
+	  ChineseName,
+	  UserId,
+	  IsActive
+	from
+	  promoter
+	where
+	  IsActive = 1
+	</select>
+	
+	<update id="update" parameterType="com.dowloyalty.pojo.PromoterVo">
+	  update
+        promoter
+      set
+        ChineseName = #{chineseName},
+        UserId = #{userID}
+      where
+        ID = #{id}
+	</update>
+	
+	<insert id="batchSave">
+	  insert into 
+	    promoter
+	  (ChineseName,UserId,IsActive)
+	  values
+	  <foreach collection="promoters" item="promoter" separator=",">
+	    (#{promoter.chineseName},#{promoter.userID},#{promoter.isActive})
+	  </foreach>
+	</insert>
+	
+	<select id="findAllPromoterAndProvinceRelation" resultType="com.dowloyalty.entity.RPromoterProvince">
+	  select
+	    ID,PromoterID,ProvinceID,IsActive
+	  from
+	    rpromoterprovince
+	  where
+	  IsActive = 1
+	</select>
+	
+	<update id="updatePromoterAndProvinceRelation">
+	  update
+	    rpromoterprovince
+	  set
+	    ProvinceID = #{provinceID}
+	  where
+	    PromoterID = #{promoterID}
+	</update>
+	
+	<insert id="batchSavePromoterAndProvinceRelation">
+	  insert into
+	    rpromoterprovince
+	  (PromoterID,ProvinceID,IsActive)
+	  values
+	  <foreach collection="promoters" item="promoter" separator=",">
+	    (#{promoter.id},#{promoter.provinceId},1)
+	  </foreach>
+	</insert>
 </mapper>

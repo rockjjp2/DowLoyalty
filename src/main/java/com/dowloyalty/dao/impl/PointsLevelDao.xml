@@ -2,27 +2,93 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  <mapper namespace="com.dowloyalty.dao.PointsLevelDao">
+ <sql id="projectID">
+ (
+					select
+						project.ID
+					from 
+						project	
+					left join 
+					rprojectretailer
+					on 
+					project.ID = rprojectretailer.ProjectID
+					where
+						rprojectretailer.RetailerID = #{RetailerID}
+					and 
+						project.IsActive = 1
+					and 
+						rprojectretailer.IsActive = 1
+					and
+						project.StartDate &lt;= current_date()
+					and
+						project.EndDate >= current_date()
+					order by project.StartDate desc 
+						limit 0,1
+				)
+ </sql>
+ 	
  	<select id="findLvNameByRetailerId" resultType="String">
  		select
  			Name
 		from pointslevel
 		where
+			ProjectID = #{ProjectID}
+ 		and
+			IsActive = 1
+ 		and
  			(
  			select
- 				sum(Points)
- 			from salerecord
+ 				sum(salerecord.Points)+initpoints.Points
+ 			from 
+ 				salerecord
+ 			inner join
+ 				initpoints
+ 			on
+ 				salerecord.RetailerID = initpoints.RetailerID
+ 			and
+ 				salerecord.ProjectID = initpoints.ProjectID
  			where salerecord.RetailerID = #{RetailerID}
+ 			and salerecord.ProjectID = #{ProjectID}
  			) >= Points 
  		or
  			(
  			select
- 				sum(Points)
+ 				sum(salerecord.Points)+initpoints.Points
  			from salerecord
+ 			inner join
+ 				initpoints
+ 			on
+ 				salerecord.RetailerID = initpoints.RetailerID
+ 			and
+ 				salerecord.ProjectID = initpoints.ProjectID
  			where salerecord.RetailerID = #{RetailerID}
+ 			and salerecord.ProjectID = #{ProjectID}
  			) &lt; 0
- 		and ProjectID = #{ProjectID}
- 		and IsActive = 1
-		order by Points asc
+		order by Points desc
+		limit 0,1
+ 	</select>
+ 	<select id="findPointslevelNameByProjectIdAndPoints" resultType="String">
+ 		select Name from pointslevel
+		where
+			ProjectID = #{projectId}
+ 		and
+			IsActive = 1
+ 		and
+ 			#{points}>= Points 
+
+		order by Points desc
+		limit 0,1
+ 	</select>
+ 	<select id="findNextPointslevelByProjectIdAndPoints" resultType="com.dowloyalty.entity.PointsLevel">
+ 		select * from pointslevel
+		where
+			ProjectID = #{projectId}
+ 		and
+			IsActive = 1
+ 		and
+ 			#{points}&lt; Points 
+
+		order by Points ASC
 		limit 0,1
  	</select>
  	
@@ -31,15 +97,23 @@
  			Id,ProjectID,Name,Points,IsActive
 		from pointslevel
 		where
+		ProjectID = #{ProjectID}
+ 		and
+			IsActive = 1
+		and
  			(
  			select
- 				sum(Points)
+ 				sum(salerecord.Points)+initpoints.Points
  			from salerecord
- 			where
- 			salerecord.RetailerID = #{RetailerID}
- 			) &lt;= Points
- 		and ProjectID = #{ProjectID}
- 		and IsActive = 1
+ 			inner join
+ 				initpoints
+ 			on
+ 				salerecord.RetailerID = initpoints.RetailerID
+ 			and
+ 				salerecord.ProjectID = initpoints.ProjectID
+ 			where salerecord.RetailerID = #{RetailerID}
+ 			and salerecord.ProjectID = #{ProjectID}
+ 			) &lt; Points
 		order by Points asc
 		limit 0,1
  	</select>
@@ -51,31 +125,79 @@
  		<result column="totalPoints" property="totalPoints"/>
  		<result column="remainPoints" property="remainPoints"/>
  	</resultMap>
- 	
+ 	<select id="findAccountBasicInfoByRetailerId" resultMap="accInfoMap">
+ 	select
+		retailer.ChineseName retailerName,
+		retailer.ID retailerId,
+		province.Name provinceName
+	from
+		retailer
+	left join 
+		province
+	on 
+		retailer.ProvinceID = province.ID
+	where
+		retailer.ID = #{retailerId}
+	and
+		retailer.IsActive = 1
+	and
+		province.IsActive = 1
+ 	</select>
  	<select id="findAccInfoByRetailerId" resultMap="accInfoMap">
 	select
-	retailer.ChineseName retailerName,
-	retailer.ID retailerId,
-	province.Name provinceName,
-	sum(salerecord.Points) totalPoints,
-	sum(salerecord.Points)+ifnull(sumEgPoints,0) remainPoints
-	from
-	retailer
-	left join province
-	on retailer.ProvinceID = province.ID
-	left join salerecord
-	on retailer.ID = salerecord.RetailerID
+		retailer.ChineseName retailerName,
+		retailer.ID retailerId,
+		province.Name provinceName,
+		salePoints.totalPoints totalPoints,
+		salePoints.totalPoints+ifnull(sumEgPoints,0) remainPoints
+from
+		retailer
+	left join 
+		province
+	on 
+		retailer.ProvinceID = province.ID
+	,
+	(
+		select
+			sum(ifnull(salerecord.Points,0))+
+		ifnull((
+			select
+				Points
+			from 
+				initpoints
+			where 
+				RetailerID = #{RetailerID}
+			and
+				ProjectID =
+				<include refid="projectID"/>
+				),0) totalPoints
+from
+	salerecord
+		where
+		salerecord.RetailerID = #{RetailerID}
+		and
+		salerecord.ProjectID =
+		<include refid="projectID"/>
+	) salePoints
 	,
 	(
 	select
 		sum(ifnull(ExchangePoints,0)) sumEgPoints
 	from
-	exchangerecord
+		exchangerecord
 	where
-	RetailerID = #{RetailerID}
+		RetailerID = #{RetailerID}
+	and
+		exchangerecord.ProjectID =
+		<include refid="projectID"/>
 	)EgPoints
 	where
-	retailer.ID = #{RetailerID}
+		retailer.ID = #{RetailerID}
+	and
+		retailer.IsActive = 1
+	and
+		province.IsActive = 1
+	
 	</select>
 	
 	<resultMap type="com.dowloyalty.pojo.RetailerAccInfo" id="furAccMap">
@@ -88,49 +210,155 @@
 	select 
 	count(allPoint) nextRank,
 	count(allPoint)+1 curRank,
-	min(allPoint-onePoint) remainPoints
-	from 
+	(
+		(
+			select
+				min(ifnull(allPoints.allPoint,onePoint))
+			from
+				(
+				select
+					sum(ifnull(salerecord.Points,0)) allPoint,
+					rprojectretailer.RetailerID
+				from 
+					rprojectretailer
+				left join
+					retailer
+				on
+					rprojectretailer.RetailerID = retailer.ID
+				left join 
+					salerecord
+				on
+					retailer.ID = salerecord.RetailerID
+				where
+					rprojectretailer.ProjectID = 
+				<include refid="projectID"/>
+				and
+					rprojectretailer.IsActive = 1
+				and
+					retailer.IsActive = 1
+				group by
+					rprojectretailer.RetailerID
+				) allPoints
+			where
+				allPoints.allPoint >
+				(
+				select
+					sum(ifnull(salerecord.Points,0)) onePoint
+				from 
+					rprojectretailer
+				left join
+					retailer
+				on
+					rprojectretailer.RetailerID = retailer.ID
+				left join 
+					salerecord
+				on
+					retailer.ID = salerecord.RetailerID
+				where
+					rprojectretailer.ProjectID = 
+				<include refid="projectID"/>
+				and
+					rprojectretailer.IsActive = 1
+				and
+					retailer.IsActive = 1
+				and 
+					rprojectretailer.RetailerID = #{RetailerID}
+				)
+		)
+		- onePoint
+	) remainPoints
+from 
 	(
 	select
-		sum(salerecord.Points) allPoint,salerecord.RetailerID
-		from 
-		project
-		left join
-		salerecord
-		on
-		project.ID = salerecord.ProjectID
-		left join 
+		sum(ifnull(salerecord.Points,0)) allPoint,
+		rprojectretailer.RetailerID
+	from 
+		rprojectretailer
+	left join
 		retailer
-		on
+	on
+		rprojectretailer.RetailerID = retailer.ID
+	left join 
+		salerecord
+	on
 		retailer.ID = salerecord.RetailerID
-		where
-		project.ProvinceID = #{ProvinceID}
-		and
-		project.IsActive = 1
-		group by salerecord.RetailerID
+	where
+		rprojectretailer.ProjectID = 
+	<include refid="projectID"/>
+	and
+		rprojectretailer.IsActive = 1
+	and
+		retailer.IsActive = 1
+	group by rprojectretailer.RetailerID
 	) allPoints,
 	(
 	select
-		sum(salerecord.Points) onePoint
-		from 
-		project
-		left join
-		salerecord
-		on
-		project.ID = salerecord.ProjectID
-		left join 
+		sum(ifnull(salerecord.Points,0)) onePoint
+	from 
+		rprojectretailer
+	left join
 		retailer
-		on
+	on
+		rprojectretailer.RetailerID = retailer.ID
+	left join 
+		salerecord
+	on
 		retailer.ID = salerecord.RetailerID
-		where
-		project.ProvinceID = #{ProvinceID}
-		and
-		project.IsActive = 1
-		and 
-		retailer.ID = #{RetailerID}
+	where
+		rprojectretailer.ProjectID = 
+	<include refid="projectID"/>
+	and
+		rprojectretailer.IsActive = 1
+	and
+		retailer.IsActive = 1
+	and 
+		rprojectretailer.RetailerID = #{RetailerID}
 	) onePoints
-	where 
-allPoints.allPoint > onePoints.onePoint
+where 
+	allPoints.allPoint > onePoints.onePoint
+	</select> 
+	
+	
+	<insert id="save" parameterType="com.dowloyalty.entity.PointsLevel">
+		insert into pointslevel
+		(ProjectID,Name,Points,IsActive)
+		values
+		(#{projectID},#{name},
+		#{points},#{isActive})
+	</insert>
+	
+	<select id="findByProjectIdAndName" resultType="com.dowloyalty.entity.PointsLevel">
+		select
+			Id,ProjectID,Name,Points,IsActive
+		from
+			pointslevel
+		where
+			ProjectID = #{ProjectID}
+		and
+			Name = #{Name}
+		and
+			IsActive = 1
 	</select>
 	
+	<update id="update" parameterType="com.dowloyalty.entity.PointsLevel">
+		update pointslevel
+		set
+		ProjectID = #{projectID},Name = #{name},
+		Points = #{points},IsActive = #{isActive}
+		where
+		ProjectID = #{projectID}
+		and
+		Name = #{name}
+	</update>
+	
+	<select id="findByProjectId" parameterType="int" resultType="com.dowloyalty.entity.PointsLevel">
+		select
+			Id,ProjectID,Name,Points,IsActive
+		from
+			pointslevel
+		where
+			ProjectID = #{ProjectID}
+		and
+			IsActive = 1
+	</select>
  </mapper>

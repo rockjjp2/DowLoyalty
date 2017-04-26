@@ -7,20 +7,21 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DOW</title>
-    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/basic.css"/>
-    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/giftStore.css"/>
+    <title>忠诚度计划</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Resources/html/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Resources/html/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Resources/html/css/basic.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Resources/html/css/giftStore.css"/>
 </head>
 <body>
     <header>
-        <img src="/DowLoyalty/Resources/html/images/backImg.png" alt=""/>
+        <img src="${pageContext.request.contextPath}/Resources/html/images/backImg.png" alt=""/>
         <h4>礼品商城</h4>
     </header>
 
     <div class="container">
         <div class="clearfix">
-            <div class="col-xs-2 menu-btn style-btn-gray style-bg-green">全部</div>
+            <!-- <div class="col-xs-2 menu-btn style-btn-gray style-bg-green">全部</div> -->
             <!--<div class="col-xs-2 menu-btn style-btn-gray">电器</div>-->
             <!--<div class="col-xs-2 menu-btn style-btn-gray">卡券</div>-->
             <!--<div class="col-xs-2 menu-btn style-btn-gray">汽车</div>-->
@@ -51,35 +52,17 @@
 		</c:forEach>
 		</c:when>
 		<c:otherwise>
-		Nothing
+		您暂时还没有可以兑换的商品。
 		</c:otherwise>
 		</c:choose>
     </div>
 
-	<footer class="txt-center style-deepGray">
-        <div id="homePage" class="menu"><i class="fa fa-home"></i></div>
-        <div id="accountInfo" class="menu style-btnBg-green">账户信息</div>
-        <div id="exchangeshop" class="menu">礼品商城</div>
-        <div id="pointsDetails" class="menu">积分明细</div>
-    </footer>
-
-    <script src="/DowLoyalty/Resources/html/js/jquery-1.8.2.min.js"></script>
+    <script src="${pageContext.request.contextPath}/Resources/html/js/jquery-1.8.2.min.js"></script>
     <script type="text/javascript">
-    /*点击菜单-页面跳转*/
-    $(".menu").click(function(){
-       var pageID = $(this).attr("id");
-       location.href = "/DowLoyalty/v1/WeChat/retailer/"+pageID;
-    });
-    
-        <!-- 按钮点击后样式改变-->
-        $(".menu-btn").click(function(){
-            $(".menu-btn").removeClass("style-bg-green");
-            $(this).addClass("style-bg-green");
-        })
         
         //跳转到具体礼品信息显示页面
         function getInfo(id){
-        	location.href = "/DowLoyalty/v1/WeChat/retailer/goodsInfo?goodsId="+id;
+        	location.href = "${pageContext.request.contextPath}/WeChat/retailer/goodsInfo?goodsId="+id;
         }
     </script>
 </body>

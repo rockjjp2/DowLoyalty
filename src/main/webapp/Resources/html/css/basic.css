@@ -1,18 +1,20 @@
-/*禁用jQuery mobileĬ原有样式*/
+/*绂佺敤jQuery mobile默鍘熸湁鏍峰紡*/
 /*.ui-loader-default{ display:none}*/
 /*.ui-mobile-viewport{ border:none;}*/
 /*.ui-page {padding: 0; margin: 0; outline: 0}*/
 
 html,body{font-size: 62.5%;height:100%;font-family:"Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;}
 body{height: 100%;}    /*1.2em=12px*/
-.clearfix:after {content: ".";display: block;height: 0.5rem;clear: both;visibility: hidden;  }   /*撑开div便于设置样式属性*/
+.clearfix:after {content: ".";display: block;height: 0.5rem;clear: both;visibility: hidden;  }   /*鎾戝紑div渚夸簬璁剧疆鏍峰紡灞炴��*/
 .clearfix > div{padding: 0;}
 label,p{margin-bottom: 0.5rem;}
-header{height: 10%;position: relative;}
+header{height: 56.8px;position: relative;}
 header img{height: 100%;width: 100%;position: absolute;}
-header h4{color: #FFF;position: absolute;bottom: 1%;left: 8%;}  /*修改bootstrap内h1,h2...margin-top*/
+header h4{color: #FFF;position: absolute;bottom: 1%;left: 8%;}  /*淇敼bootstrap鍐卙1,h2...margin-top*/
 
-.container{height: 82%;overflow: auto;}
+/*鏉ㄧ懚-edit-start 20170301*/
+.container{height: 82%;overflow: auto;font-size:180%}
+/*鏉ㄧ懚-edit-end 20170301*/
 .container > div{margin: 1.7rem 0;}
 .menu-btn{padding: 0;border:0.1rem solid #B6BF00;border-radius: 0.4rem;text-align: center;}
 .item{box-shadow: 0 0.2rem #E0E0E0;}
@@ -39,15 +41,24 @@ button{border: 0.1rem solid;border-radius: 0.8rem;height: 2.5rem;font-size: 1.2r
 .style-red{color: red;}
 
 footer{margin: 0;font-size: 0;width: 100%;height: 8%;position: fixed;bottom: 0;}
-footer div{margin: 0;font-size: 1.3rem;display: inline-block;border: 0.1rem solid;height: 100%;}
+footer div{margin: 0;font-size: 1.3rem;display: inline-block;border-left: 0.1rem solid;border-right: 0.1rem solid;border-top: 0.1rem solid;height: 100%;}
 footer p{margin: 0;}
 footer div:after{display: inline-block;width: 0;height: 100%;vertical-align: middle;content: "";}
+
+/*鏉ㄧ懚-edit-start 20170221*/
 .menu{width: 30%;}
-#homePage{width: 6.5%;}
+#homePage{width: 10%;}
+#deliverList,#scoreDetails { /*add*/
+border-right:none
+}
+/*鏉ㄧ懚-edit-end 20170221*/
+
+
+
 /*.menu{width: 31%;}*/
 /*#homePage{width: 7%;}*/
 
-/*用div重写select样式*/
+/*鐢╠iv閲嶅啓select鏍峰紡*/
 /*.select{margin: auto 0.6rem;height: 2.3rem;}*/
 /*.select input{width: 100%;outline:none;border: 0.2rem solid #E0E0E0;border-radius: 0.5rem;}*/
 /*.select i{position: absolute;top: 10%;right: 10%;}*/

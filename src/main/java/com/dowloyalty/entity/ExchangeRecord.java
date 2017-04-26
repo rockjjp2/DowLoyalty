@@ -17,13 +17,14 @@ public class ExchangeRecord implements Serializable {
 	private Timestamp completeTime;
 	private int status;
 	private int exchangePoints;
+	private int projectID;
 
 	public ExchangeRecord() {
 		super();
 	}
 
 	public ExchangeRecord(int id, int retailerID, int goodsID, int amount, Timestamp submitTime, Timestamp sendOutTime,
-			Timestamp completeTime, int status, int exchangePoints) {
+			Timestamp completeTime, int status, int exchangePoints, int projectID) {
 		super();
 		this.id = id;
 		this.retailerID = retailerID;
@@ -34,6 +35,7 @@ public class ExchangeRecord implements Serializable {
 		this.completeTime = completeTime;
 		this.status = status;
 		this.exchangePoints = exchangePoints;
+		this.projectID = projectID;
 	}
 
 	public int getId() {
@@ -114,5 +116,13 @@ public class ExchangeRecord implements Serializable {
 				+ ", submitTime=" + submitTime + ", sendOutTime=" + sendOutTime + ", completeTime=" + completeTime
 				+ ", status=" + status + ", exchangePoints=" + exchangePoints + "]";
 	}
-	
+
+	public int getProjectID() {
+		return projectID;
+	}
+
+	public void setProjectID(int projectID) {
+		this.projectID = projectID;
+	}
+
 }

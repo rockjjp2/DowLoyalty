@@ -7,12 +7,12 @@
 	insert into goods
 	(
 		Name,Description,ImagePath,
-		IsActive,GoodsCategoryID
+		IsActive
 	)
 	values
 	(
 		#{Name},#{Description},#{ImagePath},
-		#{IsActive},#{GoodsCategoryID}
+		#{IsActive}
 	)
 	</insert>
 	
@@ -22,15 +22,15 @@
 	
 	<update id="update" parameterType="com.dowloyalty.entity.Goods">
 	update goods set
-	Name = #{Name},Description = #{Description},IsActive = #{IsActive},
-	IsActive = #{IsActive},GoodsCategoryID = #{GoodsCategoryID}
-	where ID = #{ID}
+	Name = #{name},Description = #{description},ImagePath = #{imagePath},
+	IsActive = #{isActive}
+	where ID = #{id}
 	</update>
 	
 	<select id="findAll" resultType="com.dowloyalty.entity.Goods">
 	select
 		ID,Name,Description,ImagePath,
-		IsActive,GoodsCategoryID
+		IsActive
 	from goods
 	where
 	IsActive = 1
@@ -49,31 +49,49 @@
 	
 	
 	<select id="findByRetailerId" parameterType="int" resultMap="pointsMap">
-	select
+	select 
 		goods.ID goodsid,
 		goods.Name goodsname,
 		goods.ImagePath goodsip,
 		goods.Description description,
 		exchangeshop.ExchangePoints exchangepoints
-	from goods
-	right join exchangeshop
-	on goods.ID = exchangeshop.GoodsID
-	right join project
-	on project.ID = exchangeshop.ProjectID
-	right join rprojectretailer
-	on project.ID = rprojectretailer.ProjectID
-	where rprojectretailer.RetailerID = #{ID}
+	from 
+		goods
+	right join 
+		exchangeshop
+	on 
+		goods.ID = exchangeshop.GoodsID
+	where 
+		exchangeshop.ProjectID =
+		(
+			select
+				project.ID
+			from 
+				project	
+			left join 
+			rprojectretailer
+			on 
+			project.ID = rprojectretailer.ProjectID
+			where
+				rprojectretailer.RetailerID = #{RetailerID}
+			and
+				project.StartDate &lt;= current_date()
+			and
+				project.EndDate >= current_date()
+			and 
+				project.IsActive = 1
+			and 
+				rprojectretailer.IsActive = 1
+			order by project.StartDate desc 
+				limit 0,1
+		)
 	and
-	goods.IsActive = 1
+		goods.IsActive = 1
 	and
-	project.IsActive = 1
-	and
-	exchangeshop.IsActive = 1
-	and
-	rprojectretailer.IsActive = 1
+		exchangeshop.IsActive = 1
 	</select>
 	
-	<select id = "findByGoodsId" parameterType="int" resultMap="pointsMap">
+	<select id = "findByGoodsId" resultMap="pointsMap">
 	select
 		goods.ID goodsid,
 		goods.Name goodsname,
@@ -83,7 +101,32 @@
 	from goods
 	left join exchangeshop
 	on goods.ID = exchangeshop.GoodsID
-	where goods.ID = #{ID}
+	where 
+	exchangeshop.ProjectID =
+		(
+			select
+				project.ID
+			from 
+				project	
+			left join 
+			rprojectretailer
+			on 
+			project.ID = rprojectretailer.ProjectID
+			where
+				rprojectretailer.RetailerID = #{RetailerID}
+			and
+				project.StartDate &lt;= current_date()
+			and
+				project.EndDate >= current_date()
+			and 
+				project.IsActive = 1
+			and 
+				rprojectretailer.IsActive = 1
+			order by project.StartDate desc 
+				limit 0,1
+		)
+	and
+	goods.ID = #{GoodsID}
 	and
 	goods.IsActive = 1
 	and
@@ -128,5 +171,14 @@
 	and
 	goods.IsActive = 1
 	</select>
+	
+	<insert id="batchGoodsInfo">
+	    insert into
+	      goods(Name,Description,ImagePath,IsActive)
+	    values
+	    <foreach collection="goodsList" item="goods" separator=",">
+	      (#{goods.name},#{goods.description},#{goods.imagePath},#{goods.isActive})
+	    </foreach>
+	</insert>
 </mapper>
 

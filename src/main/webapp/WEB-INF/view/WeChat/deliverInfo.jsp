@@ -5,22 +5,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DOW</title>
-    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/basic.css"/>
-    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/deliverInfo.css"/>
+    <title>忠诚度计划</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Resources/html/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Resources/html/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Resources/html/css/basic.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Resources/html/css/deliverInfo.css"/>
 
 </head>
 <body>
     <header>
-        <img src="/DowLoyalty/Resources/html/images/backImg.png" alt=""/>
+        <img src="${pageContext.request.contextPath}/Resources/html/images/backImg.png" alt=""/>
         <h4>发货详情</h4>
     </header>
     <div class="container">
         <div class="clearfix">
             <div class="img-div col-xs-6 col-xs-offset-3">
-                <img src="/DowLoyalty/Resources/html/images/deliverInfo.png" alt=""/>
+                <img src="${pageContext.request.contextPath}/Resources/html/images/deliverInfo.png" alt=""/>
             </div>
         </div>
         <div class="clearfix">

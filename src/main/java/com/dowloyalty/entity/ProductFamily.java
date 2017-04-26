@@ -26,6 +26,7 @@ public class ProductFamily implements Serializable {
 		this.categoryID = categoryID;
 	}
 
+
 	public int getId() {
 		return id;
 	}
@@ -65,6 +66,7 @@ public class ProductFamily implements Serializable {
 	public void setCategoryID(int categoryID) {
 		this.categoryID = categoryID;
 	}
+
 
 	@Override
 	public String toString() {

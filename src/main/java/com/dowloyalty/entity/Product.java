@@ -17,7 +17,6 @@ public class Product implements Serializable {
 	private boolean isActive;
 	
 	
-	
 	public Product() {
 		super();
 	}
@@ -32,7 +31,6 @@ public class Product implements Serializable {
 		this.lastModifiedDate = lastModifiedDate;
 		this.isActive = isActive;
 	}
-	
 	
 	public int getId() {
 		return id;

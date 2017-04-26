@@ -1,23 +1,28 @@
-﻿/********************数据表格样式********************/
+/********************���ݱ����ʽ********************/
 
 .content-flickr {
     border: 0;
     margin: 0 auto;
     padding: 0;
+    height:auto;
     /*width: 1024px;*/
-    overflow: auto;
+    /*overflow: auto;*/
+    width:100%;
 }
-/*搜索表格样式Start*/
+/*���������ʽStart*/
 .top-table {
     width: 100%;
     height: auto;
     line-height: 32px;
-    font-family: 微软雅黑;
+    font-family: ΢���ź�;
     font-weight: 500;
     font-size: 1em;
     margin-bottom: 30px;
 }
 
+.top-title{
+    font-size: 1.2em;
+}
 #txtCardId {
     border: 1px solid #C9CACC;
     height: 24px;
@@ -26,14 +31,14 @@
     -webkit-border-radius: 3px;
     -o-border-radius: 3px;
     -moz-border-radius: 3px;
-    background-image: url(/DowLoyalty/Resources/html/images/smallImg/Search.png);
+    /* background-image: url(../images/smallImg/Search.png); */
     background-size: 13% 80%;
     background-repeat: no-repeat;
     background-position: right;
     padding-right: 8%;
     padding-left: 5%;
     float: right;
-    font-family: 微软雅黑;
+    font-family: ΢���ź�;
     font-size: 0.8em;
 }
 .content-title {
@@ -43,7 +48,7 @@
 .btnOperate {
     border: 1px solid #B6BF00;
     height: 27px;
-    width: 90%;
+    width: 47%;
     color: white;
     background-color: #B6BF00;
     border-radius: 3px;
@@ -54,19 +59,33 @@
     font-family: 'Arial Unicode MS';
 }
 
+.synchronize {
+    border: 1px solid #B6BF00;
+    height: 27px;
+    width: 60%;
+    margin-right:19px;
+    color: white;
+    background-color: #B6BF00;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
+    float: right;
+    font-family: 'Arial Unicode MS';
+}
 
-/*搜索表格样式End*/
-/*内容表格样式Start*/
+/*���������ʽEnd*/
+/*���ݱ����ʽStart*/
 .content-table {
     width: 100%;
     height: auto;
     line-height: 32px;
-    font-family: 微软雅黑;
+    font-family: ΢���ź�;
     text-align: center;
 }
 
     .content-table .thead_event {
-        background: url(/DowLoyalty/Resources/html/images/smallImg/triangle.png) no-repeat;
+        background: url(~/Resources/html/images/smallImg/triangle.png) no-repeat;
         background-position: 70% center;
         cursor: pointer;
     }
@@ -87,10 +106,11 @@
 }
 
 .table-tr-even {
-    background-color: #F1FAF7;
+    /*background-color: #F1FAF7;*/
+     background-color: #FBFDF2;
 }
 
 #endtr td {
     border-bottom: 0px solid red;
 }
-/*内容表格样式End*/
+/*���ݱ����ʽEnd*/

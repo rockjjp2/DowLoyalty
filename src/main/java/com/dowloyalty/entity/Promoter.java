@@ -65,5 +65,12 @@ public class Promoter implements Serializable {
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
+
+
+	@Override
+	public String toString() {
+		return "Promoter [id=" + id + ", chineseName=" + chineseName + ", userID=" + userID + ", isActive=" + isActive
+				+ "]";
+	}
 	
 }

@@ -5,11 +5,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title></title>
-    <link href="/DowLoyalty/Resources/html/css/Datalist.css" rel="stylesheet" />
-    <link href="/DowLoyalty/Resources/html/css/paging.css" rel="stylesheet" />
-    <link href="/DowLoyalty/Resources/html/css/gift_Config.css" rel="stylesheet" />
-    <script src="/DowLoyalty/Resources/html/js/jquery-1.4.2.min.js"></script>
-    <script src="/DowLoyalty/Resources/html/js/gift.js"></script>
+    <link href="${pageContext.request.contextPath}/Resources/html/css/Datalist.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/Resources/html/css/paging.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/Resources/html/css/gift_Config.css" rel="stylesheet" />
+    <script src="${pageContext.request.contextPath}/Resources/html/js/jquery-1.4.2.min.js"></script>
+    <script src="${pageContext.request.contextPath}/Resources/html/js/gift.js"></script>
     <style>
 
             .content-table tr td {
@@ -24,7 +24,7 @@
             -o-appearance: 3px;
             -webkit-appearance: none; /*for chrome*/
             /*在选择框的最右侧中间显示小箭头图片*/
-            background: url("/DowLoyalty/Resources/html/images/smallImg/green-triangle.png") no-repeat scroll right center transparent;
+            background: url("${pageContext.request.contextPath}/Resources/html/images/smallImg/green-triangle.png") no-repeat scroll right center transparent;
             background-size: 15% 90%;
             /*为下拉小箭头留出一点位置，避免被文字覆盖*/
             padding-right: 6%;

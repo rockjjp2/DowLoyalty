@@ -2,6 +2,8 @@ package com.dowloyalty.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.dowloyalty.entity.Goods;
 import com.dowloyalty.pojo.GoodsVo;
 
@@ -37,15 +39,16 @@ public interface GoodsDao {
 	 * @param retailerId 零售商ID
 	 * @return 礼品集合
 	 */
-	public List<GoodsVo> findByRetailerId(int retailerId);
+	public List<GoodsVo> findByRetailerId(@Param("RetailerID")int retailerId);
 	
 	/**
 	 * 根据礼品ID获取礼品信息
 	 * 包括ID，名称，图片地址和礼品的积分
-	 * @param	礼品ID
+	 * @param retailerId	零售商ID
+	 * @param goodsId	礼品ID
 	 * @return	礼品对象
 	 */
-	public GoodsVo findByGoodsId(int goodsId);
+	public GoodsVo findByGoodsId(@Param("RetailerID")int retailerId,@Param("GoodsID")int goodsId);
 	
 	/**
 	 * 根据省份ID获取该省礼品商城所有礼品信息
@@ -61,4 +64,10 @@ public interface GoodsDao {
 	public int getGoodsAmount();
 	
 	public Goods findById(int id);
+	
+	/**
+	 * 批量插入礼品信息
+	 * @param goodsList 礼品集合
+	 */
+	public void batchGoodsInfo(@Param("goodsList")List<Goods> goodsList);
 }

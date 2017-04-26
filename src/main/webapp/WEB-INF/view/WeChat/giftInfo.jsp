@@ -6,20 +6,20 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DOW</title>
-    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/basic.css"/>
-    <link rel="stylesheet" href="/DowLoyalty/Resources/html/css/giftInfo.css"/>
+    <title>忠诚度计划</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Resources/html/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Resources/html/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Resources/html/css/basic.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Resources/html/css/giftInfo.css"/>
 </head>
 <body>
     <header>
-        <img src="/DowLoyalty/Resources/html/images/backImg.png" alt=""/>
+        <img src="${pageContext.request.contextPath}/Resources/html/images/backImg.png" alt=""/>
         <h4>礼品详情</h4>
     </header>
 
     <div class="container">
-		<form class = "exchangeGoods" method = "post" action = "">
+		<!-- <form class = "exchangeGoods" method = "post" action = ""> -->
 		<c:choose>
 		<c:when test="${not empty goods}">
         <div class="clearfix">
@@ -41,35 +41,23 @@
         <div class="numChange txt-center">
             <label class="col-xs-3 col-xs-offset-2" for="amount">购买数量：</label>
             <div id="minus" class="col-xs-1 style-bg-gray">
-                <i class="fa fa-minus style-deepGray"></i>
+                <i class="fa fa-minus style-deepGray" style="margin:10px"></i>
             </div>
             <input id="amount" name = "amount" type="text" class="col-xs-2 style-bg-gray txt-center" value="">
             <div id="add" class="col-xs-1 style-bg-gray">
-                <i class="fa fa-plus style-deepGray"></i>
+                <i class="fa fa-plus style-deepGray" style="margin:10px"></i>
             </div>
         </div>
-		</form>
+		<!-- </form> -->
 		
         <div class="clearfix">
             <button id="convert" class="col-xs-6 col-xs-offset-3 style-bg-green">兑换</button>
         </div>
-        
     </div>
     
-    <footer class="txt-center style-deepGray">
-        <div id="homePage" class="menu"><i class="fa fa-home"></i></div>
-        <div id="accountInfo" class="menu style-btnBg-green">账户信息</div>
-        <div id="exchangeshop" class="menu">礼品商城</div>
-        <div id="pointsDetails" class="menu">积分明细</div>
-    </footer>
     
-    <script src="/DowLoyalty/Resources/html/js/jquery-1.8.2.min.js"></script>
+    <script src="${pageContext.request.contextPath}/Resources/html/js/jquery-1.8.2.min.js"></script>
     <script type="text/javascript">
-    /*点击菜单-页面跳转*/
-    $(".menu").click(function(){
-       var pageID = $(this).attr("id");
-       location.href = "/DowLoyalty/v1/WeChat/retailer/"+pageID;
-    });
     
         $(function(){
             $("#amount").val(1);
@@ -122,47 +110,24 @@
             });
             $("#doubleConvert").click(function(){
             	var amount = $("#amount").val();
+            	var points = parseInt("${goods.exchangePoints}");
             	$.ajax({
             		type:"post",
-            		url:"/DowLoyalty/v1/WeChat/retailer/remainPoints/get",
-            		data:"retailerId="+${retailerId},
+            		url:"${pageContext.request.contextPath}/WeChat/retailer/goodsexchange",
+            		data:"retailerId="+${retailerId}+"&goodsId=${goods.goods.id}"+"&exchangePoints=${goods.exchangePoints}"+"&amount="+amount,
             		dataType:"text",
-            		success:function(remainPoints)
+            		success:function(msg)
             		{
-            			if(remainPoints >= amount*${goods.exchangePoints})
-            			{
-			       		 $(".exchangeGoods").attr("action","/DowLoyalty/v1/WeChat/retailer/goods/exchange?retailerId=${retailerId}"+
-			            	"&goodsId=${goods.goods.id}"+"&exchangePoints=${goods.exchangePoints}"+"&amount="+amount);
-			       			
-			       		$(".exchangeGoods").submit();
-            			}
-            			else
-            			{
-            				alert("您的积分不足!");
-            			}
+            			
+            			alert(msg);
+            			location.reload();
             		}
             	});
             });
             
         }
 
-
-//        function convertPopup(){
-//            $("#convert").click(function(){
-//                var cover = $("<div id='cover'></div>");
-//                var form = $("<div id='form' class='col-xs-10 col-xs-offset-1'>" +
-//                        "<label for='address'>地址</label>" +
-//                        "<input type='text' id='address' style='width:100%'/>" +
-//                        "<label for='contacts'>联系人</label>" +
-//                        "<input id='contacts' type='text' style='width:100%'/>" +
-//                        "<label for='tel'>电话</label>" +
-//                        "<input id='tel' type='text' style='width:100%'/>" +
-//                        "<button class='col-xs-8 col-xs-offset-2 style-bg-green'>确认兑换</button>" +
-//                        "</div>");
-//
-//                $("html").append(cover).append(form);
-//            })
-//        }
+        
 
     </script>
 </body>

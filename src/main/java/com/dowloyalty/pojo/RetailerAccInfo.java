@@ -20,14 +20,15 @@ public class RetailerAccInfo implements Serializable {
 	private String rankPercent;
 	private String nextLv;
 	private int toNextLvRemainPoints;
+	private int totalPrice;
 
 	public RetailerAccInfo() {
 		super();
 	}
 
-	public RetailerAccInfo(String lvName, String reName, int reId, String provinceName, int totalPoints, int remainPoints,
-			int curRank, int nextRank, int toUpPersonRemainPoints, String rankPercent, String nextLv,
-			int toNextLvRemainPoints) {
+	public RetailerAccInfo(String lvName, String reName, int reId, String provinceName, int totalPoints,
+			int remainPoints, int curRank, int nextRank, int toUpPersonRemainPoints, String rankPercent, String nextLv,
+			int toNextLvRemainPoints, int totalPrice) {
 		super();
 		this.lvName = lvName;
 		this.reName = reName;
@@ -41,6 +42,7 @@ public class RetailerAccInfo implements Serializable {
 		this.rankPercent = rankPercent;
 		this.nextLv = nextLv;
 		this.toNextLvRemainPoints = toNextLvRemainPoints;
+		this.totalPrice = totalPrice;
 	}
 
 	public String getLvName() {
@@ -137,6 +139,14 @@ public class RetailerAccInfo implements Serializable {
 
 	public void setToNextLvRemainPoints(int toNextLvRemainPoints) {
 		this.toNextLvRemainPoints = toNextLvRemainPoints;
+	}
+
+	public int getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(int totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 
 }

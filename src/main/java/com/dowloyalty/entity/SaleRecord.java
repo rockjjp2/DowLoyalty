@@ -17,41 +17,11 @@ public class SaleRecord implements Serializable {
 	private int projectID;
 	private int points;
 	private int amount;
-
-	private Retailer retailer;
-	private Product product;
+	private boolean status;
+	private String oppId;
 
 	public SaleRecord() {
 		super();
-	}
-
-	public SaleRecord(int id, int retailerID, int productID, float totalPrice, int importerID, Timestamp submitDate,
-			int projectID, int points, int amount) {
-		super();
-		this.id = id;
-		this.retailerID = retailerID;
-		this.productID = productID;
-		this.totalPrice = totalPrice;
-		this.importerID = importerID;
-		this.submitDate = submitDate;
-		this.projectID = projectID;
-		this.points = points;
-		this.amount = amount;
-	}
-
-	public SaleRecord(int id, int retailerID, int productID, float totalPrice, int importerID, Timestamp submitDate,
-			int projectID, int points, Retailer retailer, Product product) {
-		super();
-		this.id = id;
-		this.retailerID = retailerID;
-		this.productID = productID;
-		this.totalPrice = totalPrice;
-		this.importerID = importerID;
-		this.submitDate = submitDate;
-		this.projectID = projectID;
-		this.points = points;
-		this.retailer = retailer;
-		this.product = product;
 	}
 
 	public int getId() {
@@ -118,35 +88,51 @@ public class SaleRecord implements Serializable {
 		this.points = points;
 	}
 
-	public Retailer getRetailer() {
-		return retailer;
-	}
-
-	public void setRetailer(Retailer retailer) {
-		this.retailer = retailer;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	@Override
-	public String toString() {
-		return "SaleRecord [id=" + id + ", retailerID=" + retailerID + ", productID=" + productID + ", totalPrice="
-				+ totalPrice + ", importerID=" + importerID + ", submitDate=" + submitDate + ", projectID=" + projectID
-				+ ", points=" + points + "]";
-	}
-
 	public int getAmount() {
 		return amount;
 	}
 
 	public void setAmount(int amount) {
 		this.amount = amount;
+	}
+
+	@Override
+	public String toString() {
+		return "SaleRecord [id=" + id + ", retailerID=" + retailerID + ", productID=" + productID + ", totalPrice="
+				+ totalPrice + ", importerID=" + importerID + ", submitDate=" + submitDate + ", projectID=" + projectID
+				+ ", points=" + points + ", amount=" + amount + "]";
+	}
+
+	public SaleRecord(int id, int retailerID, int productID, float totalPrice, int importerID, Timestamp submitDate,
+			int projectID, int points, int amount, boolean status, String oppId) {
+		super();
+		this.id = id;
+		this.retailerID = retailerID;
+		this.productID = productID;
+		this.totalPrice = totalPrice;
+		this.importerID = importerID;
+		this.submitDate = submitDate;
+		this.projectID = projectID;
+		this.points = points;
+		this.amount = amount;
+		this.status = status;
+		this.oppId = oppId;
+	}
+
+	public String getOppId() {
+		return oppId;
+	}
+
+	public void setOppId(String oppId) {
+		this.oppId = oppId;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 }

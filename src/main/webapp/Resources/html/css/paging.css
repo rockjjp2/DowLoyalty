@@ -1,4 +1,4 @@
-ï»¿/********************æ•°æ®åˆ†é¡µæ ·å¼********************/
+/********************Êı¾İ·ÖÒ³ÑùÊ½********************/
 
 #pagination-flickr li {
     border: 0;
@@ -7,21 +7,34 @@
     font-size: 11px;
     list-style: none; /* savers */
     float: left;
-    font-family: å¾®è½¯é›…é»‘;
+    font-family: Î¢ÈíÑÅºÚ;
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 #pagination-flickr a {
     margin-right: 4px;
 }
 
-#pagination-flickr .previous-off, #pagination-flickr .next-off {
-    color: #666666;
-    display: block;
-    float: left;
-    padding: 3px 4px;
-    margin-right: 5px;
+#pagination-flickr .firstPage{
+	margin-top:2px;
 }
 
+#pagination-flickr .identify-page{
+	margin-top:-3px;
+}
+
+ /*<!--ÑîÑş-edit-20170227-start-->*/
+#pagination-flickr .previous-off, #pagination-flickr .next-off {
+    color: #000000;
+    display: block;
+    float: left;
+    padding: 1px 4px;
+    margin-right: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+/*<!--ÑîÑş-edit-20170227-end-->*/
 #pagination-flickr .next a, #pagination-flickr .previous a {
     border: solid 1px #FFFFFF;
 }
@@ -33,7 +46,7 @@
     font-weight: bold;
     display: block;
     float: left;
-    padding: 1px 5px;
+    padding: 0px 5px 0px 5px;
     margin-right: 3px;
 }
 

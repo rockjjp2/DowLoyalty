@@ -1,15 +1,15 @@
 package com.dowloyalty.pojo;
 
-import java.sql.Timestamp;
 
 public class webSale {
 
-	private Timestamp submitDate;
+	private String projectName;
+	private String submitDate;
 	private String retaileName;
 	private String categoryName;
 	private String productName;
 	private String familyName;
-	private double totalPrice;
+	private String totalPrice;
 	private int amount;
 	
 	public webSale() {
@@ -18,9 +18,10 @@ public class webSale {
 	}
 
 
-	public webSale(Timestamp submitDate, String retaileName, String categoryName, String productName, String familyName,
-			double totalPrice,int amount) {
+	public webSale(String projectName, String submitDate, String retaileName, String categoryName, String productName,
+			String familyName, String totalPrice, int amount) {
 		super();
+		this.projectName = projectName;
 		this.submitDate = submitDate;
 		this.retaileName = retaileName;
 		this.categoryName = categoryName;
@@ -31,12 +32,22 @@ public class webSale {
 	}
 
 
-	public Timestamp getSubmitDate() {
+	public String getProjectName() {
+		return projectName;
+	}
+
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+
+	public String getSubmitDate() {
 		return submitDate;
 	}
 
 
-	public void setSubmitDate(Timestamp submitDate) {
+	public void setSubmitDate(String submitDate) {
 		this.submitDate = submitDate;
 	}
 
@@ -81,12 +92,12 @@ public class webSale {
 	}
 
 
-	public double getTotalPrice() {
+	public String getTotalPrice() {
 		return totalPrice;
 	}
 
 
-	public void setTotalPrice(double totalPrice) {
+	public void setTotalPrice(String totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 
@@ -103,8 +114,9 @@ public class webSale {
 
 	@Override
 	public String toString() {
-		return "webSale [submitDate=" + submitDate + ", retaileName=" + retaileName + ", categoryName=" + categoryName
-				+ ", productName=" + productName + ", familyName=" + familyName + ", totalPrice=" + totalPrice +", amount=" + amount + "]";
+		return "webSale [projectName=" + projectName + ", submitDate=" + submitDate + ", retaileName=" + retaileName
+				+ ", categoryName=" + categoryName + ", productName=" + productName + ", familyName=" + familyName
+				+ ", totalPrice=" + totalPrice + ", amount=" + amount + "]";
 	}
 	
 	

@@ -8,13 +8,13 @@
 	(
 		RetailerID,GoodsID,
 		Amount,SubmitTime,SendOutTime,
-		CompleteTime,Status,ExchangePoints
+		CompleteTime,Status,ExchangePoints,ProjectID
 	)
 	values
 	(
 		#{retailerID},#{goodsID},
 		#{amount},#{submitTime},#{sendOutTime},
-		#{completeTime},#{status},#{exchangePoints}
+		#{completeTime},#{status},#{exchangePoints},#{projectID}
 	)
 	</insert>
 	
@@ -26,7 +26,7 @@
 	update exchangerecord set
 	RetailerID = #{RetailerID},GoodsID = #{GoodsID},Amount = #{Amount},
 	SubmitTime = #{SubmitTime},SendOutTime = #{SendOutTime},CompleteTime = #{CompleteTime},
-	Status = #{Status},ExchangePoints = #{ExchangePoints}
+	Status = #{Status},ExchangePoints = #{ExchangePoints},,ProjectID = #{ProjectID}
 	where ID = #{ID}
 	</update>
 	
@@ -34,7 +34,7 @@
 	select
 		ID,RetailerID,GoodsID,
 		Amount,SubmitTime,SendOutTime,
-		CompleteTime,Status,ExchangePoints
+		CompleteTime,Status,ExchangePoints,ProjectID
 	from exchangerecord
 	</select>
 	
@@ -42,9 +42,130 @@
 	select
 		ID,RetailerID,GoodsID,
 		Amount,SubmitTime,SendOutTime,
-		CompleteTime,Status,ExchangePoints
+		CompleteTime,Status,ExchangePoints,ProjectID
 	from exchangerecord
 	where ID = #{ID}
+	</select>
+	<select id = "findExchangeRecordByProvinceIdAndStatus" parameterType="int" resultType="com.dowloyalty.entity.ExchangeRecord">
+	select
+		ID,RetailerID,GoodsID,
+		Amount,SubmitTime,SendOutTime,
+		CompleteTime,Status,ExchangePoints,ProjectID
+	from exchangerecord
+	where Status=#{status} AND RetailerID IN 
+		(select ID from retailer WHERE ProvinceID =#{provinceId} AND IsActive)
+	</select>
+	
+	<select id="findByConditions" resultType="com.dowloyalty.pojo.ExchangeRecordWeb">
+		select 
+			DATE_FORMAT(exchangerecord.SubmitTime,'%Y.%m.%d') date,
+			retailer.ChineseName retailerName,
+			province.Name provinceName,
+			goods.Name goodsName,
+			exchangerecord.Amount amount
+		from 
+			exchangerecord
+			left join 
+			retailer
+			on 
+			exchangerecord.RetailerID = retailer.ID
+			left join
+			province
+			on
+			retailer.ProvinceID = province.ID
+			left join 
+			goods
+			on 
+			exchangerecord.GoodsID = goods.ID
+			where 
+			1 = 1
+			<if test="RetailerID != null">
+			and
+			retailer.ID like "%${RetailerID}%"
+			</if>
+			<if test="RetailerName != null and RetailerName != ''">
+			and
+			retailer.ChineseName like "%${RetailerName}%"
+			</if>
+			<if test="ProjectID != null and ProjectID != ''">
+			and
+			exchangerecord.ProjectID = #{ProjectID}
+			</if>
+			<if test="StartDate != null and StartDate != ''">
+			and
+			exchangerecord.SubmitTime &gt;= #{StartDate}
+			</if>
+			<if test="EndDate != null and EndDate != ''">
+			and
+			exchangerecord.SubmitTime &lt;= #{EndDate}
+			</if>
+			and
+			retailer.IsActive = 1
+			and
+			province.IsActive = 1
+			and
+			goods.IsActive = 1
+			order by exchangerecord.SubmitTime desc
+			limit #{PageNum},#{ShowNum}
+	</select>
+	
+	<select id="getCount" resultType="int">
+		select 
+			count(exchangerecord.RetailerID)
+		from 
+			exchangerecord
+			left join 
+			retailer
+			on 
+			exchangerecord.RetailerID = retailer.ID
+			left join
+			province
+			on
+			retailer.ProvinceID = province.ID
+			left join 
+			goods
+			on 
+			exchangerecord.GoodsID = goods.ID
+			where 
+			1 = 1
+			<if test="RetailerID != null">
+			and
+			retailer.ID like "%${RetailerID}%"
+			</if>
+			<if test="RetailerName != null and RetailerName != ''">
+			and
+			retailer.ChineseName like "%${RetailerName}%"
+			</if>
+			<if test="ProjectID != null and ProjectID != ''">
+			and
+			exchangerecord.ProjectID = #{ProjectID}
+			</if>
+			<if test="StartDate != null and StartDate != ''">
+			and
+			exchangerecord.SubmitTime &gt;= #{StartDate}
+			</if>
+			<if test="EndDate != null and EndDate != ''">
+			and
+			exchangerecord.SubmitTime &lt;= #{EndDate}
+			</if>
+			and
+			retailer.IsActive = 1
+			and
+			province.IsActive = 1
+			and
+			goods.IsActive = 1
+			order by exchangerecord.SubmitTime desc
+	</select>
+	<select id="findDeliverList" resultType="com.dowloyalty.pojo.Deliver">
+	SELECT province.`Name` ProvinceName,retailer.ChineseName RetailerName,goods.`Name` GoodsName,exchangerecord.Amount ExchangAmount,exchangerecord.ID exchangId FROM exchangerecord,goods,retailer,province
+	WHERE exchangerecord.GoodsID=goods.ID AND exchangerecord.RetailerID=retailer.ID AND retailer.ProvinceID=province.ID
+	AND exchangerecord.ProjectID=#{projectId} AND exchangerecord.`Status`=#{status};
+	</select>
+	<update id="updateExchangerrecordToComplete">
+	UPDATE `exchangerecord` SET `SendOutTime`=(NOW()), `CompleteTime`=(NOW()), `Status`='1' WHERE (`ID`=#{exchangeRecordId}) LIMIT 1
+	</update>
+	<select id="getSumExchangPointsByProjectIdAndRetailerId" resultType="int">
+	SELECT IFNULL(SUM(ExchangePoints),0) FROM exchangerecord WHERE ProjectID=#{projectId} AND RetailerID=#{retailerId}
 	</select>
 </mapper>
 

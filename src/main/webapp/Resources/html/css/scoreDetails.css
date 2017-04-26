@@ -7,3 +7,5 @@ select {appearance: none;-moz-appearance: none;-o-appearance: 0.3rem;-webkit-app
 select::-ms-expand {display: none;}
 .fa-sort-down{position: absolute;right: 7%;top: 10%;}
 option{font-size: 1.0rem;border: none;}
+
+p{text-align: center;}

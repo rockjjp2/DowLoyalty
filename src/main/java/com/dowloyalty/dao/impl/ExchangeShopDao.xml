@@ -6,13 +6,13 @@
 	<insert id="save" parameterType="com.dowloyalty.entity.ExchangeShop">
 	insert into exchangeshop
 	(
-		ProvinceID,GoodsID,
+		ProjectID,GoodsID,
 		ExchangePoints,IsActive
 	)
 	values
 	(
-		#{RetailerID},#{GoodsID},
-		#{ExchangePoints},#{IsActive}
+		#{projectID},#{goodsID},
+		#{exchangePoints},#{isActive}
 	)
 	</insert>
 	
@@ -22,9 +22,9 @@
 	
 	<update id="update" parameterType="com.dowloyalty.entity.ExchangeShop">
 	update exchangeshop set
-	ProvinceID = #{ProvinceID},GoodsID = #{GoodsID},ExchangePoints = #{ExchangePoints},
-	IsActive = #{IsActive}
-	where ID = #{ID}
+	ProjectID = #{projectID},GoodsID = #{goodsID},ExchangePoints = #{exchangePoints},
+	IsActive = #{isActive}
+	where ID = #{id}
 	</update>
 	
 	<select id="findAll" resultType="com.dowloyalty.entity.ExchangeShop">
@@ -32,14 +32,18 @@
 		ID,ProvinceID,GoodsID,
 		ExchangePoints,IsActive
 	from exchangeshop
+	where
+	exchangeshop.IsActive = 1
 	</select>
 	
-	<select id = "findById" parameterType="int" resultType="com.dowloyalty.entity.ExchangeShop">
+	<select id = "findById" resultType="com.dowloyalty.entity.ExchangeShop">
 	select
-		ID,ProvinceID,GoodsID,
+		ID,ProjectID,GoodsID,
 		ExchangePoints,IsActive
 	from exchangeshop
-	where ID = #{ID}
+	where ProjectID = #{ProjectID}
+	and
+	GoodsID = #{GoodsID}
 	</select>
 </mapper>
 

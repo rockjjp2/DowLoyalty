@@ -1,5 +1,8 @@
 /*homePage*/
 body{margin: 0;padding: 0;}
-.container{height: 92%;}
+
+/*杨瑶-edit-start 20170222*/
+.container{height: 100%;}
+/*杨瑶-edit-end 20170222*/
 img{width: 100%;}
 /*.point{width: 0.7rem;height: 0.7rem;background-color: #ccc;border-radius: 50%;}*/

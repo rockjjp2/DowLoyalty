@@ -30,7 +30,7 @@ public class GoodsServiceImpl implements GoodsService {
 
 	@Override
 	public void update(Goods goods) {
-
+		goodsDao.update(goods);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class GoodsServiceImpl implements GoodsService {
 
 	@Override
 	public Goods findById(int id) {
-		return null;
+		return goodsDao.findById(id);
 	}
 
 	@Override
@@ -55,13 +55,18 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 
 	@Override
-	public GoodsVo findByGoodsId(int goodsId) {
-		return goodsDao.findByGoodsId(goodsId);
+	public GoodsVo findByGoodsId(int retailerId, int goodsId) {
+		return goodsDao.findByGoodsId(retailerId,goodsId);
 	}
 
 	@Override
 	public List<GoodsVo> findByProvinceId(int provinceId) {
 		return goodsDao.findByProvinceId(provinceId);
+	}
+
+	@Override
+	public void batchGoodsInfo(List<Goods> goodsList) {
+		goodsDao.batchGoodsInfo(goodsList);
 	}
 
 }
