@@ -69,14 +69,9 @@ public class WeChatController {
 		//获取零售商所在省份礼品商城的所有礼品与分类信息
 		Retailer user = (Retailer)session.getAttribute("USER");
 		int retailerId = user.getId();
-		//测试数据
-		//int retailerId = 90005;
 		
 		List<GoodsVo> allGoods = goodsService.findByRetailerId(retailerId);
 		
-		//获取所有礼品目录
-		//List<GoodsCategory> allCategory = goodsCategoryService.findAll();
-		//model.addAttribute("allCategory", allCategory);
 		session.setAttribute("retailerId", retailerId);
 		
 		ModelAndView mv = new ModelAndView();
@@ -117,9 +112,6 @@ public class WeChatController {
 		//获取零售商id、筛选条件（月份、事项）并查找数据
 		String month = request.getParameter("month");
 		String matter = request.getParameter("matter");
-		//String retailerId = request.getParameter("retailerId");
-		//测试用
-		//int retailerId = 90005;
 		Retailer user = (Retailer)session.getAttribute("USER");
 		int retailerId = user.getId();
 		List<PointsDetails> pointsDetails = iRetailerService.findByRetailerId(retailerId, matter, month);
@@ -144,7 +136,6 @@ public class WeChatController {
 	{
 		Retailer user = (Retailer)session.getAttribute("USER");
 		int retailerId = user.getId();
-		//int retailerId = 1003;
 		
 		Project project = projectService.findActiveByRid(retailerId);
 		boolean isVisible = false;
@@ -259,11 +250,9 @@ public class WeChatController {
 		}
 		
 		System.out.println("-------------------"+remainPoints);
-		//RetailerAccInfo reAcc = pointsLevelService.findAccInfoByRetailerId(Integer.parseInt(retailerId));
 		
 		try {
 			PrintWriter out = response.getWriter();
-			//out.println(reAcc.getRemainPoints());
 			out.println(msg);
 			out.flush();
 			out.close();

@@ -21,14 +21,6 @@
                 _Main.Init();
             }
 
-            ////iframe自适应高度
-            //$("#iframeContent").load(function () {
-            //    alert($(this).contents().find("body").height());
-            //    var mainheight = $(this).contents().find("body").height();
-            //    $(this).height(mainheight);
-            //});
-
-
             //iframe自适应高度
             $("#iframeContent").load(function () {
 
@@ -56,12 +48,6 @@
                 </li>
                 <li id="gift_ExChange">
                     <span>兑换列表</span>
-                    <!--<div class="Bubble-menu" style="display:none">
-                        <ul class="cui-bubble-layer" style="position: absolute; top: 43px;left:-25px">
-                            <li data-index="0" data-flag="c" class="cui-bubble-layer-action"><span>&gt;</span>  礼品配置</li>
-                            <li data-index="1" data-flag="c"><span>&nbsp;&nbsp;</span> 兑换列表</li>
-                        </ul>
-                    </div>-->
                 </li>
                 <li id="createproject"><span>创建新项目</span></li>
 <!--                 <li id="cardinfo"><span>会员信息</span></li>

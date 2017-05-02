@@ -15,13 +15,6 @@
     
     $(function () {
  
-        ////iframe自适应高度
-        //$("#content-flickr").load(function () {
-        //    alert($(this).contents().find("body").height());
-        //    var mainheight = $(this).contents().find("body").height();
-        //    $(this).height(mainheight);
-        //});
-    
         var userId = "${userid}";
         $.ajax
         (
@@ -36,14 +29,6 @@
         	    	//var image = null;
         	    	for(var i in projects)
         	    	{
-        	    		/* var byteString = "";
-        	    		var array = projects[i].backgroundPath;
-        	    		//alert(array.length/1024);
-        	    		for(var j in array)
-        	    		{
-        	    			byteString += String.fromCharCode(array[j]);
-        	    		} */
-        	    		//var base64 = base64encode(byteString);
         	    		var base64 = projects[i].backgroundBase64;
         	    		content += "<li id='"+projects[i].id+"' style='margin-left: 1.5%;background-image:url(data:image/jpg;base64,"+ base64 +");background-size: cover'>"+
         	    		"<div class='integralitem-content' ><p class=iintegralitem-content-titlei style = 'font-size: 1.9em;'>"+projects[i].name+"</p>"+
@@ -61,8 +46,6 @@
         		}
         	}
         );
-    	//var projects = eval('${projects}');
-    	
     	
     })
         
@@ -73,18 +56,6 @@
 <body>
     <div class="content-flickr">
         <div id="IntegralItemHome">
-            <%-- ul>
-<c:forEach items="${projects }" var="pros">
-
-                <li id="${pros.id }" style="margin-left: 1.5%;background-image: data:image/jpg;base64,${pros.backgroundBase64};background-size: cover">
-                    <div class="integralitem-content" >
-                        <p class="integralitem-content-title">${pros.name }</p>
-                        <p><a href="salerecord?projectId=${pros.id } " target="_self"><span class="Sales-img"></span> &nbsp;&nbsp;销售记录</a></p>
-                        <p><a href="project?projectId=${pros.id }" target="_self"><span class="detail-img"></span> &nbsp;&nbsp;活动详情</a> </p><!--detail-img-checked-->
-                    </div>
-                </li></c:forEach>
-                
-            </ul> --%>
         </div>
     </div>
 </body>

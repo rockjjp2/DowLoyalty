@@ -19,13 +19,6 @@
     <script src="${pageContext.request.contextPath}/Resources/html/js/main.js"></script>
     <script>
     
-    var hashMap = {   
-    	    set : function(key,value){this[key] = value},   
-    	    get : function(key){return this[key]},   
-    	    contains : function(key){return this.Get(key) == null?false:true},   
-    	    remove : function(key){delete this[key]}   
-    	}
-    
     /*将礼品数据加入缓存*/
 	var giftArray = eval(('${exchangeShopGoods}'));
 	var productArray = eval(('${productInfos}'));
@@ -34,6 +27,7 @@
 	var promoterArray = eval(('${promoters}'));
 	var promoter = eval(('[${promoter}]'));
 	var projectId = "${projectId}";
+	var projectProvince = eval('[${projectProvince}]');
 	//测试
 	//var projectId = "10001";
 	
@@ -43,9 +37,23 @@
 	var retailerJson = "";
 	var promotersJson = "";
 	var promoterJson = "";
+	var projectProvinceJson = "";
 	 /*-----------------------*/
      $("document").ready(function()
     {
+    	 
+    	//向缓存中存入活动信息
+     	if(null != projectProvince && '' != projectProvince)
+    	{
+	    	var Province = $.trim(projectProvince[0].provinceId);
+	    	var Start_time = $.trim(projectProvince[0].startDate);
+	    	var End_time = $.trim(projectProvince[0].endDate);
+	    	var Title = $.trim(projectProvince[0].projectTitle);
+	    	var Introduce = $.trim(projectProvince[0].description);
+	    	projectProvinceJson += '{"Province":"' + Province + '","Start_time":" ' + Start_time + ' ","End_time":" ' + End_time + ' ","Title":" ' + Title + ' ","Introduce":" ' + Introduce + ' "},';
+	    	projectProvinceJson = projectProvinceJson.substring(0, projectProvinceJson.length - 1);
+	    	hashMap.set("Activity", projectProvinceJson);
+    	}
     	 
     	//向缓存中存入礼品配置信息
     	if(null != giftArray && '' != giftArray)
@@ -170,9 +178,6 @@
 	    								content += "<tr><td id = '"+ ascString +"'><span style = 'margin-left:-50%;margin-top:20%;color:#B6BF00;'>"+ ascString + "</span></td><td></td><td></td></tr>";
 	    								 for(var j = 0; j < json[key].length; j=j+3)
 	    									{
-	    										//分割出id和零售商名称
-	    										//var retailerName = json[key][j].split("$@#")[0];
-	    										//var retailerId = json[key][j].split("$@#")[1];
 	    										if((json[key][j].split("$@#")[0]).length > 10)
 	    										{
 	    											content += "<tr><td><span style = 'width:208px;cursor: pointer;' data-id = '" + json[key][j].split("$@#")[1] + "' data-content = '" + json[key][j].split("$@#")[0] + "'>" + (json[key][j].split("$@#")[0]).substring(0,10) + "..." + "</span></td>";
@@ -231,7 +236,7 @@
     			},
     			error:function()
     			{
-    				alert("系统异常，请清除浏览器缓存，重新载入页面！");
+    				alert("系统异常，请重新载入页面！");
     			}
     		}
     		);
@@ -318,7 +323,7 @@
     			},
     			error:function()
     			{
-    				alert("系统异常，请清除浏览器缓存，重新载入页面！");
+    				alert("系统异常，请重新载入页面！");
     			}
     		}
     		);
@@ -1095,7 +1100,7 @@
                                 <img id="Poster_img1" border="0" src="${pageContext.request.contextPath}/Resources/html/images/smallImg/photo_icon.png" width="90" height="90" onclick="$('#Poster_img').click();">
                             </c:if>
                             </div>
-                            <input type="file" onchange="previewImage(this, 'preview')" style="display: none;" id="Poster_img" name="Poster_img" >
+                            <input type="file" onchange="previewImage(this, 'preview')" style="display: none;" class="Poster_img" id="Poster_img" name="Poster_img" >
                         </td>
                     </tr>
                     <tr>
@@ -1109,7 +1114,7 @@
                                 <img id="Back_img1" border="0" src="${pageContext.request.contextPath}/Resources/html/images/smallImg/photo_icon.png" width="90" height="90" onclick="$('#Back_img').click();">
                             </c:if>
                             </div>
-                            <input type="file" onchange="previewImage(this, 'previewB')" style="display: none;" id="Back_img" name="Back_img" >
+                            <input type="file" onchange="previewImage(this, 'previewB')" style="display: none;" class="Back_img" id="Back_img" name="Back_img" >
                             &nbsp;<span style="color:red">请上传尺寸400（高）*318（宽）的图片</span>
                         </td>
                     </tr>
@@ -1135,10 +1140,6 @@
                        </c:if>
                         </c:forEach>
                         </c:if>
-                            <!--<li><span>家乐福</span></li>
-                            <li><span>家乐福</span></li>
-                            <li><span>家乐福</span></li>
-                            <li><span>家乐福</span></li>-->
                         </ul>
                     </div>
                 </fieldset>
@@ -1370,6 +1371,7 @@
 			});
 		});
 		
+		/*选择产品目录，加载相应的产品家族*/
 		$("#selectType").change(function()
 		{
 			var categoryId = $("#selectType").val();
@@ -1400,6 +1402,7 @@
 			}
 		});
 		
+		/*选择产品家族，加载相应的产品*/
 		$("#selectFamily").change(function()
 				{
 			
@@ -1435,8 +1438,6 @@
 		
 	});
 	
-	 /*删除产品*/
-	 
 	 /*等级配置*/
 	 $("#configGrade").click(function(){
 		 var tr1 = "<input type='text' id='rank' placeholder='请输入等级名称'  autocomplete='off'/>";

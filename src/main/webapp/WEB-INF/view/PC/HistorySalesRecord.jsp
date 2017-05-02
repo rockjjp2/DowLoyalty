@@ -73,19 +73,6 @@
              			    $(".tableContents").append(str+str2);
                            
              			});
-             			/* if(json.maxPageNum !=0){
-                 			if(json.webSales ==""&& num==1){
-                 				alert("没有查询到相应的历史销售记录！");
-                 			}else if(num<1){
-                 				alert("已经是第一页！");
-                 			}else if(num>json.maxPageNum && num>1){
-                 				alert("已经是最后一页！");
-                 			}
-                 		}else{
-                 			if(json.webSales ==""&& num==1){
-                 			alert("没有查询到相应的历史销售记录！");
-                 			}
-                 		} */
                  		
              			$("#pro_name").val(json.projectId);
              		 	$("#pagination-flickr li").remove(); 

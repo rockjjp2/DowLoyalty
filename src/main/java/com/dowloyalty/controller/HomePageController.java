@@ -53,10 +53,14 @@ public class HomePageController {
 		model.addAttribute("USERNAME", userName);
 		return "/PC/Main2";
 	}
+	
+	/*PC主页*/
 	@RequestMapping(value={"","/Login"})
 	public String PCLogin(HttpServletRequest request, HttpServletResponse response){
 		return "/PC/index";
 	}
+	
+	/*微信端区分加载零售商菜单和推广员菜单*/
 	@RequestMapping(value={"/WeChat/retailer/home","/WeChat/promoter/home"})
 	public String WeChatSubscription(Model model){
 		Map<String, String> map=new LinkedHashMap<>();
@@ -82,6 +86,8 @@ public class HomePageController {
 		model.addAttribute("map",map);
 		return "/WeChat/Main";
 	}
+	
+	/*微信端零售商界面*/
 	@RequestMapping(value="/WeChat/retailer/homePage")
 	public String WeChatSubscriptionH(HttpServletRequest request,Model model){
 		Project project = projectService.findActiveByRid( ((Retailer)session.getAttribute("USER")).getId() );
@@ -91,6 +97,8 @@ public class HomePageController {
 		}
 		return "/WeChat/homePage";
 	}
+	
+	/*微信端推广员界面*/
 	@RequestMapping(value="/WeChat/promoter/homePage")
 	public String WeChatSubscriptionH2(HttpServletRequest request,Model model){
 		//int id=((Promoter)session.getAttribute("USER")).getId();
@@ -103,6 +111,8 @@ public class HomePageController {
 		}
 		return "/WeChat/homePage";
 	}
+	
+	/*登录错误页面*/
 	@RequestMapping("/WeChat/Logintips")
 	public String tips(Model model,String a){
 		if(a!=null){
@@ -110,6 +120,8 @@ public class HomePageController {
 		}
 		return "ReLogin";
 	}
+	
+	/*登出系统*/
 	@RequestMapping({"/website/loginout","/web/loginout"})
 	public String loginout(){
 		session.removeAttribute("USER");

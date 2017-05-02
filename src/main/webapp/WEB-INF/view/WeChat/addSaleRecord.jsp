@@ -25,13 +25,6 @@
     			   dataType: "json",
     			   success:function(data){
 						var json=eval(data);
-						/*	$("#retailerTable tr").remove();
-    				    $.each(json.retailers,function (index,entity){
-    					   var Str1="<tr><td data-id='"+entity.id+"'data-content='"+entity.chineseName+"'>";
-    					   var Str2="<input type='radio' id='"+entity.id+"' data-id='"+entity.id+"'class='radio_121' name='radio_Retailers' value='"+entity.chineseName+"'/></td>"
-    					   var Str3="<td>"+entity.chineseName+"</td><td>"+entity.mobile+"</td></tr>";
-    					   $("#retailerTable").append(Str1+Str2+Str3);
-    					}); */
 						//产品类别
 						$("#retailerSelect option").remove();
 						$("#retailerSelect").append("<option value='0'>--请选择零售商--</option>");
@@ -113,14 +106,12 @@
     		$("#submitSalesRecord").click(function(){
     			var projectId=$("#selectProject").val();
     			var startDate = $("#selectProject").find("option:selected").data("time");
-    			//var retailerId=$("#lblRetailers").attr("sid");
     			var retailerId=$("#retailerSelect").val();
     			var categoryId=$("#productcategorsselect").val();
     			var familyId=$("#productfamilyselect").val();
     			var productId=$("#productselect").val();
     			var nums=$("#nums").val()-0;
     			var sales=$("#sales").val()-0;
-    			//if(isNaN(retailerId)){
     			//数字验证
     			var exp = /^[0-9]+$/;
     			if(startDate != null && startDate != "")
@@ -330,19 +321,6 @@
                                 </tr>
                             </thead>
                             <tbody id="retailerTable">
-                                   <%-- <c:forEach items="${retailers }" var="r" >
-	                                <tr>
-	                                    <td data-id="${r.id}" data-content="${r.chineseName }"><input type="radio" id="radio_a${r.id }" data-id="${r.id}" class="radio_121" name="radio_Retailers" value="${r.chineseName }" /></td>
-	                                    <td>${r.chineseName }</td>
-	                                    <td>${r.mobile }</td>
-	                                </tr>
-                                    </c:forEach> --%>
-                               <!--  <tr>
-                                    <td data-id="2" data-content="支付宝"><input type="radio" id="radio_a2" class="radio_1" name="radio_Retailers" value="支付宝" /><label for="checkbox_a2"></label></td>
-                                    <td>支付宝</td>
-                                    <td>广州</td>
-                                </tr> -->
-                                <!--<tr><td style="width:50%;text-align:center" colspan="3"><button id="Person_Submit" class="person_submit" style="width: 25%; border-radius: 3px; height: 70%; background-color: #B6BF00; border: 1px solid #B6BF00;color:#fff;margin-top:3px ">确定</button></td></tr>-->
                             </tbody>
                         </table>
 							

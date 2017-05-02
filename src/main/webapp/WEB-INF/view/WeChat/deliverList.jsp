@@ -74,14 +74,6 @@
             </div>
         </div>
 		
-<!--         <div class="clearfix item">
-            <div class="data col-xs-8 col-xs-offset-1">
-                <h5>xx省经销商2</h5>
-
-                <p class="prize">滚筒洗衣机</p>
-            </div>
-            <button class="col-xs-3 style-bg-green">发货</button>
-        </div> -->
     </div>
     <script type="text/javascript">
         $(".tag").click(function(){

@@ -31,10 +31,14 @@ public class WebExtraPointsController {
 	IMessagesService iMessagesService;
 	@Resource
 	ProjectService projectService;
+	
+	//进入会员留言界面
 	@RequestMapping({"/website/extrapoints"})
 	public String extrapoints() {
 		return "/PC/MemberMessage";
 	}
+	
+	//初始化会员留言信息
 	@RequestMapping({"/website/expointsajax"})
 	public String expointsajax(HttpServletResponse response,int pageNow) {
 		PrintWriter printWriter = null;
@@ -84,6 +88,8 @@ public class WebExtraPointsController {
 		}
 		return "/PC/MemberMessage";
 	}
+	
+	//设置留言积分奖励
 	@RequestMapping({"/website/addpoints"})
 	public @ResponseBody void addpointAjax(HttpServletResponse response,int retailerId,
 			int id,int projectId,int point,HttpSession session) {

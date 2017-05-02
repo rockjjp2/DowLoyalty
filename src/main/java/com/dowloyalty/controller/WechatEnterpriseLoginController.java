@@ -25,9 +25,7 @@ import com.dowloyalty.utils.SimpleHttpConnectUtil;
  */
 @Controller
 public class WechatEnterpriseLoginController {
-/*	
-	@Autowired  
-	private  HttpServletRequest request; */
+
 	@Autowired
     private HttpSession session;
 	
@@ -55,6 +53,8 @@ public class WechatEnterpriseLoginController {
 		return new ModelAndView("redirect:"+url);
 
 	}
+	
+	//登陆微信企业号
 	@RequestMapping(value="/WeChat/LoginEnterpriseDo")
 	public String WeChatEnterpriseDo(String code,HttpServletResponse response){
 		String url="https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token="

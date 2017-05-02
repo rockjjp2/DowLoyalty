@@ -40,20 +40,6 @@
 	ORDER BY submitDates DESC
     </select>
     
-    
-    <!-- <select id="selectSalesRecord"  parameterType="int" resultType="com.dowloyalty.pojo.webSale" >
-      SELECT S.SUBMITDATE submitDate,R.CHINESENAME retaileName,PC.NAME categoryName,P.NAME productName,PF.NAME familyName,S.TOTALPRICE totalPrice,S.AMOUNT amount 
-      FROM SALERECORD S,PRODUCT P,PRODUCTCATEGORY PC,PRODUCTFAMILY PF,RETAILER R
-      WHERE P.ID=S.PRODUCTID 
-      AND PF.ID=P.PRODUCTFAMILYID 
-      AND PC.ID=PF.CATEGROYID
-      AND S.RETAILERID=R.ID
-      AND S.IMPORTERID=#{promoterId}
-      AND PF.ISACTIVE=PC.ISACTIVE=P.ISACTIVE=R.ISACTIVE=1
-      ORDER BY S.SUBMITDATE DESC;
-      LIMIT #{startindex},#{pagesize}
-    </select> -->
-    
     <select id="selectWeChatSaleRecords"  parameterType="int" resultMap="saleRecord" >
        SELECT S.SUBMITDATE,R.CHINESENAME,S.TOTALPRICE 
       FROM SALERECORD S 
@@ -63,17 +49,6 @@
       AND S.IMPORTERID=#{promoterId}
       ORDER BY SUBMITDATE DESC;
     </select>
-    <!-- <select id="selectSalesRecord"  parameterType="int" resultMap="saleRecord" >
-      SELECT S.SUBMITDATE,R.CHINESENAME,PC.NAME,P.NAME,PF.NAME,S.TOTALPRICE 
-      FROM SALERECORD S,PRODUCT P,PRODUCTCATEGORY PC,PRODUCTFAMILY PF,RETAILER R
-      WHERE P.ID=S.PRODUCTID 
-      AND PF.ID=P.PRODUCTFAMILYID 
-      AND PC.ID=PF.CATEGROYID
-      AND S.RETAILERID=R.ID
-      AND PF.ISACTIVE=PC.ISACTIVE=P.ISACTIVE=R.ISACTIVE=1
-      limit #{startindex},#{pagesize}
-    </select> -->
-    
     
     <resultMap type="com.dowloyalty.pojo.PojoSaleRecord" id="saleRecord">
       <id property="ID" column="id" />

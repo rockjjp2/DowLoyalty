@@ -45,7 +45,6 @@ import com.dowloyalty.entity.Project;
 import com.dowloyalty.entity.Promoter;
 import com.dowloyalty.entity.Province;
 import com.dowloyalty.entity.RPromoterProvince;
-import com.dowloyalty.pojo.CompareNums;
 import com.dowloyalty.pojo.ExchangeRecordWeb;
 import com.dowloyalty.pojo.PointMapping;
 import com.dowloyalty.pojo.PromoterVo;
@@ -63,6 +62,7 @@ import com.dowloyalty.service.ISalesRecordService;
 import com.dowloyalty.service.ISearchSaleRecordService;
 import com.dowloyalty.service.PointsLevelService;
 import com.dowloyalty.service.ProjectService;
+import com.dowloyalty.utils.CompareNums;
 import com.dowloyalty.utils.ImportExcelUtil;
 
 /**
@@ -478,16 +478,12 @@ public class WebController {
 		}
 		
 		//将搜索条件，实际显示页码，最大页码以及获取的兑换记录集合拼接成json字符串传到前台页面
-//		idOrName = "[{idOrName:"+("'"+idOrName+"'");
-//		String page = ",page:"+num;
 		String page = "[{page:"+num;
 		String maxPage = ",maxPage:"+maxPageNum+"}]";
-//		String ejson = idOrName + page + maxPage;
 		String ejson = page + maxPage;
 		ejson = JSONObject.parse(ejson).toString();
 		JSONArray json = (JSONArray)JSONArray.toJSON(exchangeRecords);
 		String longJson = ejson + "@#$" + json.toString();
-		//JSONObject j1 = (JSONObject)JSONObject.toJSON(num);
 		try {
 			PrintWriter out = response.getWriter();
 			out.println(longJson);
@@ -570,7 +566,6 @@ public class WebController {
 		ejson = JSONObject.parse(ejson).toString();
 		JSONArray json = (JSONArray)JSONArray.toJSON(retailerInfos);
 		String longJson = ejson + "@#$" + json.toString();
-		//JSONObject j1 = (JSONObject)JSONObject.toJSON(num);
 		try {
 			PrintWriter out = response.getWriter();
 			out.println(longJson);
@@ -581,7 +576,9 @@ public class WebController {
 		}
 	}
 	
-	
+	/*
+	 * 导出销售记录报表
+	 * */
 	@RequestMapping({"/website/exportExcel","/web/exportExcel"})
 	public void exportExcel(HttpServletRequest request, HttpServletResponse response,HttpSession session)
 	{
@@ -719,6 +716,9 @@ public class WebController {
 		}
 	}
 	
+	/*
+	 * 导入信息页面入口
+	 * */
 	@RequestMapping({"/website/importExcelEnter"})
 	public String importExcelEnter(Model model)
 	{
@@ -811,53 +811,6 @@ public class WebController {
 		{
 			logger.warn("获取上传推广员信息异常");
 		}
-		
-//		//将省份id与推广员绑定
-//		List<Province> provinces = iProvinceService.getAllProvince();
-//		for (Province province : provinces) {
-//			for (PromoterVo promoter : promoters) {
-//				if(province.getName().equals(promoter.getProvinceName()))
-//				{
-//					promoter.setProvinceId(province.getId());
-//				}
-//			}
-//		}
-//		
-//		//将已存在的推广员与省份的关系与新的分开
-//		List<RPromoterProvince> relations = iPromoterService.findAllPromoterAndProvinceRelation();
-//		List<PromoterVo> updateRelations = new ArrayList<>();
-//		Set<PromoterVo> saveSet = new HashSet<>();
-//		for (int i = 0; i < relations.size(); i++) {
-//			for (int j = 0; j < promoters.size(); j++) {
-//				if(relations.get(i).getPromoterID() == promoters.get(j).getId())
-//				{
-//					updateRelations.add(promoters.get(j));
-//				}
-//				else
-//				{
-//					saveSet.add(promoters.get(j));
-//				}
-//			}
-//		}
-//		List<PromoterVo> saveRelations = new ArrayList<>();
-//		Iterator<PromoterVo> iterator = saveSet.iterator();
-//		while(iterator.hasNext())
-//		{
-//			saveRelations.add(iterator.next());
-//		}
-//		
-//		//修改推广员与省份的关系
-//		for (PromoterVo promoter : updateRelations) {
-//			iPromoterService.updatePromoterAndProvinceRelation(promoter.getId(), promoter.getProvinceId());
-//		}
-//		logger.info("从导入的excel表格数据修改了推广员与省份的关系");
-//		
-//		//添加推广员与省份的关系
-//		if(!saveRelations.isEmpty())
-//		{
-//			iPromoterService.batchSavePromoterAndProvinceRelation(saveRelations);
-//		}
-//		logger.info("从导入的excel表格数据添加了推广员与省份的关系");
 		
 		//将已存在的推广员与新的推广员分开
 		List<Promoter> allPromoters = iPromoterService.findAllActivePromoters();

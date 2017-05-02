@@ -186,13 +186,6 @@
         
     </script>
     <style>
-        /* .datetime{
-            width: 20%;
-            border: 1px solid #C9CACC;
-            height: 22px;
-            border-radius: 4px;
-        } */
-
         .datetime {
             width: 16%;
             height: 22px;

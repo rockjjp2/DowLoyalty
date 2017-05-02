@@ -2,14 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dowloyalty.dao.IPromoterDao">
-	<!-- <select id="findPromoterByProvinceId" resultType="com.dowloyalty.pojo.PromoterProvince" parameterType="int">
-	SELECT prom.ID promoterId,prom.ChineseName promoterName,prov.name provinceName
-	FROM promoter prom,province prov,rpromoterprovince rpp  
-    WHERE prom.id = rpp.promoterID 
-    and prov.id = rpp.provinceID 
-    and rpp.provinceID=#{value}
-    and prom.IsActive =prov.IsActive = rpp.IsActive= 1 
-	</select> -->
 	<select id="findCountByProvinceId" resultType="int" parameterType="Object">
 	SELECT count(id)
 	FROM promoter   WHERE   IsActive = 1 AND

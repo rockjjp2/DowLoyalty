@@ -60,6 +60,7 @@ public class TaskWeChatKeyConfiguration {
 			e.printStackTrace();
 		}
 	}
+	/*定时获取token*/
 	@Scheduled(fixedRate=7000*1000)//*1000=1s
 	public void weChatTakken() {
 		GetWechatTaken(0);

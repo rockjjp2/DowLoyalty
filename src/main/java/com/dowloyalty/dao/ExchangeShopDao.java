@@ -14,8 +14,6 @@ public interface ExchangeShopDao {
 	 */
 	public void save(ExchangeShop exchangeShop);
 	
-	public void delete(int id);
-	
 	/**
 	 * 根据id修改礼品商城记录
 	 * @param exchangeShop

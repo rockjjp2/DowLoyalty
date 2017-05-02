@@ -35,6 +35,7 @@ public class SortRetalierAndPromoterController {
 	@Resource
 	ProjectService projectService;
 
+	/*初始化零售商信息*/
 	@RequestMapping("website/initRetailers")
 	public void SortRetailersAndPut(HttpServletRequest request, HttpServletResponse response)
 	{
@@ -57,6 +58,7 @@ public class SortRetalierAndPromoterController {
 		}
 	}
 	
+	/*关联零售商与项目*/
 	@ResponseBody
 	@RequestMapping("website/insertRetailers")
 	public void insertRetailers(HttpServletRequest request)
@@ -84,6 +86,7 @@ public class SortRetalierAndPromoterController {
 		}
 	}
 	
+	/*取消零售商与项目的关联*/
 	@ResponseBody
 	@RequestMapping("website/deleteRetailers")
 	public void deleteRetailers(HttpServletRequest request)
@@ -108,6 +111,7 @@ public class SortRetalierAndPromoterController {
 		}
 	}
 	
+	/*初始化推广员信息*/
 	@RequestMapping("website/initPromoters")
 	public void SortPromotersAndPut(HttpServletRequest request, HttpServletResponse response)
 	{
@@ -131,6 +135,8 @@ public class SortRetalierAndPromoterController {
 		}
 	}
 	
+	
+	/*关联推广员与项目*/
 	@ResponseBody
 	@RequestMapping("website/insertPromoters")
 	public void insertPromoters(HttpServletRequest request)
@@ -158,6 +164,8 @@ public class SortRetalierAndPromoterController {
 		}
 	}
 	
+	
+	/*取消推广员与项目的关联*/
 	@ResponseBody
 	@RequestMapping("website/deletePromoters")
 	public void deletePromoters(HttpServletRequest request)
@@ -181,6 +189,8 @@ public class SortRetalierAndPromoterController {
 		}
 	}
 	
+	
+	/*修改项目下的发货员信息*/
 	@ResponseBody
 	@RequestMapping("website/updateProjectAssistant")
 	public void updateProjectAssistant(HttpServletRequest request)

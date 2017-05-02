@@ -39,13 +39,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 var div_height = $(".content-flickr").height();
          $('#iframeContent', window.parent.document).height(div_height + 90); //为iframe赋值高度
       
-		 document.getElementById("downloadTemplate").onclick=function(){
-			document.location = "${pageContext.request.contextPath}/Resources/files/importSaleRecordTemplate.xlsx";
-		}
-			/* function submits(){
-				document.getElementById("uploadExcel")=document.getElementById("uploadExcel1").value;
+			 document.getElementById("downloadTemplate").onclick=function(){
+				document.location = "${pageContext.request.contextPath}/Resources/files/importSaleRecordTemplate.xlsx";
 			}
-		  */
 		}
 		
 </script>

@@ -46,11 +46,13 @@
 	AND ProductFamilyID IN
 		(SELECT ID FROM productfamily WHERE CategroyID=#{categroyId} AND IsActive=1)
 	AND IsActive=1
+	order by   convert(Name USING gbk)   COLLATE   gbk_chinese_ci asc
 	</select>
 	<select id="findProductByFamilyIdAndProjectId" resultType="com.dowloyalty.entity.Product">
 	SELECT product.* FROM product,productfamily,points WHERE product.ProductFamilyID=productfamily.ID AND
 	points.ProductID=product.ID AND productfamily.ID=#{productFamilyId} AND points.ProjectID=#{projectId} AND points.IsActive=1
 	AND product.IsActive=1 AND productfamily.IsActive=1
+	order by   convert(product.Name USING gbk)   COLLATE   gbk_chinese_ci asc
 	</select>
 	<select id="findProductByFamilyIdOrProjectIdAndPromoterId" parameterType="int" resultType="com.dowloyalty.entity.Product">
 	SELECT * FROM product WHERE 
@@ -99,6 +101,7 @@
 	</select>
 	<select id="findProductFamilyByCategroyID" parameterType="int" resultType="com.dowloyalty.entity.ProductFamily">
 	SELECT * FROM productfamily WHERE CategroyID=#{value} AND IsActive=1
+	order by   convert(Name USING gbk)   COLLATE   gbk_chinese_ci asc
 	</select>
 	<select id="findProductFamilyByCategroyIdAndProjectId" resultType="com.dowloyalty.entity.ProductFamily">
 	SELECT distinct productfamily.ID,productfamily.`Name`,productfamily.Description,productfamily.IsActive,
@@ -106,6 +109,7 @@
 	WHERE product.ID=points.ProductID AND productfamily.ID=product.ProductFamilyID
 	AND points.ProjectID=#{projectId} AND productfamily.CategroyID=#{categroyId}
 	AND points.IsActive=1 AND product.IsActive=1 AND productfamily.IsActive=1
+	order by   convert(Name USING gbk)   COLLATE   gbk_chinese_ci asc
 	</select>
 	
 	<select id="findProductFamilyByCategroyIdOrProjectIdAndPromoterId" parameterType="int" resultType="com.dowloyalty.entity.ProductFamily">
@@ -131,6 +135,7 @@
 			(SELECT ID FROM productfamily WHERE CategroyID=#{categroyId} AND IsActive=1)
 		AND IsActive=1)
 	AND IsActive=1
+	order by   convert(Name USING gbk)   COLLATE   gbk_chinese_ci asc
 	</select>
 	
 	<select id="findProductCategoryByProjectId" parameterType="int" resultType="com.dowloyalty.entity.ProductCategory">
@@ -158,10 +163,12 @@
 	
 	<select id="findAllProductCategory" resultType="com.dowloyalty.entity.ProductCategory">
 		SELECT * FROM productcategory where IsActive=1
+		order by   convert(Name USING gbk)   COLLATE   gbk_chinese_ci asc
 	</select>
 	
 	<select id="findProductByFamilyId" resultType="com.dowloyalty.entity.Product">
 		select * from product where ProductFamilyID = #{ProductFamilyID} and IsActive=1
+		order by   convert(Name USING gbk)   COLLATE   gbk_chinese_ci asc
 	</select>
 	
 	<select id="findProductInfosByProjectId" parameterType="int" resultType="com.dowloyalty.pojo.ProductInfos">

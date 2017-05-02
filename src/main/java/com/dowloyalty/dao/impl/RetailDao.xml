@@ -5,7 +5,7 @@
 	<select id="findRetailerByProvinceId" resultType="com.dowloyalty.entity.Retailer" parameterType="int">
 		SELECT ID,ChineseName,ProvinceID,Mobile,OpenID,Email,LastUpdataData,SFDCCode,LoginCode,IsActive
 			FROM retailer   WHERE   IsActive = 1 AND  ProvinceID = #{value}
-			order by id 
+			order by   convert(ChineseName USING gbk)   COLLATE   gbk_chinese_ci asc
 	</select>
 	<select id="findCountByProvinceId" resultType="int" parameterType="Object">
 		SELECT count(id)

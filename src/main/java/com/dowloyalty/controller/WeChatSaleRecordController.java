@@ -65,7 +65,7 @@ public class WeChatSaleRecordController {
 	private static final String ADDSALERECORD="WeChat/addSaleRecord";
 	private static final String QUERYSALERECORD="WeChat/querySaleRecord";
 	
-	
+	//添加销售记录
 	@RequestMapping("/addSalesrecord")
 	public String selectProject(Model model,String msg){
 		int promoterId=((Promoter)session.getAttribute("USER")).getId();
@@ -219,6 +219,8 @@ public class WeChatSaleRecordController {
 			printWriter.close();
 		}
 	}
+	
+	//初始化产品家族信息
 	@RequestMapping("/ProductFamChangeAjax")
 	@ResponseBody
 	public void changeProductFamily(String categoryId,String projectId,String familyId,HttpServletResponse response){
@@ -294,6 +296,7 @@ public class WeChatSaleRecordController {
 		return QUERYSALERECORD;
 	}
 	
+	//显示销售记录查询结果
 	@RequestMapping("/showSaleRecord")
 	public String showSalesRecord(Model model,HttpServletRequest request){
 		String startDate = request.getParameter("startdate");

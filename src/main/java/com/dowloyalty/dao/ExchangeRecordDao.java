@@ -12,10 +12,8 @@ public interface ExchangeRecordDao {
 	
 	public void save(ExchangeRecord exchangeRecord);
 	
-	public void delete(int id);
 	public int getSumExchangPointsByProjectIdAndRetailerId(@Param("projectId")int projectId,@Param("retailerId")int retailerId);
 	
-	public void update(ExchangeRecord exchangeRecord);
 	public void updateExchangerrecordToComplete(@Param("exchangeRecordId")int exchangeRecordId);
 	
 	public List<ExchangeRecord> findAll();
@@ -25,7 +23,6 @@ public interface ExchangeRecordDao {
 	 * @return
 	 */
 	public List<ExchangeRecord> findExchangeRecordByProvinceIdAndStatus(@Param("provinceId")int provinceId,@Param("status")int status);
-	public ExchangeRecord findById(int id);
 	
 	/**
 	 * 根据指定条件获取兑换记录并分页显示

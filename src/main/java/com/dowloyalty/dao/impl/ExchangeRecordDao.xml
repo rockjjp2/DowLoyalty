@@ -18,18 +18,6 @@
 	)
 	</insert>
 	
-	<delete id="delete" parameterType="int">
-		delete from exchangerecord where ID = #{ID}
-	</delete>
-	
-	<update id="update" parameterType="com.dowloyalty.entity.ExchangeRecord">
-	update exchangerecord set
-	RetailerID = #{RetailerID},GoodsID = #{GoodsID},Amount = #{Amount},
-	SubmitTime = #{SubmitTime},SendOutTime = #{SendOutTime},CompleteTime = #{CompleteTime},
-	Status = #{Status},ExchangePoints = #{ExchangePoints},,ProjectID = #{ProjectID}
-	where ID = #{ID}
-	</update>
-	
 	<select id="findAll" resultType="com.dowloyalty.entity.ExchangeRecord">
 	select
 		ID,RetailerID,GoodsID,
@@ -38,14 +26,6 @@
 	from exchangerecord
 	</select>
 	
-	<select id = "findById" parameterType="int" resultType="com.dowloyalty.entity.ExchangeRecord">
-	select
-		ID,RetailerID,GoodsID,
-		Amount,SubmitTime,SendOutTime,
-		CompleteTime,Status,ExchangePoints,ProjectID
-	from exchangerecord
-	where ID = #{ID}
-	</select>
 	<select id = "findExchangeRecordByProvinceIdAndStatus" parameterType="int" resultType="com.dowloyalty.entity.ExchangeRecord">
 	select
 		ID,RetailerID,GoodsID,

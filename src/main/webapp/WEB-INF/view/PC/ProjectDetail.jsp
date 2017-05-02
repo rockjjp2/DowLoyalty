@@ -24,11 +24,6 @@
             font-weight: 900;
         }
     </style>
-    <!-- <script>
-        $(function () {
-            $(".nav-right").css("height", $(window).height()-40);
-        })
-    </script> -->
 </head>
 <body>
     <!--<div style=" padding-top: 10px; padding-bottom: 10px; margin-top: 0; height:40px;"> <a id="goback" href="IntegralItem.html" target="_self">&lt;<span style="font-size: 0.9em; font-family: 宋体; font-weight: 400; "> 返回</span></a></div>-->
@@ -261,14 +256,6 @@
                     </tbody>
                 </table>
             </div>
-            <!--<div class="line">
-                <table style="border-spacing: 15px;">
-                    <tr>
-                        <td style="width:20%; text-align: right;">礼品:</td>
-                        <td style="width:80%"><input style="" type="text" /></td>
-                    </tr>
-                </table>
-            </div>-->
         </div>
 
         <div class="hide"></div>

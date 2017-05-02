@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +40,7 @@ import com.dowloyalty.service.IPointsService;
 import com.dowloyalty.service.IProvinceService;
 import com.dowloyalty.service.ISalesRecordService;
 import com.dowloyalty.service.ISearchSaleRecordService;
+import com.dowloyalty.utils.CompareNums;
 import com.dowloyalty.utils.ReadExcel;
 import com.dowloyalty.utils.UploadUtils;
 
@@ -58,6 +61,8 @@ public class WebSaleRecordController {
 
 	private static final String IMPORTSALESRECORD = "PC/ImportSalesRecord";
 	private static final String HISTORYSALESRECORD = "PC/HistorySalesRecord";
+	
+	protected final Log logger = LogFactory.getLog(this.getClass());
 
 	/**
 	 * 从项目进入销售记录页面
@@ -82,12 +87,8 @@ public class WebSaleRecordController {
 			project.setBackgroundPath(null);
 			project.setPlacardPath(null);
 		}
-		//根据userid，是管理员还是promoter做具体查询。
-		/*List<webSale> webSales = iSearchSaleRecordService.findWebSaleRecordByQuery(projectId, null, null, userid,
-				null, 1);*/
 		model.addAttribute("projectId", projectId);
 		model.addAttribute("projects", projects);
-		//model.addAttribute("salesRecords", webSales);
 		return "PC/HistorySalesRecord";
 	}
 
@@ -151,7 +152,7 @@ public class WebSaleRecordController {
 		int totalPageNum;// 总页面数
 		totalPageNum = iSearchSaleRecordService.getTotalPage(Integer.parseInt(projectId), startDate, endDate, promoterId,
 				retailerName);
-		num = compareNums(num, totalPageNum);
+		num = CompareNums.compareNums(num, totalPageNum);
 		webSales = iSearchSaleRecordService.findWebSaleRecordByQuery(Integer.parseInt(projectId), startDate, endDate,
 				promoterId, retailerName, num);
 System.out.println("查看销售记录页面"+webSales.size());
@@ -163,6 +164,7 @@ System.out.println("查看销售记录页面"+webSales.size());
 			out.flush();
 			out.close();
 		} catch (IOException e) {
+			logger.warn("Json数据传输异常");
 		}
 
 	}
@@ -185,8 +187,6 @@ System.out.println("查看销售记录页面"+webSales.size());
 	@RequestMapping("/importSaleRecord")
 	public String addSaleRecord(Model model, HttpServletRequest request,
 			@RequestParam("uploadExcel") MultipartFile file,HttpSession session ) {
-		//int promoterId =1001;
-		
 		
 			//当前登录人是推广员，可以查看参与的项目
 			int promoterId =((Promoter)session.getAttribute("USER") ).getId();
@@ -194,8 +194,6 @@ System.out.println("查看销售记录页面"+webSales.size());
 		UploadUtils uploadUtils = new UploadUtils();
 		uploadUtils.uploadFile(file, request);
 		System.out.println("file===============================" + file);
-		// 存放验证失败的整条销售记录数据
-		//List<Map<String, String>> mapList = new ArrayList<Map<String, String>>();
 		// 存放失败的数据字段
 		List<String> excelData = new ArrayList<String>();
 		ReadExcel readExcel = new ReadExcel();
@@ -239,8 +237,6 @@ System.out.println("查看销售记录页面"+webSales.size());
 						Points points = iPointsService.findPointByPrjectIdAndProductId(projectId, productId);
 						if (points != null) {
 							int point= ((int)totalPrice)/points.getSalesAmount()*points.getPoints();
-							/*System.out.println(totalPrice+":"+points.getSalesAmount()+":"+points.getPoints()+":"+((int)totalPrice)/points.getSalesAmount()+":"+((int)totalPrice)+":"+points.getSalesAmount()*points.getPoints());
-							System.out.println("计算后的积分："+point);*/
 						iImportExcelService.addSaleRecord(retailerId, productId, totalPrice, promoterId, sf.format(date),
 								projectId, point, excel.getAmount());
 
@@ -260,8 +256,7 @@ System.out.println("查看销售记录页面"+webSales.size());
 				System.out.println("===================导入失败");
 			}
 		} catch (InvalidFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warn("时间转换异常");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -269,7 +264,7 @@ System.out.println("查看销售记录页面"+webSales.size());
 		return IMPORTSALESRECORD;
 	}
 
-	
+	//获取错误信息
 	public List<String> getErrorMsg(List<Excel> excels,int provinceId){
 		// 存放失败的数据字段
 		List<String> excelData = new ArrayList<String>();
@@ -382,28 +377,5 @@ System.out.println("查看销售记录页面"+webSales.size());
 		} 
 		
 		return excelData;
-	}
-	/**
-	 * 比较获取的页码和最大页码
-	 * 
-	 * @param num
-	 *            当前页码
-	 * @param maxPageNum
-	 *            最大页码
-	 * @return 实际页码
-	 */
-	public static int compareNums(int num, int maxPageNum) {
-		if (num < 1) {
-			num = 1;
-		} else {
-			if (num > maxPageNum) {
-				if (maxPageNum == 0) {
-					num = 1;
-				} else {
-					num = maxPageNum;
-				}
-			}
-		}
-		return num;
 	}
 }

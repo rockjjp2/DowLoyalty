@@ -21,14 +21,6 @@
                 _Main.Init();
             }
 
-            ////iframe自适应高度
-            //$("#iframeContent").load(function () {
-            //    alert($(this).contents().find("body").height());
-            //    var mainheight = $(this).contents().find("body").height();
-            //    $(this).height(mainheight);
-            //});
-
-
             //iframe自适应高度
             $("#iframeContent").load(function () {
 
@@ -57,16 +49,6 @@
                 <li id="cardinfo"><span>会员信息</span></li>
                 <li id="showSaleRecord"><span>历史销售记录</span></li>
                 <li id="enterImportSaleRecord"><span>导入销售记录</span></li>
-<!--                 <li style="position: relative; " id="Sales">
-                    <span>销售记录</span>
-                    <div class="Bubble-menu" style="display:none" id="menu-Sales">
-                        <ul class="cui-bubble-layer" style="position: absolute; top: 43px;left:-15px">
-                            <li data-index="0" data-flag="c" id="showSaleRecord" class="cui-bubble-layer-action"><span></span><span class="subtit">历史销售记录</span></li>
-                            <li data-index="1" data-flag="c" id="enterImportSaleRecord"><span></span><span class="subtit">导入销售记录</span></li>
-                        </ul>
-                    </div>
-
-                </li> -->
                 <li id="header-aount" style="position:relative;">
                     <div id="loginout" style="height:30px">
                         <span id="aount_img"></span>&nbsp;

@@ -78,10 +78,6 @@
 	        			$("#pagination-flickr").html(page);
         				alert("未查询到相应的会员信息！");
         			}
-        			/* if(selectOption == 1)
-        			{
-        				selectOption = null;
-        			} */
 	        			$("#txtCardId").val(selectOption);
 	        			$(".tableContents").html(contents);
 	        			$("#pagination-flickr").html(page);

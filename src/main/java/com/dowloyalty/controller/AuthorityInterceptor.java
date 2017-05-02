@@ -20,54 +20,7 @@ public class AuthorityInterceptor implements HandlerInterceptor{
 	
 	public void before() {
 	}
-/**
- * 用户登陆后cookie保留taken，服务器保留用户信息以及身份。加密后与token比对，通过则放行
- */
-/*	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-			throws Exception {
-		System.out.println("-------进入系统身份拦截");
-		//获取客户端token
-		Cookie cookie=getCookieToken(request,"LoyaltyToken");
-		//retailer
-		if ("retailer".equals(session.getAttribute("IDENTITY"))) {
-			boolean is=JWTTokenUtils.getInstance().decodeToken(cookie.getValue(),"retailer",((Retailer)session.getAttribute("USER")).getId()+"");
-			if (!is) {
-				session.setAttribute("IDENTITY", null);
-				request.getRequestDispatcher("redirect:/Login").forward(request, response);
-				}
-		//WeChatPromoter
-		}else if ("promoterWechat".equals(session.getAttribute("IDENTITY"))) {
-			boolean is =JWTTokenUtils.getInstance().decodeToken(cookie.getValue(),"promoterWechat",((Promoter)session.getAttribute("USER")).getId()+"");
-			//验证不通过
-			if (!is) {
-				session.setAttribute("IDENTITY", null);
-				request.getRequestDispatcher("redirect:/WeChatEnterprise/Login").forward(request, response);
-			}
-		}else if ("admin".equals(session.getAttribute("IDENTITY"))) {
-			boolean is =JWTTokenUtils.getInstance().decodeToken(cookie.getValue(),"admin",((Admin)session.getAttribute("USER")).getId()+"");
-			//验证不通过
-			if (!is) {
-				System.out.println("admin验证不通过");
-				session.setAttribute("IDENTITY", null);
-				request.getRequestDispatcher("redirect:/Login").forward(request, response);
-		}
-		//PC端promoter
-		}else if ("promoter".equals(session.getAttribute("IDENTITY"))) {
-			boolean is =JWTTokenUtils.getInstance().decodeToken(cookie.getValue(),"promoter",((Promoter)session.getAttribute("USER")).getId()+"");
-			//验证不通过
-			if (!is) {
-				//
-				session.setAttribute("IDENTITY", null);
-				request.getRequestDispatcher("redirect:/Login").forward(request, response);
-			}
-		}else {
-			response.sendRedirect("Login");
-			return false;
-		}
-		//无错误直接放行
-		return true;
-	}*/
+
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
@@ -96,6 +49,9 @@ public class AuthorityInterceptor implements HandlerInterceptor{
 		return null;
 	}
 
+	/**
+	 * 用户登陆后cookie保留taken，服务器保留用户信息以及身份。加密后与token比对，通过则放行
+	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {

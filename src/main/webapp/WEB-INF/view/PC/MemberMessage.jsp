@@ -134,31 +134,6 @@
      				showMessage(num);
      	    	});
       		
-				/* //当前页面取得的当前页
-				var page_nowPage=$(".active").text();
-				//ajsx拼出页面字段
-				var pageStr1=""
-				if(totalPage==1){
-					pageStr1+="<li class='active'>1</li>";
-				}else {
-					//当前页不为第一页则有上一页按钮
-					if(nowPage!=1){
-						pageStr1+="<li class='previous-off'><a href='?page=1'>上一页</a></li>"
-					}
-					for(var i=1;i<=totalPage;i++){
-						if(i==nowPage){
-						pageStr1+="<li class='active'>"+i+"</li>";
-						}else{
-						pageStr1+="<li><a href='?page="+i+"'>"+i+"</a></li>";
-						}
-					}
-					//当前页不为最后页则有下一页按钮
-					if(nowPage!=totalPage){
-						pageStr1+="<li class='next'><a href='?page=8'>下一页</a></li>"
-					}
-				}
-				//页码选择，拼接到页面
-				$("#pagination-flickr").append(pageStr1); */
 				//重新计算高度
 				var div_height = $(".content-flickr").height();
                 $('#iframeContent', window.parent.document).height(div_height + 400); //为iframe赋值高度
@@ -217,77 +192,10 @@
                     <td valign="top"><input type="number" value="0" style="width:30px;padding-left:16px" /></td>
                     <td valign="top"><input type="button" value="保存" class="btnOperate"></td>
                 </tr>
- <!--                <tr class="table-tr-odd">
-                    <td valign="top">Becky</td>
-                    <td valign="top">2017.01.20</td>
-                    <td style="text-align:left">积分项目这个活动很好，给我奖励个积分吧.</td>
-                    <td valign="top"><select><option>四川柑橘</option></select> </td>
-                    <td valign="top"><input type="number" value="0" style="width:30px;padding-left:16px" /></td>
-                    <td valign="top"><input type="button" value="保存" class="btnOperate"></td>
-                </tr>
-                <tr class="table-tr-odd">
-                    <td valign="top">Becky</td>
-                    <td valign="top">2017.01.20</td>
-                    <td style="text-align:left">积分项目这个活动很好，给我奖励个积分吧.</td>
-                    <td valign="top"><select><option>四川柑橘</option></select> </td>
-                    <td valign="top"><input type="number" value="0" style="width:30px;padding-left:16px" /></td>
-                    <td valign="top"><input type="button" value="保存" class="btnOperate"></td>
-                </tr>
-                <tr class="table-tr-odd">
-                    <td valign="top">Becky</td>
-                    <td valign="top">2017.01.20</td>
-                    <td style="text-align:left">积分项目这个活动很好，给我奖励个积分吧.</td>
-                    <td valign="top"><select><option>四川柑橘</option></select> </td>
-                    <td valign="top"><input type="number" value="0" style="width:30px;padding-left:16px" /></td>
-                    <td valign="top"><input type="button" value="保存" class="btnOperate"></td>
-                </tr>
-                <tr class="table-tr-odd">
-                    <td valign="top">Becky</td>
-                    <td valign="top">2017.01.20</td>
-                    <td style="text-align:left">积分项目这个活动很好，给我奖励个积分吧.</td>
-                    <td valign="top"><select><option>四川柑橘</option></select> </td>
-                    <td valign="top"><input type="number" value="0" style="width:30px;padding-left:16px" /></td>
-                    <td valign="top"><input type="button" value="保存" class="btnOperate"></td>
-                </tr>
-                <tr class="table-tr-odd">
-                    <td valign="top">Becky</td>
-                    <td valign="top">2017.01.20</td>
-                    <td style="text-align:left">积分项目这个活动很好，给我奖励个积分吧.</td>
-                    <td valign="top"><select><option>四川柑橘</option></select> </td>
-                    <td valign="top"><input type="number" value="0" style="width:30px;padding-left:16px" /></td>
-                    <td valign="top"><input type="button" value="保存" class="btnOperate"></td>
-                </tr>
-                <tr class="table-tr-odd">
-                    <td valign="top">Becky</td>
-                    <td valign="top">2017.01.20</td>
-                    <td style="text-align:left">积分项目这个活动很好，给我奖励个积分吧.</td>
-                    <td valign="top"><select><option>四川柑橘</option></select> </td>
-                    <td valign="top"><input type="number" value="0" style="width:30px;padding-left:16px" /></td>
-                    <td valign="top"><input type="button" value="保存" class="btnOperate"></td>
-                </tr>
-                <tr class="table-tr-odd">
-                    <td valign="top">Becky</td>
-                    <td valign="top">2017.01.20</td>
-                    <td style="text-align:left">积分项目这个活动很好，给我奖励个积分吧.</td>
-                    <td valign="top"><select><option>四川柑橘</option></select> </td>
-                    <td valign="top"><input type="number" value="0" style="width:30px;padding-left:16px" /></td>
-                    <td valign="top"><input type="button" value="保存" class="btnOperate"></td>
-                </tr> -->
-
-
             </tbody>
         </table>
         <div class="datalist-paging" >
             <ul id="pagination-flickr">
-               <!--  <li class="previous-off">上一页</li>
-                <li class="">1</li>
-                <li><a href="?page=2">2</a></li>
-                <li><a href="?page=3">3</a></li>
-                <li><a href="?page=4">4</a></li>
-                <li><a href="?page=5">5</a></li>
-                <li><a href="?page=6">6</a></li>
-                <li><a href="?page=7">7</a></li>
-                <li class="next"><a href="?page=8">下一页</a></li> -->
 				<li class="firstPage" style="cursor: pointer;">首页</li>
 				<li class="previous-off" style="cursor: pointer;">上一页</li>
 				<li class="active">第1页</li>

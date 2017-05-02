@@ -50,6 +50,7 @@ public class TaskSalesforceAccount {
 	IRetailerService iRetailerService;
 	
 
+	/*同步零售商信息*/
 	@ResponseBody
 	@RequestMapping("/website/synchronizeRetailerInfo")
 	public void synchronizeInfo()
@@ -74,10 +75,8 @@ public class TaskSalesforceAccount {
 	}
 	
 	/**
-	 * 58*2分钟后更新
 	 * 定时从salesforce系统获取用户信息
 	 */
-//	@Scheduled(fixedRate=2*58*60*1000)
 	public void salesForec() {
 		System.out.println("开始同步=========================");
 		logger.info("数据库开始同步零售商数据");
@@ -230,6 +229,8 @@ public class TaskSalesforceAccount {
 		logger.info("DateUTC2DateZ,DateUTC："+DateUTC+"DateZ"+DateZ);
 		return DateZ;
 	}
+	
+	/*account转为retailer信息*/
 	private Retailer AccountMapping2Retailer(AccountMapping accountMapping){
 		Retailer retailer=new Retailer();
 		retailer.setChineseName(accountMapping.getName());

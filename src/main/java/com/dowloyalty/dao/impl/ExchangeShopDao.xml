@@ -16,10 +16,6 @@
 	)
 	</insert>
 	
-	<delete id="delete" parameterType="int">
-		delete from exchangeshop where ID = #{ID}
-	</delete>
-	
 	<update id="update" parameterType="com.dowloyalty.entity.ExchangeShop">
 	update exchangeshop set
 	ProjectID = #{projectID},GoodsID = #{goodsID},ExchangePoints = #{exchangePoints},

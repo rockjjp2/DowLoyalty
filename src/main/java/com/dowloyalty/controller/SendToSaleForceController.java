@@ -34,17 +34,15 @@ public class SendToSaleForceController {
 	private static String PASSWORD = "GCWeChat@2017sCf1MbnskKLfGlnKSrvvD4SN";
 	protected final Log logger = LogFactory.getLog(this.getClass());
 	
-//	@Autowired
-//	HttpSession session;
-	
 	@Resource
 	ISalesRecordService iSalesRecordService;
 
-	//@RequestMapping("/json")
-//	@Scheduled(fixedRate=60*1000)
+	
+	/**
+	 * 定时将销售记录发送至salesforce
+	 */
 	public void sendSaleRecordJson() {
 		
-//		HttpSession session = request.getSession();
 		String access_token = "";
 		JSONObject tokenJson = null;
 		String postBody = "";
@@ -58,10 +56,6 @@ public class SendToSaleForceController {
 			//写到log里面
 			logger.warn("获取token时，json数据转换异常");
 		}
-		
-		//缓存到session中并设置生命周期为2小时
-//		session.setAttribute("token", access_token);
-//		session.setMaxInactiveInterval(7200);
 		
 		List<SendSaleRecord> allSaleRecords = iSalesRecordService.findAllSaleRecord();
 		for(SendSaleRecord record : allSaleRecords)
@@ -124,6 +118,8 @@ public class SendToSaleForceController {
 		return token;
 	}
 	
+	
+	/*发送数据至salesforce并获取返回oppid*/
 	public static Map<String, Object> createOpp(String token,String postBody) throws Exception{
 	       
 		   Map<String, Object> map = new HashMap<String ,Object>();

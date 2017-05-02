@@ -109,10 +109,10 @@ public class WebCreateProjectController {
 		String title = request.getParameter("Title");
 		String introduce = request.getParameter("Introduce");
 		System.out.println("introduce="+introduce);
-		//String postImg = request.getParameter("file");
-		//String backImg = request.getParameter("file1");
-		MultipartFile postImg = Mrequest.getFile("file");
-		MultipartFile backImg = Mrequest.getFile("file1");
+		MultipartFile postImg = null;
+		postImg = Mrequest.getFile("file");
+		MultipartFile backImg = null;
+		backImg = Mrequest.getFile("file1");
 		System.out.println("postImg="+postImg);
 		System.out.println("backImg="+backImg);
 		try {
@@ -196,11 +196,15 @@ public class WebCreateProjectController {
 				project.setAdminID(adminId);
 				try 
 				{
-					project.setBackgroundPath(backImg.getBytes());
-					project.setBackgroundBase64(Base64.getEncoder().encodeToString(backImg.getBytes()));
+					if(postImg != null)
+					{
+						project.setPlacardPath(postImg.getBytes());
+					}
+					if(backImg != null)
+					{
+						project.setBackgroundPath(backImg.getBytes());
+					}
 					project.setDescription(introduce);
-					project.setPlacardPath(postImg.getBytes());
-					project.setPlacardBase64(Base64.getEncoder().encodeToString(postImg.getBytes()));
 					project.setStartDate(new Timestamp(sf.parse(start_time).getTime()));
 					project.setEndDate(new Timestamp(sf.parse(end_time).getTime()));
 					projectService.update(project);
@@ -225,261 +229,131 @@ public class WebCreateProjectController {
 					logger.warn("创建项目时间解析异常");
 				}
 			}
-		
-////		String poster_img = null;
-////		String back_img = null;
-////		String Posterimg = request.getParameter("Posterimg");//
-////		String Backimg = request.getParameter("Backimg");
-//		
-//		//根据项目id判断行为：创建 or 修改
-//		//创建
-//		if(edit_id== null || "".equals(edit_id))
-//		{
-//			file = Mrequest.getFile("file");
-//			file1 = Mrequest.getFile("file1");
-////			poster_img = BaiduFileService.getInstance().uploadFile(file);
-////			back_img = BaiduFileService.getInstance().uploadFile(file1);
-//		}
-//		//修改
-//		else
-//		{// 编辑活动信息页面，获得海报图和背景图的逻辑
-//			Project project = projectService.findProjectByProjectId(Integer.parseInt(edit_id));
-////			if(!project.getPlacardPath().isEmpty())
-////			{
-////				if (project.getPlacardPath().equals(Posterimg)) 
-////				{// 不修改海报图
-////					poster_img = Posterimg;
-////				} 
-////				else 
-////				{// 修改海报图
-//					file = Mrequest.getFile("file");// formdata上传的海报图片文件
-////					poster_img = BaiduFileService.getInstance().uploadFile(file);
-//					try 
-//					{
-//						project.setPlacardPath(file.getBytes());
-//						project.setPlacardBase64(Base64.getEncoder().encodeToString(file.getBytes()));
-////				}
-////			}
-////			if(!project.getBackgroundPath().isEmpty()){
-////			if (project.getBackgroundPath().equals(Backimg)) {
-////				back_img = Backimg;
-////			} else {
-//						file1 = Mrequest.getFile("file1");// formdata上传的背景图片文件
-//						project.setBackgroundPath(file1.getBytes());
-//						project.setBackgroundBase64(Base64.getEncoder().encodeToString(file1.getBytes()));
-////				back_img = BaiduFileService.getInstance().uploadFile(file1);
-//					} 
-//					catch (IOException e) 
-//					{
-//						logger.warn("上传图片获取异常");
-//					}
-////			}
-////			}
-//		}
-//		
-//
-//		/*if((provinceId != null && !"".equals(provinceId)) && (start_time != null && !"".equals(start_time)) && (end_time != null && !"".equals(end_time))&& (title != null && !"".equals(title))
-//				&& (introduce != null && !"".equals(introduce))&&(poster_img!= null &&  !"".equals(poster_img))&&(back_img!= null && !"".equals(back_img))){*/
-//			try {
-//			// 转换日期格式
-//			String s[] = start_time.split("/");
-//			String e[] = end_time.split("/");
-//			Date sd = sf.parse(s[0] + "-" + s[1] + "-" + s[2] + " 00:00:00");
-//			Date ed = sf.parse(e[0] + "-" + e[1] + "-" + e[2] + " 00:00:00");
-//			Timestamp starDate = Timestamp.valueOf(sf.format(sd));
-//			Timestamp endDate = Timestamp.valueOf(sf.format(ed));
-//			// 和数据库比较，判断同省项目名是否已存在
-//			Project projects = iCreateProjectService.findProjectByInfo(null, null, Integer.parseInt(provinceId), title);
-//			Project project = null ;
-//			if (edit_id.isEmpty()) {
-//				// chuangjian
-//				if(projects == null ){
-//					
-//					if (new Date().getTime() - new SimpleDateFormat("yyyy/MM/dd").parse(start_time).getTime() <= 0) {// 判断开始时间是否大于当前时间
-//						iCreateProjectService.insertProjectInfo(title, Integer.parseInt(provinceId), poster_img,
-//								starDate, endDate, adminId, true, true, back_img, introduce);
-//						project = iCreateProjectService.findProjectByInfo(start_time, end_time,
-//								Integer.parseInt(provinceId), title);// 从数据库中查找到刚创建的活动
-//						try {
-//							PrintWriter out = response.getWriter();
-//							out.println(project.getId());
-//							out.flush();
-//							out.close();
-//						} catch (IOException e1) {
-//							logger.warn("提交项目活动信息，向页面传递数据传输异常");
-//						}
-//				}
-//
-//					}else{
-//						try {
-//							PrintWriter out = response.getWriter();
-//							out.println("exist");
-//							out.flush();
-//							out.close();
-//						} catch (IOException e1) {
-//							logger.warn("判断项目名是否存在时，向页面传递数据传输异常");
-//						}
-//					}
-//			} else {
-//				// 编辑
-//				Project project1 = projectService.findProjectByProjectId(Integer.parseInt(edit_id));
-//				if (projects == null || title.equals(project1.getName())) {// 项目名称不存在或没有修改
-//					iCreateProjectService.updateProjectInfo(title, Integer.parseInt(provinceId), poster_img, back_img,
-//							introduce, Integer.parseInt(edit_id));
-//					 project = iCreateProjectService.findProjectByInfo(start_time, end_time,
-//							Integer.parseInt(provinceId), title);
-//					 try {
-//						 PrintWriter out = response.getWriter();
-//						 out.println(project.getId());
-//						 out.flush();
-//						 out.close();
-//					 } catch (IOException e1) {
-//						 logger.warn("编辑项目活动信息时，向页面传递数据传输异常");
-//					 }
-//				}else{
-//					try {
-//						PrintWriter out = response.getWriter();
-//						out.println("exist");
-//						out.flush();
-//						out.close();
-//					} catch (IOException e1) {
-//						logger.warn("判断项目名是否存在时，向页面传递数据传输异常");
-//					}
-//				}
-//				
-//			}
-//
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			logger.warn("提交项目活动信息的时候，时间解析异常");
-//		}
-//
-//		
 	}
 
 	
 
-	/**
-	 * "选择零售商"部分
-	 * @param model
-	 * @param request
-	 * @param response
-	 */
-	@RequestMapping("/website/searchRetailerByRetailerName")
-	public void searchRetailerByRetailerName(Model model, HttpServletRequest request, HttpServletResponse response) {
-		String provinceID = request.getParameter("provinceId");
-		int provinceId = Integer.valueOf(provinceID);
-		List<Retailer> retailers = iRetailerService.findRetailerByProvinceId(provinceId);
-		System.out.println("搜索到的零售商："+retailers);
-		JSONArray longJson = (JSONArray) JSONArray.toJSON(retailers);
-		try {
-			PrintWriter out = response.getWriter();
-			out.println(longJson);
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			logger.warn("创建项目中搜索零售商信息Json数据传输异常");
-		}
-
-	}
-
-	/**
-	 * "选择推广员"部分
-	 * @param model
-	 * @param request
-	 * @param response
-	 */
-	@RequestMapping("/website/searchPromoterByPromoterName")
-	public void searchPromoterByPromoterName(Model model, HttpServletRequest request, HttpServletResponse response) {
-		String provinceID = request.getParameter("provinceId");
-		int provinceId = Integer.valueOf(provinceID);
-		List<Promoter> promoters = iPromoterService.findPromoterByProvinceId(provinceId);
-		System.out.println("搜索到的零售商："+promoters);
-		JSONArray longJson =(JSONArray) JSONArray.toJSON(promoters);
-		try {
-			PrintWriter out = response.getWriter();
-			out.println(longJson);
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			logger.warn("创建项目中搜索推广员信息Json数据传输异常");
-		}
-
-	}
-
-	/**
-	 * 保存项目所选择的零售商信息
-	 * @param request
-	 */
-	@RequestMapping("/website/subProjectRetailer")
-	public void subProjectRetailer(HttpServletRequest request) {
-		String projectId = request.getParameter("projectId");
-		String retailerNames = request.getParameter("retailerNames");
-		String retailer_name[] = retailerNames.split(";");// 页面中新选择的零售商数组
-
-		List<Integer> retailerIds = iCreateProjectService.findRetailerIdByProjectId(Integer.parseInt(projectId));// 项目中已经选择的零售商
-		if (retailerIds.isEmpty()) {
-			for (int i = 0; i < retailer_name.length; i++) {
-				
-				iCreateProjectService.insertRProjectRetailer(Integer.parseInt(projectId),
-						Integer.parseInt(retailer_name[i]), true);
-			}
-
-		} else {
-			for (int y = 0; y < retailer_name.length; y++) {
-				if (!retailerIds.toString().contains(retailer_name[y])) {
-					iCreateProjectService.insertRProjectRetailer(Integer.parseInt(projectId),
-							Integer.parseInt(retailer_name[y]), true);
-				}
-			}
-			for (int x = 0; x < retailerIds.size(); x++) {
-				if (!retailerNames.contains(retailerIds.get(x).toString())) {
-					iCreateProjectService.updateRProjRetailer(Integer.parseInt(projectId), retailerIds.get(x), false);
-				}
-			}
-		}
-	}
-
-	/**
-	 * 保存项目所选择的推广员的信息
-	 * @param request
-	 */
-	@RequestMapping("/website/subProjectPromoter")
-	public void subProjectPromoter(HttpServletRequest request) {
-		String projectId = request.getParameter("projectId");
-		String promoterNames = request.getParameter("promoterNames");
-		String promoter_name[] = promoterNames.split(";");// 选择的推广员数组
-
-		List<Integer> promoterIds = iCreateProjectService.findPromoterIdByProjectId(Integer.parseInt(projectId));// 项目中已经选择的推广员
-		if (promoterIds.isEmpty()) {
-			for (int i = 0; i < promoter_name.length; i++) {
-				iCreateProjectService.insertRProjectPromoter(Integer.parseInt(projectId), Integer.parseInt(promoter_name[i]), true);
-			}
-
-		} else {
-			for (int y = 0; y < promoter_name.length; y++) {
-				if (!promoterIds.toString().contains(promoter_name[y])) {
-					iCreateProjectService.insertRProjectPromoter(Integer.parseInt(projectId),
-							Integer.parseInt(promoter_name[y]), true);
-				}
-			}
-			for (int x = 0; x < promoterIds.size(); x++) {
-				if (!promoterNames.contains(promoterIds.get(x).toString())) {
-					iCreateProjectService.updateRProjPromoter(Integer.parseInt(projectId), promoterIds.get(x), false);
-				}
-			}
-		}
-	}
-	/**
-	 * 更新项目的发货推广员
-	 * @param request
-	 */
-	@RequestMapping("/website/updateProjects_delivPromoter")
-	public void updateProject(HttpServletRequest request){
-		String projectId = request.getParameter("projectId");
-		String delivPromoter = request.getParameter("delivPromoter");
-		iCreateProjectService.updateDeliveryGoodsPromoter(Integer.parseInt(delivPromoter), Integer.parseInt(projectId));
-	}
+//	/**
+//	 * "选择零售商"部分
+//	 * @param model
+//	 * @param request
+//	 * @param response
+//	 */
+//	@RequestMapping("/website/searchRetailerByRetailerName")
+//	public void searchRetailerByRetailerName(Model model, HttpServletRequest request, HttpServletResponse response) {
+//		String provinceID = request.getParameter("provinceId");
+//		int provinceId = Integer.valueOf(provinceID);
+//		List<Retailer> retailers = iRetailerService.findRetailerByProvinceId(provinceId);
+//		System.out.println("搜索到的零售商："+retailers);
+//		JSONArray longJson = (JSONArray) JSONArray.toJSON(retailers);
+//		try {
+//			PrintWriter out = response.getWriter();
+//			out.println(longJson);
+//			out.flush();
+//			out.close();
+//		} catch (IOException e) {
+//			logger.warn("创建项目中搜索零售商信息Json数据传输异常");
+//		}
+//
+//	}
+//
+//	/**
+//	 * "选择推广员"部分
+//	 * @param model
+//	 * @param request
+//	 * @param response
+//	 */
+//	@RequestMapping("/website/searchPromoterByPromoterName")
+//	public void searchPromoterByPromoterName(Model model, HttpServletRequest request, HttpServletResponse response) {
+//		String provinceID = request.getParameter("provinceId");
+//		int provinceId = Integer.valueOf(provinceID);
+//		List<Promoter> promoters = iPromoterService.findPromoterByProvinceId(provinceId);
+//		System.out.println("搜索到的零售商："+promoters);
+//		JSONArray longJson =(JSONArray) JSONArray.toJSON(promoters);
+//		try {
+//			PrintWriter out = response.getWriter();
+//			out.println(longJson);
+//			out.flush();
+//			out.close();
+//		} catch (IOException e) {
+//			logger.warn("创建项目中搜索推广员信息Json数据传输异常");
+//		}
+//
+//	}
+//
+//	/**
+//	 * 保存项目所选择的零售商信息
+//	 * @param request
+//	 */
+//	@RequestMapping("/website/subProjectRetailer")
+//	public void subProjectRetailer(HttpServletRequest request) {
+//		String projectId = request.getParameter("projectId");
+//		String retailerNames = request.getParameter("retailerNames");
+//		String retailer_name[] = retailerNames.split(";");// 页面中新选择的零售商数组
+//
+//		List<Integer> retailerIds = iCreateProjectService.findRetailerIdByProjectId(Integer.parseInt(projectId));// 项目中已经选择的零售商
+//		if (retailerIds.isEmpty()) {
+//			for (int i = 0; i < retailer_name.length; i++) {
+//				
+//				iCreateProjectService.insertRProjectRetailer(Integer.parseInt(projectId),
+//						Integer.parseInt(retailer_name[i]), true);
+//			}
+//
+//		} else {
+//			for (int y = 0; y < retailer_name.length; y++) {
+//				if (!retailerIds.toString().contains(retailer_name[y])) {
+//					iCreateProjectService.insertRProjectRetailer(Integer.parseInt(projectId),
+//							Integer.parseInt(retailer_name[y]), true);
+//				}
+//			}
+//			for (int x = 0; x < retailerIds.size(); x++) {
+//				if (!retailerNames.contains(retailerIds.get(x).toString())) {
+//					iCreateProjectService.updateRProjRetailer(Integer.parseInt(projectId), retailerIds.get(x), false);
+//				}
+//			}
+//		}
+//	}
+//
+//	/**
+//	 * 保存项目所选择的推广员的信息
+//	 * @param request
+//	 */
+//	@RequestMapping("/website/subProjectPromoter")
+//	public void subProjectPromoter(HttpServletRequest request) {
+//		String projectId = request.getParameter("projectId");
+//		String promoterNames = request.getParameter("promoterNames");
+//		String promoter_name[] = promoterNames.split(";");// 选择的推广员数组
+//
+//		List<Integer> promoterIds = iCreateProjectService.findPromoterIdByProjectId(Integer.parseInt(projectId));// 项目中已经选择的推广员
+//		if (promoterIds.isEmpty()) {
+//			for (int i = 0; i < promoter_name.length; i++) {
+//				iCreateProjectService.insertRProjectPromoter(Integer.parseInt(projectId), Integer.parseInt(promoter_name[i]), true);
+//			}
+//
+//		} else {
+//			for (int y = 0; y < promoter_name.length; y++) {
+//				if (!promoterIds.toString().contains(promoter_name[y])) {
+//					iCreateProjectService.insertRProjectPromoter(Integer.parseInt(projectId),
+//							Integer.parseInt(promoter_name[y]), true);
+//				}
+//			}
+//			for (int x = 0; x < promoterIds.size(); x++) {
+//				if (!promoterNames.contains(promoterIds.get(x).toString())) {
+//					iCreateProjectService.updateRProjPromoter(Integer.parseInt(projectId), promoterIds.get(x), false);
+//				}
+//			}
+//		}
+//	}
+//	/**
+//	 * 更新项目的发货推广员
+//	 * @param request
+//	 */
+//	@RequestMapping("/website/updateProjects_delivPromoter")
+//	public void updateProject(HttpServletRequest request){
+//		String projectId = request.getParameter("projectId");
+//		String delivPromoter = request.getParameter("delivPromoter");
+//		iCreateProjectService.updateDeliveryGoodsPromoter(Integer.parseInt(delivPromoter), Integer.parseInt(projectId));
+//	}
 	/**
 	 * 初始化项目view或edit页面项目信息
 	 * @param request	客户端请求
@@ -492,9 +366,6 @@ public class WebCreateProjectController {
 		String projectId = request.getParameter("projectId");
 		Project project = projectService.findProjectByProjectId(Integer.parseInt(projectId));
 		String startTime = project.getStartDate().toString();
-		//测试
-		//String projectId = "1001";
-		//String startTime = "2016-03-03";
 		boolean start = false;
 		try {
 			//比较项目开始时间和当前时间并获取比较结果的返回值
@@ -514,8 +385,6 @@ public class WebCreateProjectController {
 		Promoter promoter = null;
 		
 		//将变量和相关数据绑定（需自己加入所需数据对应的变量）
-		//findAllInfos(projectId, exchangeShopGoods, productInfos, pointsLevels,projectProvince,retailers,promoters,promoter);
-		
 		projectProvince = iProjectDetailsService.findProjectById(Integer.parseInt(projectId));
 		projectProvince.setPlacardBase64(Base64.getEncoder().encodeToString(projectProvince.getPlacardPath()));
 		projectProvince.setBackgroundBase64(Base64.getEncoder().encodeToString(projectProvince.getBackgroundPath()));
@@ -579,44 +448,30 @@ public class WebCreateProjectController {
 		return mv;
 	}
 	
-//	public void findAllInfos(String projectId,
-//			List<ExchangeshopGoods> exchangeShopGoods,List<ProductInfos> productInfos,
-//			List<PointsLevel> pointsLevels,ProjectProvince projectProvince,List<Retailer> retailers,List<Promoter> promoters,Promoter promoter)
-//	{
-//		//初始化变量引用的值，获取数据
-//		 projectProvince = iProjectDetailsService.findProjectById(Integer.parseInt(projectId));
-//		 retailers = iProjectDetailsService.findRetaileByProjectId(Integer.parseInt(projectId));
-//		 promoters = iProjectDetailsService.findPromoterByProjectId(Integer.parseInt(projectId));
-//		 promoter = iProjectDetailsService.findDelivPromoterByProjectId(Integer.parseInt(projectId));
-//		 exchangeShopGoods =  iProjectDetailsService.findGoodsByProjectId(Integer.parseInt(projectId));
-//		 productInfos = iProductService.findProductInfosByProjectId(Integer.parseInt(projectId));
-//		 pointsLevels = pointsLevelService.findByProjectId(Integer.parseInt(projectId));
+	
+//	/**
+//	 * 比较获取的页码和最大页码
+//	 * 
+//	 * @param num
+//	 *            当前页码
+//	 * @param maxPageNum
+//	 *            最大页码
+//	 * @return 实际页码
+//	 */
+//	public static int compareNums(int num, int maxPageNum) {
+//		if (num < 1) {
+//			num = 1;
+//		} else {
+//			if (num > maxPageNum) {
+//				if (maxPageNum == 0) {
+//					num = 1;
+//				} else {
+//					num = maxPageNum;
+//				}
+//			}
+//		}
+//		return num;
 //	}
-	
-	
-	/**
-	 * 比较获取的页码和最大页码
-	 * 
-	 * @param num
-	 *            当前页码
-	 * @param maxPageNum
-	 *            最大页码
-	 * @return 实际页码
-	 */
-	public static int compareNums(int num, int maxPageNum) {
-		if (num < 1) {
-			num = 1;
-		} else {
-			if (num > maxPageNum) {
-				if (maxPageNum == 0) {
-					num = 1;
-				} else {
-					num = maxPageNum;
-				}
-			}
-		}
-		return num;
-	}
 
 	/**
 	 * 根据给定省份集合将省份名按照首字母排序

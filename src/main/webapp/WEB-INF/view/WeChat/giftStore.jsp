@@ -21,10 +21,6 @@
 
     <div class="container">
         <div class="clearfix">
-            <!-- <div class="col-xs-2 menu-btn style-btn-gray style-bg-green">全部</div> -->
-            <!--<div class="col-xs-2 menu-btn style-btn-gray">电器</div>-->
-            <!--<div class="col-xs-2 menu-btn style-btn-gray">卡券</div>-->
-            <!--<div class="col-xs-2 menu-btn style-btn-gray">汽车</div>-->
         </div>
 		<c:choose>
 		<c:when test="${not empty allGoods}">

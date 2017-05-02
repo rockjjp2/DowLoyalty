@@ -1,10 +1,4 @@
-﻿/// <reference path="Common.js" />
-/// <reference path="../ajaxjs/jquery.js" />
-/// <reference path="JquerySession.js" />
-
-//document.write(" <script src='http://dowloyaltyresources.bj.bcebos.com/Common.js'></script>");
-//document.write(" <script src='http://dowloyaltyresources.bj.bcebos.com/JquerySession.js'></script>");
-function dataURItoBlob(base64Data) {
+﻿function dataURItoBlob(base64Data) {
         var byteString;
         if (base64Data.split(',')[0].indexOf('base64') >= 0)
             byteString = atob(base64Data.split(',')[1]);
@@ -19,8 +13,39 @@ function dataURItoBlob(base64Data) {
         return new Blob([ia], { type: mimeString });
     }
 
+var hashMap = {   
+	    set : function(key,value){this[key] = value},   
+	    get : function(key){return this[key]},   
+	    contains : function(key){return this.Get(key) == null?false:true},   
+	    remove : function(key){delete this[key]}   
+	}
+
+	function uploadImg(formData)
+	{
+		$.ajax({
+			url : 'subProjectActive',
+			type : 'POST',
+			cache : false,
+			data : formData,
+			processData : false,
+			contentType : false,
+			success : function(returndata) {
+				if (returndata.trim() == "exist") {
+					alert("项目名已存在！");
+					location.href = "createproject";
+				} else{
+					projectId = returndata.trim();
+					initRetailerAndPromoter(projectId);
+
+					page.$hide();
+					page.$Show("Person");
+				}
+			}
+		});
+	}
+
 $(function () {
-    
+	
     page.$Init();
 });
 
@@ -69,7 +94,7 @@ var page = {
     $Empty: function () {
         $(".sub-nav").on("click", "li", function () {
 
-        	 var Activity = $.session.get("Activity");
+        	 var Activity = hashMap.get("Activity");
         	 var edit_id = $.trim($('#edit_id').val());
         	 if(!App.Com.isnullorempty(Activity) || !App.Com.isnullorempty(edit_id)){
         		 
@@ -107,8 +132,17 @@ var page = {
             var End_time = $.trim($(".End_time").val());//结束时间
             var Title = $.trim($("#Title").val());//标题
             var Introduce = $.trim($("#Introduce").val());//介绍
-            var Poster_img = $.trim($("#Poster_img").val());//海报图片
-            var Back_img = $.trim($("#Back_img").val());//项目背景图片
+            if(projectId == "")
+            {
+            	 var Poster_img = $.trim($("#Poster_img").val());//海报图片
+                 var Back_img = $.trim($("#Back_img").val());//项目背景图片
+            }
+            else
+            {
+            	var Poster_img = $.trim($("#Poster_img1").val());//海报图片
+                var Back_img = $.trim($("#Back_img1").val());//项目背景图片
+            }
+           
             var edit_id = $.trim($('#edit_id').val());
            
             if (App.Com.isnullorempty(Province) || Province == "请选择省份") { alert("请选择省份！"); return false; }
@@ -135,7 +169,7 @@ var page = {
           /*  window.location.href="submitActiveInformation";*/
 
             var Json = '[{"Province":"' + Province + '","Start_time":" ' + Start_time + ' ","End_time":" ' + End_time + ' ","Title":" ' + Title + ' ","Introduce":" ' + Introduce + ' "}]';
-            $.session.set("Activity", Json);
+            hashMap.set("Activity", Json);
             
             var Provinces = $('#Province').val();
             var formData = new FormData();
@@ -146,125 +180,62 @@ var page = {
 			formData.append('Title', Title);
 			formData.append('Introduce', Introduce);
 
-//			if (!App.Com.isnullorempty(edit_id)) {//从积分项目进入，传递图片信息
-//				if (App.Com.isnullorempty(Poster_img)) {
-//					formData.append('Posterimg', $('#Poster_img1').attr('src'));
-//				} else {
-//					formData.append('file', $('#Poster_img')[0].files[0]);
-//				}
-//				if (App.Com.isnullorempty(Back_img)) {
-//					formData.append('Backimg', $('#Back_img1').attr('src'));
-//				} else {
-//					formData.append('file1', $('#Back_img')[0].files[0]);
-//				}
-//
-//			} else {
-//			alert(($('#Poster_img')[0].files[0]).size/1024);
-//			alert(($('#Back_img')[0].files[0]).size/1024);
-//			var file;
-//			var file1;
-			lrz($('#Poster_img')[0].files[0], { width: 640, quality: 0.8 }, function (rst) {              
-                var blob = dataURItoBlob(rst.base64);  // 上一步中的函数
-                var canvas = document.createElement('canvas');
-                var dataURL = canvas.toDataURL('image/jpeg', 1.0);
-                formData.append("file", blob);
-//                file = blob;
-//                alert(blob.size/1024);
-                
-                lrz($('#Back_img')[0].files[0], { width: 640, quality: 0.8 }, function (rst) {              
-                    var blob = dataURItoBlob(rst.base64);  // 上一步中的函数
-                    var canvas = document.createElement('canvas');
-                    var dataURL = canvas.toDataURL('image/jpeg', 1.0);
-                    formData.append("file1", blob);
-//                    file1 = blob;
-//                    alert(blob.size/1024);
-                    
-//                    alert('file='+formData.get('file'));
-//        			alert('file1='+formData.get('file1'));
-                    
-        			$.ajax({
-        				url : 'subProjectActive',
-        				type : 'POST',
-        				cache : false,
-        				data : formData,
-        				processData : false,
-        				contentType : false,
-        				success : function(returndata) {
-        					if (returndata.trim() == "exist") {
-        						alert("项目名已存在！");
-        						location.href = "createproject";
-        					} else{
-        						projectId = returndata.trim();
-        						initRetailerAndPromoter(projectId);
-        
-        						page.$hide();
-        						page.$Show("Person");
-        					}
-        				}
-        			});
-        			
-//                    $.ajaxFormData({
-//                        url: 'subProjectActive',
-//                        method: 'post',
-//                        data: {
-//                            'edit_id': edit_id,
-//                            'Start_time':Start_time,
-//                            'End_time':End_time,
-//                            'Title':Title,
-//                            'Introduce':Introduce,
-//                            'file':file,
-//                            'file1':file1
-//                        },
-//                        success: function(returndata) {
-//                        	if (returndata.trim() == "exist") {
-//        						alert("项目名已存在！");
-//        						location.href = "createproject";
-//        					} else{
-//        						projectId = returndata.trim();
-//        						initRetailerAndPromoter(projectId);
-//
-//        						page.$hide();
-//        						page.$Show("Person");
-//        					}
-//                        } 
-//                    });
-                });
-                
-                
-            });
-			
-				//formData.append('file', $('#Poster_img')[0].files[0]);
-				//formData.append('file1', $('#Back_img')[0].files[0]);
-//			}
-			
-
+			if(projectId == "")
+			{
+				lrz($('#Poster_img')[0].files[0], { width: 640, quality: 0.8 }, function (rst) {              
+	                var blob = dataURItoBlob(rst.base64);  // 上一步中的函数
+	                formData.append("file", blob);
+	                
+	                lrz($('#Back_img')[0].files[0], { width: 640, quality: 0.8 }, function (rst) {              
+	                    var blob = dataURItoBlob(rst.base64);  // 上一步中的函数
+	                    formData.append("file1", blob);
+	                    
+	                    uploadImg(formData);
+	                });
+	            });
+			}
+			else
+			{
+				if(!App.Com.isnullorempty($.trim($('#Poster_img').val())) && App.Com.isnullorempty($.trim($('#Back_img').val())))
+				{
+					lrz($('#Poster_img')[0].files[0], { width: 640, quality: 0.8 }, function (rst) {              
+		                var blob = dataURItoBlob(rst.base64);  // 上一步中的函数
+		                formData.append("file", blob);
+		                
+		                uploadImg(formData);
+		            });
+				}
+				else if(App.Com.isnullorempty($.trim($('#Poster_img').val())) && !App.Com.isnullorempty($.trim($('#Back_img').val())))
+				{
+	                lrz($('#Back_img')[0].files[0], { width: 640, quality: 0.8 }, function (rst) {              
+	                    var blob = dataURItoBlob(rst.base64);  // 上一步中的函数
+	                    formData.append("file1", blob);
+	                    
+	                    uploadImg(formData);
+	                });
+				}
+				else
+				{
+					lrz($('#Poster_img')[0].files[0], { width: 640, quality: 0.8 }, function (rst) {              
+		                var blob = dataURItoBlob(rst.base64);  // 上一步中的函数
+		                formData.append("file", blob);
+		                
+		                lrz($('#Back_img')[0].files[0], { width: 640, quality: 0.8 }, function (rst) {              
+		                    var blob = dataURItoBlob(rst.base64);  // 上一步中的函数
+		                    formData.append("file1", blob);
+		                    
+		                    uploadImg(formData);
+		                });
+		            });
+				}
+			}
 			
 			
-//			$.ajax({
-//				url : 'subProjectActive',
-//				type : 'POST',
-//				cache : false,
-//				data : formData,
-//				processData : false,
-//				contentType : false,
-//				success : function(returndata) {
-//					if (returndata.trim() == "exist") {
-//						alert("项目名已存在！");
-//						location.href = "createproject";
-//					} else{
-//						projectId = returndata.trim();
-//						initRetailerAndPromoter(projectId);
-//
-//						page.$hide();
-//						page.$Show("Person");
-//					}
-//				}
-//			});
         });
 
         /*参与人员(零售商)*/
         $("#Person_submit").click(function () {
-            var PeopleSession = $.session.get("People_Content");//零售商
+            var PeopleSession = hashMap.get("People_Content");//零售商
             if (App.Com.isnullorempty(PeopleSession)) { alert("请选择零售商！"); return false; }
             page.$hide();
             page.$Show("Person2");
@@ -272,8 +243,8 @@ var page = {
 
         /*参与人员(推广员)*/
         $("#Person_submit2").click(function () {
-            var PromoterSession = $.session.get("Promoter_Content");//推广员
-            var Send_Promoter = $.session.get("Send_Promoter");//被选发货推广员ID
+            var PromoterSession = hashMap.get("Promoter_Content");//推广员
+            var Send_Promoter = hashMap.get("Send_Promoter");//被选发货推广员ID
 
             if (App.Com.isnullorempty(PromoterSession)) { alert("请选择推广员！"); return false; }
             if (App.Com.isnullorempty(Send_Promoter)) { alert("请选择发货推广员！"); return false; }
@@ -284,7 +255,7 @@ var page = {
 
         /*选择礼品*/
         $("#Gift_submit").click(function () {
-            var GiftSession = $.session.get("Gift");//礼品
+            var GiftSession = hashMap.get("Gift");//礼品
             if (App.Com.isnullorempty(GiftSession)) { alert("请添加礼品！"); return false; }
             page.$hide();
             page.$Show("Product");
@@ -292,7 +263,7 @@ var page = {
 
         /*选择产品*/
         $("#Product_submit").click(function () {
-            var ProductSession = $.session.get("Product");//礼品
+            var ProductSession = hashMap.get("Product");//礼品
 
             if (App.Com.isnullorempty(ProductSession)) { alert("请添加产品！"); return false; }
 
@@ -302,15 +273,14 @@ var page = {
 
         /*完成*/
         $("#Grade_submit").click(function () {
-            var Activity = $.session.get("Activity");
-            var People = $.session.get("People_Content");
-            var Promoter = $.session.get("Promoter_Content");
-            var Send_Promoter = $.session.get("Send_Promoter");
-            var Gift = $.session.get("Gift");
-            var Product = $.session.get("Product");
+            var Activity = hashMap.get("Activity");
+            var People = hashMap.get("People_Content");
+            var Promoter = hashMap.get("Promoter_Content");
+            var Send_Promoter = hashMap.get("Send_Promoter");
+            var Gift = hashMap.get("Gift");
+            var Product = hashMap.get("Product");
 
-            var Grade = $.session.get("Grade");
-            //|| App.Com.isnullorempty(People) || App.Com.isnullorempty(Promoter) || App.Com.isnullorempty(Promoter_id) || App.Com.isnullorempty(Gift) || App.Com.isnullorempty(Product)
+            var Grade = hashMap.get("Grade");
 
             if (App.Com.isnullorempty(Activity)) { alert("请完成活动信息内容填写!"); return false; }
             if (App.Com.isnullorempty(People)) { alert("请完成参与人员-零售商选择!"); return false; }
@@ -341,11 +311,9 @@ var page = {
             switch (addID) {
                 case "Retailers":
                     $(".retailer").css("display", "block");
-                  // $("#Person_UL").empty();
                     break;
                 case "Promoters":
                     $(".promoter").css("display", "block");
-                   // $("#Promoter_UL").empty();
                     break;
                 case "addGift":
                     $(".gift").css("display", "block");
@@ -363,114 +331,6 @@ var page = {
 
         });
 
-        /*单击行选中零售商 并将选中的数据记录于session*/
-//        $("#People_Content").on("click", "tbody tr", function () {
-//            var session = $.session.get("People_Content");
-//            var id = $(this).find('td').data('id');
-//            var name = $(this).find('td').data('content');
-//            var Json = '{"id":"' + id + '","name":" ' + name + ' "}';
-//
-//            if ($(this).find('input[type=checkbox]').is(":checked")) {
-//
-//                $(this).find('input[type=checkbox]').prop("checked", false);
-//
-//                if (!App.Com.isnullorempty(session)) {
-//
-//                    var array = jQuery.parseJSON(session);
-//                    var result = [];
-//
-//                    for (var i = 0; i < array.length; i++) { if (JSON.stringify(array[i]) != Json) result.push(array[i]); }
-//
-//                    $.session.set("People_Content", JSON.stringify(result) == "[]" ? "" : JSON.stringify(result));
-//                }
-//            } else {
-//                $(this).find('input[type=checkbox]').prop("checked", true);
-//
-//                var result = [];
-//
-//                if (!App.Com.isnullorempty(session)) { session = session.substring(0, session.length - 1); session = session.substring(1, session.Length); Json = session + ',' + Json; }
-//
-//                Json = '[' + Json + ']';
-//
-//                $.session.set("People_Content", Json);
-//            }
-//        });
-//
-//        /*单击行选中推广员 并将选中的数据记录于session*/
-//        $("#Promoter_Content").on("click", "tbody tr", function () {
-//            var session = $.session.get("Promoter_Content");
-//            var id = $(this).find('td').data('id');
-//            var name = $(this).find('td').data('content');
-//            var Json = '{"id":"' + id + '","name":" ' + name + ' "}';
-//
-//            if ($(this).find('input[type=checkbox]').is(":checked")) {
-//
-//                $(this).find('input[type=checkbox]').prop("checked", false);
-//
-//                if (!App.Com.isnullorempty(session)) {
-//
-//                    var array = jQuery.parseJSON(session);
-//                    var result = [];
-//
-//                    for (var i = 0; i < array.length; i++) { if (JSON.stringify(array[i]) != Json) result.push(array[i]); }
-//
-//                    $.session.set("Promoter_Content", JSON.stringify(result) == "[]" ? "" : JSON.stringify(result));
-//                }
-//            } else {
-//                $(this).find('input[type=checkbox]').prop("checked", true);
-//
-//                var result = [];
-//
-//                if (!App.Com.isnullorempty(session)) { session = session.substring(0, session.length - 1); session = session.substring(1, session.Length); Json = session + ',' + Json; }
-//
-//                Json = '[' + Json + ']';
-//
-//                $.session.set("Promoter_Content", Json);
-//            }
-//        });
-//
-//        /*鼠标移动*/
-//        $(".table_content tbody tr").mouseover(function () { $(this).css("background", "#f9f9f9"); }).mouseout(function () { $(this).css("background", "#FFFFFF"); });
-//
-//        /*确定选中零售商*/     /*修改——Manyu*/
-//        $("#Person_Submit").click(function () {
-//            /*关闭*/
-//            page.$close();
-//
-//            /*显示被选人员*/
-//            var session = $.session.get("People_Content");
-//
-//            var _html = '';
-//
-//            if (!App.Com.isnullorempty(session)) { $(jQuery.parseJSON(session)).each(function (index, item) { _html += "<li><span>" + item.name + "</span></li>"; }); }
-//
-//            $("#Person_UL").append(_html);
-//
-//        });
-
-//        /*确定选择推广员*/
-//        $("#Promoter_Submit").click(function () {
-//            /*关闭*/
-//            page.$close();
-//
-//            /*显示被选人员*/
-//            var session = $.session.get("Promoter_Content");
-//
-//            var _html = '';
-//
-//            if (!App.Com.isnullorempty(session)) { $(jQuery.parseJSON(session)).each(function (index, item) { _html += "<li><span data-id='" + item.id + "'>" + item.name + "</span></li>"; }); }
-//
-//            $("#Promoter_UL").append(_html);
-//
-//        });
-
-//        /*选择发货推广员*/
-//        $(".li_choose").on("click", "span", function () {
-//            $(".li_choose span").css("color", "#333333");
-//            $(this).css("color", "#B6BF00");
-//            $(".field-choose").text($(this).text());
-//            $("#Promoters_Id").val($(this).data("id"));
-//        })
         var exp = /^[1-9][0-9]*$/;
         /*添加礼品*/
         $("#Gift_Submit").click(function () {
@@ -482,7 +342,7 @@ var page = {
             if (!exp.test(Gift_Number)){alert("输入不合法！");return false;}
             var Json = '{"id":"' + Gift_ID + '","name":" ' + Gift_Name + ' ","Number":" ' + Gift_Number + ' "}';
 
-            var session = $.session.get("Gift");
+            var session = hashMap.get("Gift");
 
             if (!App.Com.isnullorempty(session)) {
                 var array = jQuery.parseJSON(session);
@@ -495,7 +355,7 @@ var page = {
             }
 
             Json = '[' + Json + ']';
-            $.session.set("Gift", Json);
+            hashMap.set("Gift", Json);
             var newGift = "<tr>" +
                   "<td>" + Gift_Name + "</td>" +
                   "<td>" + Gift_Number + "</td>" +
@@ -533,7 +393,7 @@ var page = {
 
             var Gift_ID = $(this).data("giftid");
 
-            var array = jQuery.parseJSON($.session.get("Gift"));
+            var array = jQuery.parseJSON(hashMap.get("Gift"));
             var result = [];
             for (var i = 0; i < array.length; i++) {
                 if ($.trim(array[i]["id"]) != Gift_ID)
@@ -555,7 +415,7 @@ var page = {
             	}
             });
             
-            $.session.set("Gift", JSON.stringify(result) == "[]" ? "" : JSON.stringify(result));
+            hashMap.set("Gift", JSON.stringify(result) == "[]" ? "" : JSON.stringify(result));
 
             $(this).parent().parent().remove();
             
@@ -591,7 +451,7 @@ var page = {
             if (App.Com.isnullorempty(Sales)) { alert("请填写1积分对应销售额！"); return false; }
             if (!exp.test(Sales)){alert("输入不合法！");return false;}
             
-            var session = $.session.get("Product");
+            var session = hashMap.get("Product");
             if("all" == Product_ID)
             {
             	if (!App.Com.isnullorempty(session)) {
@@ -655,7 +515,7 @@ var page = {
                  "</tr>";
             }
             Json = '[' + Json + ']';
-            $.session.set("Product", Json);
+            hashMap.set("Product", Json);
             
             //alert("Ids="+Ids+"\n"+"\n"+"Names="+Names+"\n"+"newGift="+newGift);
             //调用ajax添加产品积分记录
@@ -686,14 +546,14 @@ var page = {
 
             var Product_ID = $(this).data("productid");
 
-            var array = jQuery.parseJSON($.session.get("Product"));
+            var array = jQuery.parseJSON(hashMap.get("Product"));
             var result = [];
             for (var i = 0; i < array.length; i++) {
                 if ($.trim(array[i]["Product_ID"]) != Product_ID)
                     result.push(array[i]);
             }
 
-            $.session.set("Product", JSON.stringify(result) == "[]" ? "" : JSON.stringify(result));
+            hashMap.set("Product", JSON.stringify(result) == "[]" ? "" : JSON.stringify(result));
 
             /*调用ajax删除产品记录*/
             $.ajax({
@@ -727,7 +587,7 @@ var page = {
             if (!exp.test(gradeLine)){alert("输入不合法！");return false;}
             var Json = '{"rank":"' + rank + '","gradeLine":" ' + gradeLine + '"}';
 
-            var session = $.session.get("Grade");
+            var session = hashMap.get("Grade");
 
             if (!App.Com.isnullorempty(session)) {
                 var array = jQuery.parseJSON(session);
@@ -740,7 +600,7 @@ var page = {
             }
 
             Json = '[' + Json + ']';
-            $.session.set("Grade", Json);
+            hashMap.set("Grade", Json);
             var newGift = "<tr>" +
                   "<td>" + rank + "</td>" +
                   "<td>" + gradeLine + "</td>" +
@@ -774,14 +634,14 @@ var page = {
         $("#Grade").on("click", ".delete", function () {
 
             var rank = $(this).data("rank");
-            var array = jQuery.parseJSON($.session.get("Grade"));
+            var array = jQuery.parseJSON(hashMap.get("Grade"));
             var result = [];
             for (var i = 0; i < array.length; i++) {
                 if ($.trim(array[i]["rank"]) != rank)
                     result.push(array[i]);
             }
 
-            $.session.set("Grade", JSON.stringify(result) == "[]" ? "" : JSON.stringify(result));
+            hashMap.set("Grade", JSON.stringify(result) == "[]" ? "" : JSON.stringify(result));
 
             /*调用ajax删除积分等级记录*/
             $.ajax({
@@ -803,63 +663,6 @@ var page = {
             var div_height = $(".nav-right").height();
             $('#iframeContent', window.parent.document).height(div_height + 90);
         });
-
-
-        /*将填写的数据前台写入页面*/    /*新增——Manyu*/
-        //$(".config").click(function () {
-        //    /*关闭*/
-        //    //page.$close();
-
-        //    switch (addID) {
-        //        //case "addGift":
-        //        //    var gift = $(".gift option:selected").html();
-        //        //    var newGift = "<tr>" +
-        //        //        "<td>" + gift + "</td>" +
-        //        //        "<td>50</td>" +
-        //        //        "<td><a class='delete'>删除</a></td>" +
-        //        //        "</tr>";
-        //        //    $("#Gift .add").before(newGift);
-        //        //    page.$delete();
-        //        //    break;
-        //        //case "addProduct":
-        //        //    var productType = $(".product .selectType option:selected").html();
-        //        //    var productFamily = $(".product .selectFamily option:selected").html();
-        //        //    var product = $(".product .selectProduct option:selected").html();
-        //        //    var newProduct = "<tr>" +
-        //        //        "<td>" + productType + "</td>" +
-        //        //        "<td>" + product + "</td> " +
-        //        //        "<td>规格待定</td> " +
-        //        //        "</tr>";
-        //        //    $("#Product .add").before(newProduct);
-        //        //    break;
-        //        //case "configIntegral":
-        //        //    var productType = $(".integral .selectType option:selected").html();
-        //        //    var productFamily = $(".integral .selectFamily option:selected").html();
-        //        //    var product = $(".integral .selectProduct option:selected").html();
-        //        //    var sales = $("#sales").val();
-        //        //    var newIntegral = "<tr>" +
-        //        //        "<td>" + product + "</td>" +
-        //        //        "<td>规格待定</td>" +
-        //        //        "<td>" + sales + "</td>" +
-        //        //        "</tr>";
-        //        //    $("#Integral .add").before(newIntegral);
-        //        //    break;
-        //        case "configGrade":
-        //            var rank = $("#rank").val();
-        //            var gradeLine = $("#gradeLine").val();
-        //            var newGrade = "<tr> " +
-        //                "<td class='td_line' colspan='2'></td>" +
-        //        "</tr>" +
-        //        "<tr> " +
-        //        "<td>" + rank + "</td> " +
-        //        "<td>" + gradeLine + "</td> " +
-        //        "</tr>";
-        //            $("#Grade .add").before(newGrade);
-        //            break;
-        //    }
-
-        //});
-
 
         /*关闭*/
         $(".close").click(function () { page.$close(); });

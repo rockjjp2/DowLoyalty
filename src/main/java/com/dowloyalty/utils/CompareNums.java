@@ -1,4 +1,4 @@
-package com.dowloyalty.pojo;
+package com.dowloyalty.utils;
 
 public class CompareNums {
 	/**

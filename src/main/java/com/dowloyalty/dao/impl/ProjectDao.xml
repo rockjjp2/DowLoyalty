@@ -151,12 +151,6 @@
       project.EndDate >= current_date()
     limit 1
  	</select>
-<!--  	<select id="findProjectByPromoterId" parameterType="int" resultType="com.dowloyalty.entity.Project">
- 	SELECT `ID`, `Name`, `ProvinceID`, `PlacardPath`, `AssistantID`, `StartDate`, `EndDate`, `AdminID`, `IsVisible`, `IsActive` FROM project
-		WHERE ID IN
-			(SELECT ProjectID FROM rprojectpromoter WHERE PromoterID=#{value})
-		AND IsActive=1
- 	</select> -->
  	
  	<select id="findProjectByProjectId" parameterType="int" resultMap="projectBase64Map">
  	select
