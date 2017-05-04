@@ -109,7 +109,7 @@
 	WHERE product.ID=points.ProductID AND productfamily.ID=product.ProductFamilyID
 	AND points.ProjectID=#{projectId} AND productfamily.CategroyID=#{categroyId}
 	AND points.IsActive=1 AND product.IsActive=1 AND productfamily.IsActive=1
-	order by   convert(Name USING gbk)   COLLATE   gbk_chinese_ci asc
+	order by   convert(productfamily.`Name` USING gbk)   COLLATE   gbk_chinese_ci asc
 	</select>
 	
 	<select id="findProductFamilyByCategroyIdOrProjectIdAndPromoterId" parameterType="int" resultType="com.dowloyalty.entity.ProductFamily">
@@ -202,6 +202,16 @@
 			productcategory.IsActive = 1
 		and 
 			points.IsActive = 1
+	</select>
+	
+	<select id="findById" parameterType="int" resultType="com.dowloyalty.entity.Product">
+		select
+			ID,SFDCCode,ProductFamilyID,Name,
+			Description,LastModifiedDate,IsActive
+		from
+			product
+		where
+			ID = #{ID}
 	</select>
 </mapper>
 

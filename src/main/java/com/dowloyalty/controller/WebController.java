@@ -5,10 +5,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -64,6 +68,7 @@ import com.dowloyalty.service.PointsLevelService;
 import com.dowloyalty.service.ProjectService;
 import com.dowloyalty.utils.CompareNums;
 import com.dowloyalty.utils.ImportExcelUtil;
+import com.dowloyalty.utils.WeChatMessageUtil;
 
 /**
  * Web端控制器
@@ -927,4 +932,21 @@ public class WebController {
 			logger.warn("发送导入推广员成功信息异常");
 		}
 	}
+	
+	
+//	@RequestMapping("/website/json")
+//	public void getInfo(HttpServletResponse response)
+//	{
+//		String openId = "oV21o0pUET6_EfyD4GkMZ9W0cjkM";
+//		String info = WeChatMessageUtil.focusInfo(openId, "测试柑橘","绿大生",String.valueOf(15));
+//		try {
+//			PrintWriter out = response.getWriter();
+//			out.println(info);
+//			out.flush();
+//			out.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 }

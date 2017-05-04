@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +39,7 @@ import com.dowloyalty.service.IRetailerService;
 import com.dowloyalty.service.ISalesRecordService;
 import com.dowloyalty.service.ISearchSaleRecordService;
 import com.dowloyalty.service.ProjectService;
+import com.dowloyalty.utils.WeChatMessageUtil;
 
 @Controller
 @RequestMapping("/WeChat/promoter")
@@ -277,6 +280,17 @@ public class WeChatSaleRecordController {
 			int point=Integer.parseInt(sales)/points.getSalesAmount()*points.getPoints();
 			importExcelService.addSaleRecord(Integer.parseInt(retailerId), Integer.parseInt(productId), Integer.parseInt(sales), promoterid,
 					sf.format(date), Integer.parseInt(projectId), point,Integer.parseInt(nums));
+			
+			//查询retailer的openid
+			Retailer retailer = iRetailerService.findById(Integer.parseInt(retailerId));
+			String openId = retailer.getOpenID();
+			//查询项目名称
+			Project project = projectService.findProjectByProjectId(Integer.parseInt(projectId));
+			//查询产品名称
+			Product product = iProductService.findById(Integer.parseInt(productId));
+			//发送积分变化的推送消息给retailer
+			WeChatMessageUtil.focusInfo(openId, project.getName(),product.getName(),String.valueOf(point));
+			
 			}else{
 				importExcelService.addSaleRecord(Integer.parseInt(retailerId), Integer.parseInt(productId), Integer.parseInt(sales), promoterid,
 						sf.format(date), Integer.parseInt(projectId), 0,Integer.parseInt(nums));

@@ -100,7 +100,7 @@ public class TestLoginController {
 	 */
 	@RequestMapping(value="/WeChat/LoginEnterpriseDoTest")
 	public String WeChatEnterpriseDo(String code,HttpServletResponse response){
-		String userId="shangfeng";
+		String userId="wangyuanjie";
 		Promoter promoter = iPromoterService.findPromoterByUserId(userId);
 		//创建token并返回用户
 		String token=JWTTokenUtils.getInstance().creatToken("promoterWechat", promoter.getId()+"");

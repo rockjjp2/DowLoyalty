@@ -48,4 +48,11 @@ public interface IProductDao {
 	 * @return	产品信息集合
 	 */
 	public List<ProductInfos> findProductInfosByProjectId(int projectId);
+	
+	/**
+	 * 根据id获取产品信息
+	 * @param id  产品id
+	 * @return  产品对象
+	 */
+	public Product findById(int id);
 }

@@ -126,6 +126,11 @@ IProductDao iProductDao;
 			// TODO Auto-generated method stub
 			return iProductDao.findProductByFamilyIdAndProjectId(projectId, productFamilyId);
 		}
+
+		@Override
+		public Product findById(int id) {
+			return iProductDao.findById(id);
+		}
 	
 }
  
