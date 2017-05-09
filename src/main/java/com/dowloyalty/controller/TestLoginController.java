@@ -77,7 +77,7 @@ public class TestLoginController {
 	public String identifyUser(HttpServletResponse response){
 		System.out.println("---------微信订阅号Retailer测试号登陆");
 		//输入id就可测试输入id就可测试输入id就可测试输入id就可测试输入id就可测试输入id就可测试
-		int id=90004;
+		int id=90005;
 		//该用户为Retailer
 		Retailer retailer=iRetailerService.findById(id);
 		//创建token并返回用户

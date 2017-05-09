@@ -28,7 +28,7 @@
 	SELECT @rownum:=@rownum+1 Rownum,a.* FROM (SELECT  rprojectretailer.RetailerID,rprojectretailer.ProjectID,IFNULL(pointsview.SalesPoint,0) SalesPoint,IFNULL(pointsview.Initpoint,0) Initpoint,IFNULL(pointsview.TotalPoint,0) TotalPoint
 	FROM rprojectretailer LEFT JOIN (SELECT * , SalesPoint+Initpoint TotalPoint FROM generalpointsview) pointsview
 	ON rprojectretailer.RetailerID=pointsview.RetailerID AND rprojectretailer.ProjectID=pointsview.ProjectID
-	WHERE rprojectretailer.ProjectID=#{projectId} ORDER BY pointsview.TotalPoint DESC) a, (select @rownum:=0) t
+	WHERE rprojectretailer.ProjectID=#{projectId} ORDER BY pointsview.TotalPoint DESC, rprojectretailer.RetailerID) a, (select @rownum:=0) t
 	</select>
 	
 	<insert id="patchAddProducts">
