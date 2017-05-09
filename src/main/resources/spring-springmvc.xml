@@ -57,6 +57,8 @@
 				<mvc:exclude-mapping path="/WeChat/Han*"/> 
 				<mvc:exclude-mapping path="/WeChat/Login*"/> 
 				<mvc:exclude-mapping path="/WeChat/SignUp*"/> 
+				<mvc:exclude-mapping path="/WeChat/Farmer*"/>
+				<mvc:exclude-mapping path="/WeChat/farmer/code*"/>
 				<mvc:exclude-mapping path="/WeChatRe*"/> 
 				<mvc:exclude-mapping path="/Login*"/> 
 			

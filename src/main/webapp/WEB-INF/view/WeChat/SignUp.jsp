@@ -20,19 +20,20 @@ $(function(){
     <header>
         <img src="${pageContext.request.contextPath}/Resources/html/images/accountInfo.png" alt="" style="height:auto" />
     </header>
-<form action="SignUpDo">
 
-    <div class="container">
-        <div class="txt-center">
-            <p>请输入您的手机号码进行注册</p>
-        </div>
-        <div class="txt-center">
-            <input type="text" name="mobile" placeholder="${msg}">
-        </div>
-        <div class="txt-center">
-            <button class="style-bg-green" type="submit" id="btnSubmit">确认</button>
-        </div>
-    </div>
-</form>
+	<div class="container">
+		<form action="SignUpDo">
+			<div class="txt-center">
+				<p>请输入您的手机号码进行注册</p>
+			</div>
+			<div class="txt-center">
+				<input type="text" name="mobile" placeholder="${msg}">
+			</div>
+			<div class="txt-center">
+				<button class="style-bg-green" type="submit" id="btnSubmit">确认</button>
+			</div>
+		</form>
+	</div>
+
 </body>
 </html>

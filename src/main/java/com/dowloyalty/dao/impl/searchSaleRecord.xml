@@ -208,6 +208,7 @@
  	<result column="description" property="description"/>
  	<result column="isActive" property="isActive"/>
  	<result column="isVisible" property="isVisible"/>
+ 	<result column="haveFarmer" property="haveFarmer"/>
  	</resultMap>
 
 	<select id="findProjectByPromoterId" parameterType="int"
@@ -224,6 +225,7 @@
       project.AdminID adminID,
       project.IsVisible isVisible,
       project.IsActive isActive,
+      project.HaveFarmer haveFarmer,
       project.Description description
 	from 
 	  project
@@ -251,6 +253,7 @@
       project.AdminID adminID,
       project.IsVisible isVisible,
       project.IsActive isActive,
+      project.HaveFarmer haveFarmer,
       project.Description description
     from
       project

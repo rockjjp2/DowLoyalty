@@ -1,0 +1,93 @@
+ul {
+   display: inline-block;
+}
+
+.fa-user-o{
+    font-size: 2.5rem;
+}
+
+span{
+    color: red;
+    font-size: 2rem;
+}
+
+#name_span{
+    margin-left: 1rem;
+}
+
+.name{
+    width: 15rem;
+    height:2.5rem;
+    font-size: 1.5rem;
+    border: 0;
+}
+
+#mobile_ul{
+    margin-top: -1rem;
+    margin-bottom: 0;
+}
+
+.fa-mobile{
+    font-size: 4rem;
+    margin-left: 0.18rem;
+}
+
+#mobile_span{
+    margin-left: 1.2rem;
+}
+
+.mobile{
+    width: 15rem;
+    height:2.5rem;
+    font-size: 1.5rem;
+    border: 0;
+}
+
+.fa-map-o{
+    font-size: 2rem;
+}
+
+#project_span{
+    margin-left: 0.9rem;
+}
+
+.project{
+    width: 12rem;
+    font-size: 1.5rem;
+}
+
+.fa-shield{
+    font-size: 3rem;
+}
+
+#code_span{
+    margin-left: 1rem;
+}
+
+.code{
+    width: 35%;
+    height:2.5rem;
+    font-size: 1.5rem;
+    border: 0;
+}
+
+#code_img{
+    width : 7rem;
+    height: 2.5rem;
+}
+
+.fa-tree{
+    font-size: 3rem;
+}
+
+.area{
+    width: 10rem;
+    height:2.5rem;
+    font-size: 1.5rem;
+    border: 0;
+    margin-left: 1.6rem;
+}
+
+.container > form > div{
+margin: 1.7rem 0;
+}

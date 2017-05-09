@@ -132,6 +132,14 @@ var page = {
             var End_time = $.trim($(".End_time").val());//结束时间
             var Title = $.trim($("#Title").val());//标题
             var Introduce = $.trim($("#Introduce").val());//介绍
+            var haveFarmer = "";
+            $(".join_activity").each(function()
+			 {
+            	if($(this).is(":checked"))
+			    {
+			    	haveFarmer = $.trim($(this).val());
+			    }
+			 });
             if(projectId == "")
             {
             	 var Poster_img = $.trim($("#Poster_img").val());//海报图片
@@ -179,6 +187,7 @@ var page = {
 			formData.append('End_time', End_time);
 			formData.append('Title', Title);
 			formData.append('Introduce', Introduce);
+			formData.append('haveFarmer', haveFarmer);
 
 			if(projectId == "")
 			{

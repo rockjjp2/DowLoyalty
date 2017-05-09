@@ -66,7 +66,21 @@
                     <td>活动介绍：</td>
                     <td>${projectProvince.description}</td>
                 </tr>
-                 <tr>
+				<tr>
+					<td><p>农户是否参加：</p></td>
+					<td>
+					<c:if test="${projectProvince.haveFarmer eq true}">
+							<input type="radio" name="join" value="1"
+								style="margin-left: -88%;" checked="checked" />
+							<span>是</span>
+						</c:if> <c:if test="${projectProvince.haveFarmer eq false}">
+							<input type="radio" name="join" checked="checked" value="0"
+								style="margin-left: -88%;" />
+							<span>否</span>
+						</c:if>
+					</td>
+				</tr>
+				<tr>
                     <td>海报图片：</td>
                     <td style="text-align: left">
                             <img id="Poster_img1" border="0" src="data:image/jpg;base64,${projectProvince.placardBase64}" width="90" height="90">

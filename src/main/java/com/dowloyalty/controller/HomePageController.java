@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.dowloyalty.entity.Admin;
+import com.dowloyalty.entity.Farmer;
 import com.dowloyalty.entity.Project;
 import com.dowloyalty.entity.Promoter;
 import com.dowloyalty.entity.Retailer;
@@ -60,8 +61,17 @@ public class HomePageController {
 		return "/PC/index";
 	}
 	
+	/*农户注册页面*/
+	@RequestMapping("/WeChat/Farmer_Register")
+	public String farmerLogin(Model model)
+	{
+		List<Project> list = projectService.findAllHaveFarmerProjects();
+		model.addAttribute("projects", list);
+		return "/WeChat/farmer_register";
+	}
+	
 	/*微信端区分加载零售商菜单和推广员菜单*/
-	@RequestMapping(value={"/WeChat/retailer/home","/WeChat/promoter/home"})
+	@RequestMapping(value={"/WeChat/retailer/home","/WeChat/promoter/home","/WeChat/farmer/home"})
 	public String WeChatSubscription(Model model){
 		Map<String, String> map=new LinkedHashMap<>();
 		System.out.println("主页面"+session.getAttribute("IDENTITY"));
@@ -77,7 +87,13 @@ public class HomePageController {
 				//只是一个标记，随便写的。前台有这个在判断是否相等的时候用。。判断几个菜单
 				model.addAttribute("menunum",3);
 			}
-		}else {
+		}
+		else if("farmer".equals(session.getAttribute("IDENTITY")))
+		{
+			map.put("farmerinfo", "账户信息");
+			map.put("farmersalesrecord", "销售记录");
+		}
+		else {
 			//根据权限确定相应菜单，零售商页面
 			map.put("accountInfo", "账户信息");
 			map.put("exchangeshop", "礼品商城");
@@ -85,6 +101,16 @@ public class HomePageController {
 		}
 		model.addAttribute("map",map);
 		return "/WeChat/Main";
+	}
+	
+	/*微信端农户界面*/
+	@RequestMapping(value="/WeChat/farmer/homePage")
+	public String WeChatSubscriptionH0(HttpServletRequest request,Model model){
+		Project project = projectService.findByFarmerId(((Farmer)session.getAttribute("USER")).getId() );
+		if (project!=null) {
+			model.addAttribute("imageURL", Base64.getEncoder().encodeToString(project.getPlacardPath()));
+		}
+		return "/WeChat/homePage";
 	}
 	
 	/*微信端零售商界面*/

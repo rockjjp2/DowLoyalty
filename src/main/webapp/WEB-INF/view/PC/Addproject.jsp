@@ -18,7 +18,6 @@
     <script src="${pageContext.request.contextPath}/Resources/html/js/Addproject.js?j=2s"></script>
     <script src="${pageContext.request.contextPath}/Resources/html/js/main.js"></script>
     <script>
-    
     /*将礼品数据加入缓存*/
 	var giftArray = eval(('${exchangeShopGoods}'));
 	var productArray = eval(('${productInfos}'));
@@ -1089,7 +1088,26 @@
                         <td>活动介绍：</td>
                         <td><textarea id="Introduce" name="Introduce"  rows="3" cols="20" placeholder="请输入活动介绍" >${projectProvince.description}</textarea></td>
                     </tr>
-                    <tr>
+					<tr>
+						<td><p class = "aaa">农户是否参加：</p></td>
+						<td>
+						<c:choose>
+						<c:when test="${projectProvince.haveFarmer eq true}">
+						<input class="join_activity" type="radio"
+							name="join" value="1" style="margin-left: -88%;"  checked="checked"/><span>是</span>
+							<input class="join_activity" type="radio"
+							name="join" value="0"/><span>否</span>
+						</c:when>
+						<c:otherwise>
+						<input class="join_activity" type="radio"
+							name="join" value="1" style="margin-left: -88%;" /><span>是</span>
+							<input class="join_activity" type="radio"
+							name="join" value="0" checked="checked"/><span>否</span>
+						</c:otherwise>
+						</c:choose>
+						</td>
+					</tr>
+					<tr>
                         <td>海报图片：</td>
                         <td style="text-align: left">
                             <div id="preview">

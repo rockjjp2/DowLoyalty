@@ -108,6 +108,7 @@ public class WebCreateProjectController {
 		String end_time = request.getParameter("End_time");
 		String title = request.getParameter("Title");
 		String introduce = request.getParameter("Introduce");
+		String haveFarmer = request.getParameter("haveFarmer");
 		System.out.println("introduce="+introduce);
 		MultipartFile postImg = null;
 		postImg = Mrequest.getFile("file");
@@ -115,12 +116,6 @@ public class WebCreateProjectController {
 		backImg = Mrequest.getFile("file1");
 		System.out.println("postImg="+postImg);
 		System.out.println("backImg="+backImg);
-		try {
-			System.out.println("postImg="+request.getInputStream());
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		Project project = null;
 		
 			//根据项目id判断行为：创建 or 修改
@@ -152,6 +147,7 @@ public class WebCreateProjectController {
 					project.setVisible(true);
 					project.setActive(true);
 					project.setAdminID(adminId);
+					project.setHaveFarmer(("1".equals(haveFarmer)? true : false));
 					try 
 					{
 						project.setBackgroundPath(backImg.getBytes());
@@ -194,6 +190,7 @@ public class WebCreateProjectController {
 				project.setVisible(true);
 				project.setActive(true);
 				project.setAdminID(adminId);
+				project.setHaveFarmer(("1".equals(haveFarmer)? true : false));
 				try 
 				{
 					if(postImg != null)

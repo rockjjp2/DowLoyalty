@@ -21,13 +21,14 @@
  	<result column="description" property="description"/>
  	<result column="isActive" property="isActive"/>
  	<result column="isVisible" property="isVisible"/>
+ 	<result column="haveFarmer" property="haveFarmer"/>
  	</resultMap>
  	
  	<select id="findActiveByRid" parameterType="int" resultMap="projectMap">
  		select
  			project.ID projectID,
- 			project.PlacardPath placardPath,
- 			project.IsVisible isVisible
+ 			project.IsVisible isVisible,
+ 			project.PlacardPath placardPath
  		from
  			rprojectretailer
  		left join
@@ -80,6 +81,7 @@
       project.AdminID adminID,
       project.IsVisible isVisible,
       project.IsActive isActive,
+      project.HaveFarmer haveFarmer,
       project.Description description
  	FROM
       rprojectretailer,
@@ -107,6 +109,7 @@
       project.AdminID adminID,
       project.IsVisible isVisible,
       project.IsActive isActive,
+      project.HaveFarmer haveFarmer,
       project.Description description
     FROM
       project,rprojectpromoter
@@ -134,6 +137,7 @@
       project.AdminID adminID,
       project.IsVisible isVisible,
       project.IsActive isActive,
+      project.HaveFarmer haveFarmer,
       project.Description description
     FROM
       project,rprojectpromoter
@@ -165,6 +169,7 @@
       project.AdminID adminID,
       project.IsVisible isVisible,
       project.IsActive isActive,
+      project.HaveFarmer haveFarmer,
       project.Description description
     from
       Project
@@ -186,6 +191,7 @@
       project.AdminID adminID,
       project.IsVisible isVisible,
       project.IsActive isActive,
+      project.HaveFarmer haveFarmer,
       project.Description description
     from
       Project
@@ -212,7 +218,8 @@
  		    AdminID = #{adminID},
  		    Description = #{description},
  		    IsVisible = #{isVisible},
- 		    IsActive = #{isActive}
+ 		    IsActive = #{isActive},
+ 		    HaveFarmer = #{haveFarmer}
  		where
  		    ID = #{id}
  	</update>
@@ -230,6 +237,7 @@
       project.AdminID adminID,
       project.isVisible isVisible,
       project.IsActive isActive,
+      project.HaveFarmer haveFarmer,
       project.Description description
     from
       project
@@ -246,13 +254,13 @@
  	(
  	  Name,ProvinceID,PlacardPath,BackgroundPath,
  	  AssistantID,StartDate,EndDate,AdminID,
- 	  isVisible,IsActive,Description
+ 	  isVisible,IsActive,Description,HaveFarmer
  	)
  	values
  	(
  	  #{name},#{provinceID},#{placardPath},#{backgroundPath},
  	  null,#{startDate},#{endDate},#{adminID},
- 	  #{isVisible},#{isActive},#{description}
+ 	  #{isVisible},#{isActive},#{description},#{haveFarmer}
  	)
  	</insert>
  	
@@ -269,10 +277,71 @@
       project.AdminID adminID,
       project.isVisible isVisible,
       project.IsActive isActive,
+      project.HaveFarmer haveFarmer,
       project.Description description
     from
       project
     where
       IsActive = 1
+ 	</select>
+ 	
+ 	<!--  -->
+ 	<select id="findByFarmerId" parameterType="int" resultMap="projectBase64Map">
+ 		select
+ 			project.ID projectID,
+ 			project.IsVisible isVisible,
+ 			project.PlacardPath placardPath
+ 		from
+ 			rprojectfarmer
+ 		left join
+ 			project
+ 		on
+ 			rprojectfarmer.ProjectID = project.ID
+ 		where
+ 			FarmerID = #{FarmerID}
+ 		and
+ 			rprojectfarmer.ProjectID =
+		(
+			select
+				project.ID
+			from 
+				project	
+			left join 
+			rprojectfarmer
+			on 
+			project.ID = rprojectfarmer.ProjectID
+			where
+				rprojectfarmer.FarmerID = #{FarmerID}
+			and
+				project.StartDate &lt;= current_date()
+			and
+				project.EndDate >= current_date()
+			and 
+				project.IsActive = 1
+			and 
+				rprojectfarmer.IsActive = 1
+			order by project.StartDate desc 
+				limit 0,1
+		)
+ 		and
+ 			project.IsActive = 1
+ 		and
+ 			rprojectfarmer.IsActive = 1
+ 		and
+ 			project.IsVisible = 1
+ 		and
+ 			project.HaveFarmer = 1
+ 	</select>
+ 	
+ 	<select id="findAllHaveFarmerProjects" resultMap="projectBase64Map">
+ 		select
+ 			project.ID projectID,
+ 			project.Name projectName
+ 		from
+ 			project
+ 		where
+ 			project.IsActive = 1
+ 		and
+ 			project.HaveFarmer = 1
  	</select>
  </mapper>

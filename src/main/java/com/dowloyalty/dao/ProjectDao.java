@@ -46,4 +46,17 @@ public interface ProjectDao {
 	 * @return 项目集合
 	 */
 	public List<Project> findAllActiveProjects();
+	
+	/**
+	 * 根据农户id查找对应激活项目
+	 * @param farmerId  农户id
+	 * @return  项目对象
+	 */
+	public Project findByFarmerId(int farmerId);
+	
+	/**
+	 * 查询所有激活的有农户入口的项目
+	 * @return 项目集合
+	 */
+	public List<Project> findAllHaveFarmerProjects();
 }

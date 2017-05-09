@@ -68,8 +68,18 @@ public class AuthorityInterceptor implements HandlerInterceptor{
 			// 编译正则表达式
 			matcher = Pattern.compile(regEx).matcher(requestURL);
 			goPage="/WeChat/retailer/home";
-		//WeChatPromoter
-		}else if ("promoterWechat".equals(session.getAttribute("IDENTITY"))) {
+		
+		}
+		// 微信farmer
+		else if ("farmer".equals(session.getAttribute("IDENTITY"))) {
+			// 正则表达式规则
+			regEx = "/WeChat/farmer//*";
+			// 编译正则表达式
+			matcher = Pattern.compile(regEx).matcher(requestURL);
+			goPage = "/WeChat/farmer/home";
+		}
+		// WeChatPromoter
+		else if ("promoterWechat".equals(session.getAttribute("IDENTITY"))) {
 			regEx = "/WeChat/promoter//*";
 			matcher = Pattern.compile(regEx).matcher(requestURL);
 			goPage="/WeChat/promoter/home";

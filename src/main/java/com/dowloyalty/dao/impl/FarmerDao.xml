@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dowloyalty.dao.FarmerDao">
+	
+	<insert id="save" parameterType="com.dowloyalty.entity.Farmer">
+		insert into
+			farmer
+		(
+			ID,ChineseName,Mobile,OpenID,
+			lastUpdateDate,area,isActive
+		)
+		values
+		(
+			#{id},#{chineseName},#{mobile},#{openId},
+			#{lastUpdateDate},#{area},#{isActive}
+		)
+	</insert>
+	
+	<select id="findFarmerByOpenId" parameterType="String" resultType="com.dowloyalty.entity.Farmer">
+		select
+			ID,
+			ChineseName,
+			Mobile,
+			OpenID,
+			lastUpdateDate,
+			area,
+			isActive
+		from
+			farmer
+		where
+			OpenID = #{openId}
+		and
+			isActive = 1
+	</select>
+	
+	<insert id="saveRelationWithProject" parameterType="com.dowloyalty.entity.RProjectFarmer">
+		insert into
+			rprojectfarmer
+		(
+			ID,FarmerID,projectID,IsActive
+		)
+		values
+		(
+			#{id},#{farmerId},#{projectId},#{isActive}
+		)
+	</insert>
+	
+	<select id="getFarmerCountByName" parameterType="String" resultType="int">
+		select
+		  count(ID)
+		from
+		  farmer
+		where
+		  ChineseName = #{name}
+	</select>
+	
+	<select id="getFarmerCountByMobile" parameterType="String" resultType="int">
+		select
+		  count(ID)
+		from
+		  farmer
+		where
+		  Mobile = #{mobile}
+	</select>
+	
+	<!-- 根据手机号查询农户 -->
+	<select id="findByMobile" parameterType="String" resultType="com.dowloyalty.entity.Farmer">
+		select
+		  ID,
+		  ChineseName,
+		  Mobile,
+		  OpenID,
+		  lastUpdateDate,
+		  area,
+		  isActive
+		from
+		  farmer
+		where
+		  Mobile = #{mobile}
+	</select>
+	
+	<resultMap type="com.dowloyalty.pojo.FarmerVo" id="FarmerVoMap">
+		<result column="name" property="name"/>
+		<result column="projectName" property="projectName"/>
+		<result column="totalPrice" property="totalPrice"/>
+		<result column="rank" property="rank"/>
+		<result column="id" property="id"/>
+	</resultMap>
+	
+	<!-- 根据id获取农户账号信息 -->
+	<select id="findAccountInfoByFarmerId" resultMap="FarmerVoMap">
+	select
+	@rownum:=@rownum+1 rank,
+	a.name name,
+	a.projectName projectName,
+	a.TotalPrice totalPrice,
+	a.id id
+	from
+	(
+	select
+	farmer.ChineseName name,
+	farmer.ID id,
+	project.name projectName,
+	TotalPrice
+	from
+	farmer
+	left join
+	rprojectfarmer
+	on
+	farmer.ID = rprojectfarmer.FarmerID
+	left join
+	project
+	on
+	project.ID = rprojectfarmer.ProjectID
+	,
+	(
+	select
+	sum(ifnull(farmersalesrecord.TotalPrice,0)) TotalPrice,
+	rprojectfarmer.FarmerID FarmerID
+	from
+	rprojectfarmer
+	left join
+	farmersalesrecord
+	on
+	rprojectfarmer.FarmerID = farmersalesrecord.FarmerID
+	where
+	rprojectfarmer.ProjectID =
+	(
+	select
+	project.ID
+	from
+	project
+	left join
+	rprojectfarmer
+	on
+	project.ID = rprojectfarmer.ProjectID
+	where
+	rprojectfarmer.FarmerID = #{FarmerID}
+	and
+	project.StartDate &lt;= current_date()
+	and
+	project.EndDate >= current_date()
+	and
+	project.IsActive = 1
+	and
+	project.HaveFarmer = 1
+	and
+	rprojectfarmer.IsActive = 1
+	order by project.StartDate desc
+	limit 0,1
+	)
+	group by rprojectfarmer.FarmerID
+	) total
+	where
+	total.FarmerID = farmer.ID
+	and
+	farmer.IsActive = 1
+	and
+	project.IsActive = 1
+	and
+	project.HaveFarmer = 1
+	and
+	rprojectfarmer.IsActive = 1
+	group by farmer.ID
+	order by TotalPrice desc
+	) a,
+	(select @rownum:=0) num
+</select>
+
+	<select id="findByCondition" resultType="com.dowloyalty.entity.FarmerSalesRecord">
+		select
+		  ID,FarmerID,ProjectID,TotalPrice,
+		  ImporterID,OppId,Mobile,Status,
+		  DATE_FORMAT(SubmitDate,'%Y.%m') SubmitDate
+		from
+		  farmersalesrecord
+		where
+		  farmerId = #{farmerId}
+		<if test="month != null">
+		and
+		  MONTH(SubmitDate) = #{month}
+		</if>
+	</select>
+	
+	<select id="findById" parameterType="int" resultType="com.dowloyalty.entity.Farmer">
+		select
+			ID,
+			ChineseName,
+			Mobile,
+			OpenID,
+			lastUpdateDate,
+			area,
+			isActive
+		from
+			farmer
+		where
+			ID = #{id}
+	</select>
+</mapper>

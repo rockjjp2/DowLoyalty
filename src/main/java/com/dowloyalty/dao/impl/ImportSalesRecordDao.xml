@@ -16,6 +16,7 @@
  	<result column="description" property="description"/>
  	<result column="isActive" property="isActive"/>
  	<result column="isVisible" property="isVisible"/>
+ 	<result column="haveFarmer" property="haveFarmer"/>
  	</resultMap>
  
     <select id="findByProjectName" parameterType="Object" resultMap="projectBase64Map">
@@ -31,6 +32,7 @@
       project.AdminID adminID,
       project.ID isVisible,
       project.IsActive isActive,
+      project.HaveFarmer haveFarmer,
       project.Description description
     FROM
       PROJECT
@@ -165,6 +167,7 @@
      project.AdminID adminID,
      project.ID isVisible,
      project.IsActive isActive,
+     project.HaveFarmer haveFarmer,
      project.Description description
    from
      Project

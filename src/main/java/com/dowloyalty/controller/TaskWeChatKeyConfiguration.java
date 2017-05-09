@@ -24,6 +24,7 @@ public class TaskWeChatKeyConfiguration {
 //	private static String mainURL="http://daschinaloyalty.bceapp.com";
 	//测试系统网址
 	private static String mainURL="http://dasdowloyalty.bceapp.com";
+//	private static String mainURL="16z5628q38.51mypc.cn:38729";
 	//微信服务号
 //	public static String APPID="wx3c840097a9200b83";
 //	public static String APPSECRET="decfb2251d9f5531341c9637fb98104a";
@@ -96,7 +97,8 @@ public class TaskWeChatKeyConfiguration {
 	 */
 	public static String postMenu() {
 		String menuUrl=" https://api.weixin.qq.com/cgi-bin/menu/create?access_token="+ WECHATSUBSCRIPTIONTOKEN;
-		String menu= "{\"button\":[{\"type\":\"view\",\"name\":\"积分畅想\",\"url\":\""+mainURL+"/WeChat/Login\"}]}";
+		String menu= "{\"button\":[{\"type\":\"view\",\"name\":\"积分畅想\",\"url\":\""+mainURL+"/WeChat/Login\"},"
+					+ "{\"type\":\"view\",\"name\":\"农户入口\",\"url\":\""+mainURL+"/WeChat/FarmerLogin\"}]}";
 		String re=SimpleHttpConnectUtil.getInstance().sendPost(menuUrl, menu);
 		System.out.println("微信订阅号菜单状态设置");
 		return re;

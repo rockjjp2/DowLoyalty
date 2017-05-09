@@ -12,6 +12,7 @@
    <result column="description" property="description"/>
    <result column="placardPath" property="placardPath"/>
    <result column="backgroundPath" property="backgroundPath"/>
+   <result column="haveFarmer" property="haveFarmer"/>
  </resultMap>
  
  <!-- 根据项目id查找项目和省份的相关信息 -->
@@ -24,7 +25,9 @@
    DATE_FORMAT(proj.endDate,'%Y/%m/%d') endDate,
    proj.description description,
    proj.placardPath placardPath,
+   proj.HaveFarmer haveFarmer,
    proj.backgroundPath backgroundPath
+   
  from
    project proj                            
    inner join 

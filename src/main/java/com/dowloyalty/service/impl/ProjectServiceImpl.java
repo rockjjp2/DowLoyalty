@@ -66,4 +66,14 @@ public class ProjectServiceImpl implements ProjectService {
 		return projectDao.findAllActiveProjects();
 	}
 
+	@Override
+	public Project findByFarmerId(int farmerId) {
+		return projectDao.findByFarmerId(farmerId);
+	}
+
+	@Override
+	public List<Project> findAllHaveFarmerProjects() {
+		return projectDao.findAllHaveFarmerProjects();
+	}
+
 }
