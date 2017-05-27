@@ -23,7 +23,7 @@ import com.dowloyalty.entity.Retailer;
 import com.dowloyalty.service.IPromoterService;
 import com.dowloyalty.service.IRetailerService;
 import com.dowloyalty.service.ProjectService;
-import com.dowloyalty.utils.Sort;
+import com.dowloyalty.utils.PinYinUtil;
 
 @Controller
 public class SortRetalierAndPromoterController {
@@ -46,8 +46,8 @@ public class SortRetalierAndPromoterController {
 		{
 			nameList.add(retailer.getChineseName()+"$@#"+retailer.getId());
 		}
-		Sort nameSort = new Sort();
-		Map<String, ArrayList<String>> nameMap = nameSort.sort(nameList);
+		Map<String, List<String>> nameMap = PinYinUtil.getOrderByFirstWord(nameList);
+		
 		JSON Json = (JSON) JSON.toJSON(nameMap);
 		try {
 			PrintWriter out = response.getWriter();
@@ -123,8 +123,7 @@ public class SortRetalierAndPromoterController {
 		{
 			nameList.add(promoter.getChineseName()+"$@#"+promoter.getId());
 		}
-		Sort nameSort = new Sort();
-		Map<String, ArrayList<String>> nameMap = nameSort.sort(nameList);
+		Map<String, List<String>> nameMap = PinYinUtil.getOrderByFirstWord(nameList);
 		JSON Json = (JSON) JSON.toJSON(nameMap);
 		try {
 			PrintWriter out = response.getWriter();

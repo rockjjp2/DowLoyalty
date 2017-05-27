@@ -344,4 +344,34 @@
  		and
  			project.HaveFarmer = 1
  	</select>
+ 	
+ 	<select id="findActiveAndFutureByProvinceId" parameterType="int" resultMap="projectBase64Map">
+ 		select
+ 			project.ID projectID
+ 		from
+ 			project
+ 		where
+ 			project.IsActive = 1
+ 		and
+ 			project.EndDate >= current_date()
+ 		and
+ 			project.HaveFarmer = 1
+ 		and
+ 			project.ProvinceID = #{ProvinceID}
+ 	</select>
+ 	
+ 	<select id="findLastestByProvinceId" parameterType="int" resultMap="projectBase64Map">
+ 		select
+ 			project.ID projectID,
+ 			project.EndDate endDate
+ 		from
+ 			project
+ 		where
+ 			project.IsActive = 1
+ 		and
+ 			ProvinceID = #{ProvinceID}
+ 		order by EndDate desc
+ 		limit 1
+ 	</select>
+ 	
  </mapper>

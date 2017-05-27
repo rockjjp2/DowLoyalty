@@ -48,7 +48,15 @@
                 </li>
                 <li id="cardinfo"><span>会员信息</span></li>
                 <li id="showSaleRecord"><span>历史销售记录</span></li>
-                <li id="enterImportSaleRecord"><span>导入销售记录</span></li>
+                <li style="position: relative; " id="Sales">
+                <span>导入销售记录</span>
+                    <div class="Bubble-menu" style="display:none" id="menu-Sales">
+                        <ul class="cui-bubble-layer" style="position: absolute; top: 43px;left:0px">
+                            <li data-index="0" data-flag="c" id="enterImportSaleRecord" class="cui-bubble-layer-action"><span></span><span class="subtit">零售商销售记录</span></li>
+                            <li data-index="1" data-flag="c" id="enterFarmerImportSaleRecord"><span></span><span class="subtit">农户销售记录</span></li>
+                        </ul>
+                    </div>
+                </li>
                 <li id="header-aount" style="position:relative;">
                     <div id="loginout" style="height:30px">
                         <span id="aount_img"></span>&nbsp;

@@ -24,7 +24,6 @@ public class TaskWeChatKeyConfiguration {
 //	private static String mainURL="http://daschinaloyalty.bceapp.com";
 	//测试系统网址
 	private static String mainURL="http://dasdowloyalty.bceapp.com";
-//	private static String mainURL="16z5628q38.51mypc.cn:38729";
 	//微信服务号
 //	public static String APPID="wx3c840097a9200b83";
 //	public static String APPSECRET="decfb2251d9f5531341c9637fb98104a";

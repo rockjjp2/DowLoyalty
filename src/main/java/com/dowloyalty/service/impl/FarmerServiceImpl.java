@@ -10,6 +10,7 @@ import com.dowloyalty.dao.FarmerDao;
 import com.dowloyalty.entity.Farmer;
 import com.dowloyalty.entity.FarmerSalesRecord;
 import com.dowloyalty.entity.RProjectFarmer;
+import com.dowloyalty.pojo.FarmerExcel;
 import com.dowloyalty.pojo.FarmerVo;
 import com.dowloyalty.service.FarmerService;
 
@@ -35,8 +36,8 @@ public class FarmerServiceImpl implements FarmerService {
 	}
 
 	@Override
-	public void saveRelationWithProject(RProjectFarmer relation) {
-		farmerDao.saveRelationWithProject(relation);
+	public void saveRelationWithProject(List<RProjectFarmer> relations) {
+		farmerDao.saveRelationWithProject(relations);
 	}
 
 	@Override
@@ -67,6 +68,21 @@ public class FarmerServiceImpl implements FarmerService {
 	@Override
 	public Farmer findById(int farmerId) {
 		return farmerDao.findById(farmerId);
+	}
+
+	@Override
+	public List<Farmer> findByProvinceId(int provinceId) {
+		return farmerDao.findByProvinceId(provinceId);
+	}
+
+	@Override
+	public List<FarmerExcel> findNewInsertFarmerSalesRecord(int promoterId, int maxId) {
+		return farmerDao.findNewInsertFarmerSalesRecord(promoterId, maxId);
+	}
+
+	@Override
+	public void saveFarmerSalesRecord(List<FarmerSalesRecord> list) {
+		farmerDao.saveFarmerSalesRecord(list);
 	}
 
 }

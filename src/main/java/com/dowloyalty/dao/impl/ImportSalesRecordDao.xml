@@ -44,6 +44,33 @@
       ISACTIVE=1
    </select>
    
+   <select id="findHaveFarmerByProjectName" parameterType="Object" resultMap="projectBase64Map">
+    SELECT
+      project.ID projectID,
+      project.Name projectName,
+      project.ProvinceID provinceID,
+      project.PlacardPath placardPath,
+      project.BackgroundPath backgroundPath,
+      project.AssistantID assistantID,
+      project.StartDate startDate,
+      project.EndDate endDate,
+      project.AdminID adminID,
+      project.ID isVisible,
+      project.IsActive isActive,
+      project.HaveFarmer haveFarmer,
+      project.Description description
+    FROM
+      PROJECT
+    WHERE
+      replace(NAME,' ','')=#{projectName}
+    AND
+      ProvinceID=#{provinceID}
+    AND
+      ISACTIVE=1
+    and
+      HaveFarmer = 1
+   </select>
+   
    <!-- 根据零售商名和省份找零售商 -->
    <select id="findRetailerByProvId" parameterType="Object" resultType="com.dowloyalty.entity.Retailer">
        select * from retailer where provinceId=#{provinceId} and replace(chineseName,' ','')=#{retailerName}
@@ -57,6 +84,33 @@
       WHERE RPR.PROJECTID=#{projectId} 
       AND replace(R.CHINESENAME,' ','')=#{retailerName} 
       AND RPR.ISACTIVE=R.ISACTIVE=1
+   </select>
+   
+   <!-- 根据手机号和项目id找农户 -->
+   <select id="findByMobileAndProjectId" resultType="com.dowloyalty.entity.Farmer">
+      select
+      	farmer.ID id,
+      	farmer.ChineseName chineseName,
+      	farmer.Mobile mobile,
+      	farmer.OpenID openId,
+      	farmer.lastUpdateDate lastUpdateDate,
+      	farmer.area area,
+      	farmer.isActive isActive,
+      	farmer.ProvinceID provinceId
+      from
+      	farmer
+      left join
+      	rprojectfarmer
+      on
+      	farmer.ID = rprojectfarmer.FarmerID
+      where
+      	rprojectfarmer.ProjectID = #{ProjectID}
+      and
+      	farmer.Mobile = #{Mobile}
+      and
+      	rprojectfarmer.IsActive = 1
+       and
+      	farmer.isActive = 1
    </select>
    
    <select id="findProvIdByPromId" parameterType="int" resultType="int">
@@ -150,6 +204,11 @@
    
    <select id="findMaxSaleRecordID" parameterType="int" resultType="int">
      SELECT MAX(ID) FROM SALERECORD WHERE IMPORTERID=#{promoterId}
+   </select>
+   
+   <!-- 根据导入人（推广员）id获取销售记录总数 -->
+   <select id="findMaxFarmerSaleRecordID" parameterType="int" resultType="int">
+     SELECT MAX(ID) FROM farmersalesrecord WHERE ImporterID=#{promoterId}
    </select>
    
    

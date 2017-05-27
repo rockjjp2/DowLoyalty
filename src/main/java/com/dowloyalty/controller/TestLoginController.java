@@ -38,35 +38,41 @@ public class TestLoginController {
 	 * @return
 	 */
 	@RequestMapping(value="/WeChatRedirectDoTest")
-	public String WeChatRedirectDotest(String auth_code,HttpServletResponse response){
-			//测试身份是管理员
-			String userid="aaa"; 
-			//修改测试身份是推广员
-			//userid="wangyuanjie";
-			if (userid!=null&& iAdminService.findAdminByUserId(userid.toString().trim())!=null) {
-				//管理员登陆成功
-				Admin admin=iAdminService.findAdminByUserId(userid.toString().trim());
-				//创建token并返回用户
-				String token=JWTTokenUtils.getInstance().creatToken("admin", admin.getId()+"");
-				//系统保留相关信息
-				response.addCookie(new Cookie("LoyaltyToken",token));
-				session.setAttribute("USER", admin);
-				session.setAttribute("IDENTITY", "admin");
-				session.setMaxInactiveInterval(30*60);//秒
-				return "redirect:/website/index";
-			}else if(userid!=null && iPromoterService.UserIsPromoter( userid.toString().trim() ) ){
-				//登陆成功
-				Promoter promoter=iPromoterService.findPromoterByUserId(userid.toString().trim());
-				//创建token并返回用户
-				String token=JWTTokenUtils.getInstance().creatToken("promoter", promoter.getId()+"");
-				response.addCookie(new Cookie("LoyaltyToken",token));
-				//系统保留相关信息
-				session.setAttribute("USER", promoter);
-				session.setAttribute("IDENTITY", "promoter");
-				session.setMaxInactiveInterval(30*60);//秒
-				return "redirect:/web/index";
-			}
-		return "redirect:/Login";
+	public String WeChatRedirectDotest(String auth_code, HttpServletResponse response) {
+		// 测试身份是管理员
+		String userid = "aaa";
+		// 管理员登陆成功
+		Admin admin = iAdminService.findAdminByUserId(userid.toString().trim());
+		// 创建token并返回用户
+		String token = JWTTokenUtils.getInstance().creatToken("admin", admin.getId() + "");
+		// 系统保留相关信息
+		response.addCookie(new Cookie("LoyaltyToken", token));
+		session.setAttribute("USER", admin);
+		session.setAttribute("IDENTITY", "admin");
+		session.setMaxInactiveInterval(30 * 60);// 秒
+		return "redirect:/website/index";
+	}
+	
+	/**
+	 * PC端登陆
+	 * @param auth_code
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value="/WeChatRedirectPromoterDotest")
+	public String WeChatPromoterRedirectDotest(String auth_code, HttpServletResponse response) {
+		// 修改测试身份是推广员
+		String userid = "wangyuanjie";
+		// 登陆成功
+		Promoter promoter = iPromoterService.findPromoterByUserId(userid.toString().trim());
+		// 创建token并返回用户
+		String token = JWTTokenUtils.getInstance().creatToken("promoter", promoter.getId() + "");
+		response.addCookie(new Cookie("LoyaltyToken", token));
+		// 系统保留相关信息
+		session.setAttribute("USER", promoter);
+		session.setAttribute("IDENTITY", "promoter");
+		session.setMaxInactiveInterval(30 * 60);// 秒
+		return "redirect:/web/index";
 	}
 	/**
 	 * 微信订阅号retailer登陆
@@ -125,7 +131,7 @@ public class TestLoginController {
 	public String identifyFarmer(HttpServletResponse response){
 		System.out.println("---------微信订阅号Farmer测试号登陆");
 		//输入id就可测试输入id就可测试输入id就可测试输入id就可测试输入id就可测试输入id就可测试
-		int id=1;
+		int id=16;
 		//该用户为Farmer
 		Farmer farmer=farmerService.findById(id);
 		//创建token并返回用户

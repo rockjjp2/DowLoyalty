@@ -14,6 +14,7 @@ public class Farmer implements Serializable {
 	private String mobile;
 	private String openId;
 	private Timestamp lastUpdateDate;
+	private int provinceId;
 	private int area;
 	private boolean isActive;
 
@@ -22,7 +23,7 @@ public class Farmer implements Serializable {
 	}
 
 	public Farmer(int id, String chineseName, String mobile, String openId, Timestamp lastUpdateDate, int area,
-			boolean isActive) {
+			boolean isActive, int provinceId) {
 		super();
 		this.id = id;
 		this.chineseName = chineseName;
@@ -31,6 +32,7 @@ public class Farmer implements Serializable {
 		this.lastUpdateDate = lastUpdateDate;
 		this.area = area;
 		this.isActive = isActive;
+		this.provinceId = provinceId;
 	}
 
 	public int getId() {
@@ -87,6 +89,14 @@ public class Farmer implements Serializable {
 
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public int getProvinceId() {
+		return provinceId;
+	}
+
+	public void setProvinceId(int provinceId) {
+		this.provinceId = provinceId;
 	}
 
 }

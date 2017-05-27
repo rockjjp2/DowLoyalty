@@ -52,7 +52,7 @@ span{
 }
 
 .project{
-    width: 12rem;
+    width: 16rem;
     font-size: 1.5rem;
 }
 
@@ -72,8 +72,9 @@ span{
 }
 
 #code_img{
-    width : 7rem;
-    height: 2.5rem;
+    width : 7.5rem;
+    height: 3.5rem;
+    margin-top: -1rem;
 }
 
 .fa-tree{
@@ -81,7 +82,7 @@ span{
 }
 
 .area{
-    width: 10rem;
+    width: 14rem;
     height:2.5rem;
     font-size: 1.5rem;
     border: 0;

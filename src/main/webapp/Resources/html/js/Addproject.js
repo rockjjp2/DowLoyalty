@@ -33,7 +33,11 @@ var hashMap = {
 				if (returndata.trim() == "exist") {
 					alert("项目名已存在！");
 					location.href = "createproject";
-				} else{
+				} 
+				else if (returndata.trim() == "after") {
+					alert("项目开始时间不能早于或等于最新创建的项目的结束时间！");
+				} 
+				else{
 					projectId = returndata.trim();
 					initRetailerAndPromoter(projectId);
 

@@ -14,6 +14,7 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jettison.json.JSONTokener;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
 import org.codehaus.jettison.json.JSONException;
@@ -41,6 +42,7 @@ public class SendToSaleForceController {
 	/**
 	 * 定时将销售记录发送至salesforce
 	 */
+	@Scheduled(cron="0 0 1 * * *")
 	public void sendSaleRecordJson() {
 		
 		String access_token = "";

@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.dowloyalty.dao.IImportSalesRecordDao;
+import com.dowloyalty.entity.Farmer;
 import com.dowloyalty.entity.Product;
 import com.dowloyalty.entity.ProductCategory;
 import com.dowloyalty.entity.ProductFamily;
@@ -175,6 +176,21 @@ public class ImportExcelServiceImpl implements IImportExcelService{
 			int points, int amount, boolean status) {
 		// TODO Auto-generated method stub
 		iImportSalesRecordDao.addSaleRecordByAdmin(retailerId, productId, totalPrice, submitDate, projectId, points, amount, status);
+	}
+
+	@Override
+	public Farmer findByMobileAndProjectId(String mobile, int projectId) {
+		return iImportSalesRecordDao.findByMobileAndProjectId(mobile, projectId);
+	}
+
+	@Override
+	public int findMaxFarmerSaleRecordID(int promoterId) {
+		return iImportSalesRecordDao.findMaxFarmerSaleRecordID(promoterId);
+	}
+
+	@Override
+	public Project findHaveFarmerByProjectName(String projectName, int provinceID) {
+		return iImportSalesRecordDao.findHaveFarmerByProjectName(projectName, provinceID);
 	}
 
 	

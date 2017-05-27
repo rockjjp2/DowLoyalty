@@ -4,6 +4,7 @@
 <mapper namespace="com.dowloyalty.dao.IProvinceDao">
 	<select id="getAllProvince"  parameterType="int"  resultType="com.dowloyalty.entity.Province">
 		select ID,Name,IsActive from province where IsActive=1
+		order by   convert(Name USING gbk)   COLLATE   gbk_chinese_ci asc
 	</select>
 	<select id="findProvinceByPromoterId" parameterType="int" resultType="com.dowloyalty.entity.Province">
 	SELECT ID,`Name`,IsActive  FROM province WHERE IsActive=1 AND

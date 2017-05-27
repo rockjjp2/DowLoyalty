@@ -3,7 +3,7 @@ package com.dowloyalty.service;
 
 import java.util.List;
 
-
+import com.dowloyalty.entity.Farmer;
 import com.dowloyalty.entity.Product;
 import com.dowloyalty.entity.ProductCategory;
 import com.dowloyalty.entity.ProductFamily;
@@ -48,5 +48,28 @@ public interface IImportExcelService {
     public List<Product> findProductByProject(int projectId);
     public List<ProductFamily> findProductFamilyByCName(String categoryName);
     public List<Product> findProductByFName(String familyName);
+    
+    /**
+     * 根据手机号和项目id查找相应的农户
+     * @param mobile  手机号
+     * @param projectId  项目id
+     * @return  农户
+     */
+    public Farmer findByMobileAndProjectId(String mobile, int projectId);
+    
+    /**
+     * 根据导入人（推广员）id获取销售记录总数
+     * @param promoterId  导入人（推广员）id
+     * @return  销售记录总数
+     */
+    public int findMaxFarmerSaleRecordID(int promoterId);
+    
+    /**
+     * 根据项目名和省份获取开放农户入口的项目
+     * @param projectName  项目名
+     * @param provinceID  省份id
+     * @return  项目
+     */
+    public Project findHaveFarmerByProjectName(String projectName,int provinceID);
 
 }

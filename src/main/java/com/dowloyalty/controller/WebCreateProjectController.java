@@ -29,14 +29,17 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dowloyalty.entity.Admin;
+import com.dowloyalty.entity.Farmer;
 import com.dowloyalty.entity.PointsLevel;
 import com.dowloyalty.entity.Project;
 import com.dowloyalty.entity.Promoter;
 import com.dowloyalty.entity.Province;
+import com.dowloyalty.entity.RProjectFarmer;
 import com.dowloyalty.entity.Retailer;
 import com.dowloyalty.pojo.ExchangeshopGoods;
 import com.dowloyalty.pojo.ProductInfos;
 import com.dowloyalty.pojo.ProjectProvince;
+import com.dowloyalty.service.FarmerService;
 import com.dowloyalty.service.ICreateProjectService;
 import com.dowloyalty.service.IProductService;
 import com.dowloyalty.service.IProjectDetailsService;
@@ -74,6 +77,8 @@ public class WebCreateProjectController {
 	PointsLevelService pointsLevelService;
 	@Resource
 	ICreateProjectService iCreateProjectService;
+	@Resource
+	FarmerService farmerService;
 	
 	/**
 	 * 进入创建项目路径
@@ -118,6 +123,33 @@ public class WebCreateProjectController {
 		System.out.println("backImg="+backImg);
 		Project project = null;
 		
+		//根据开始时间和已创建的最新项目的结束时间判断是否允许创建项目
+		Project lastProject = projectService.findLastestByProvinceId(Integer.parseInt(provinceId));
+		if(lastProject != null)
+		{
+			boolean after = false;
+			try {
+				after = lastProject.getEndDate().after(sf.parse(start_time)) || (lastProject.getEndDate().getTime() == sf.parse(start_time).getTime());
+			} catch (ParseException e1) {
+				logger.warn("创建项目时间解析异常");
+			}
+			if(after)
+			{
+				try 
+				{
+					PrintWriter out = response.getWriter();
+					out.println("after");
+					out.flush();
+					out.close();
+				} 
+				catch (IOException e) 
+				{
+					logger.warn("传输数据异常");
+				}
+				return;
+			}
+		}
+		
 			//根据项目id判断行为：创建 or 修改
 			//创建
 			if(edit_id == null || "".equals(edit_id.trim()))
@@ -159,6 +191,28 @@ public class WebCreateProjectController {
 						project.setEndDate(new Timestamp(sf.parse(end_time).getTime()));
 						projectService.save(project);
 						project = projectService.findProjectByProvinceIdAndName(provinceId, title);
+						
+						//根据havefarmer判断是否为项目关联农户
+						int projectId = project.getId();
+						if(project.isHaveFarmer())
+						{
+							List<Farmer> list = farmerService.findByProvinceId(project.getProvinceID());
+							List<RProjectFarmer> relations = new ArrayList<>();
+							RProjectFarmer relation = null;
+							if(list != null && !list.isEmpty())
+							{
+								for (Farmer farmer : list) 
+								{
+									relation = new RProjectFarmer();
+									relation.setProjectId(projectId);
+									relation.setFarmerId(farmer.getId());
+									relation.setActive(true);
+									relations.add(relation);
+								}
+								farmerService.saveRelationWithProject(relations);
+							}
+						}
+						
 						try 
 						{
 							PrintWriter out = response.getWriter();
@@ -173,7 +227,7 @@ public class WebCreateProjectController {
 					}
 					catch (IOException e) 
 					{
-						logger.warn("创建项目上传文件获取异常");
+						logger.warn("创建项目上传的图片获取异常");
 					} 
 					catch (ParseException e) 
 					{
@@ -205,6 +259,7 @@ public class WebCreateProjectController {
 					project.setStartDate(new Timestamp(sf.parse(start_time).getTime()));
 					project.setEndDate(new Timestamp(sf.parse(end_time).getTime()));
 					projectService.update(project);
+					
 					try 
 					{
 						PrintWriter out = response.getWriter();

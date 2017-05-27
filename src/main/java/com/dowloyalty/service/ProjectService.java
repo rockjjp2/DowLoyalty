@@ -56,4 +56,17 @@ public interface ProjectService {
 	 * @return 项目集合
 	 */
 	public List<Project> findAllHaveFarmerProjects();
+	
+	/**
+	 * 获取指定省份下已启动和已创建但未启动的项目
+	 * @param provinceId  省份id
+	 * @return  项目集合
+	 */
+	public List<Project> findActiveAndFutureByProvinceId(int provinceId);
+	
+	/**
+	 * 获取指定省份下最新创建的项目
+	 * @return  项目
+	 */
+	public Project findLastestByProvinceId(int provinceId);
 }

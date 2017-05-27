@@ -66,7 +66,17 @@ public class TaskSalesforceAccount {
 					@Override
 					public void run() {
 						start = true;
-						salesForec();
+						try
+						{
+							salesForec();
+						}
+						catch(Exception e)
+						{
+							start = false;
+							logger.warn("更新零售商数据时出现错误！");
+							System.out.println("============任务出错，终止定时器==========");
+							task.cancel();
+						}
 						start = false;
 						System.out.println("============任务完毕，终止定时器==========");
 						task.cancel();

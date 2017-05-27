@@ -16,7 +16,8 @@
     $(function () {
         if (1${menunum} == 13) { 
             $(".menu").not("#homePage").css("width", "45%");//此处是只有3个菜单情况的宽度
-        } else {
+        } 
+        else {
             $(".menu").not("#homePage").css("width", "30%"); //4个菜单情况的宽度    
         }
     })
@@ -24,14 +25,23 @@
 </head>
 
 <body>
-    <iframe src="homePage" id="iframeContent" frameborder="0" scrolling="no" width="100%" height="100%"></iframe> 
-    <footer class="txt-center style-deepGray">
-        <div id="homePage" class="menu style-btnBg-green"><i class="fa fa-home"></i></div>
-
-        <c:forEach items="${map}" var="entry">
-	        <div id="${entry.key}" class="menu">${entry.value}</div>
-	    </c:forEach> 
-    </footer>
+    
+    <c:choose>
+    <c:when test="${not empty msg}">
+    	<h2 style="top:50%;left:50%;position:absolute;transform:translate(-50%,-50%);text-align: center;">${msg}</h2>
+    </c:when>
+    <c:otherwise>
+	    <iframe src="homePage" id="iframeContent" frameborder="0" scrolling="no" width="100%" height="100%"></iframe> 
+	    <footer class="txt-center style-deepGray">
+	        <div id="homePage" class="menu style-btnBg-green"><i class="fa fa-home"></i></div>
+	
+	        <c:forEach items="${map}" var="entry">
+		        <div id="${entry.key}" class="menu">${entry.value}</div>
+		    </c:forEach> 
+	    </footer>
+    </c:otherwise>
+    </c:choose>
+    
     <script>
         var _Main = null;
         if (_Main == null) {

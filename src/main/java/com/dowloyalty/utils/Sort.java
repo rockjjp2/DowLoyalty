@@ -10,18 +10,21 @@ public class Sort {
         Sort obj1 = new Sort();  
         System.out.println("======================");  
         ArrayList<String> list=new ArrayList<String>();  
-        list.add("adisen-1");  
-        list.add("bulsi-2");  
-        list.add("Kobe-3");  
-        list.add("布丁-4");  
-        list.add("杜甫-5");  
-        list.add("元方-6");  
+//        list.add("adisen-1");  
+//        list.add("bulsi-2");  
+//        list.add("Kobe-3");  
+//        list.add("布丁-4");  
+//        list.add("杜甫-5");  
+//        list.add("元方-6");
+        list.add("覃-7");
         Map<String, ArrayList<String>> map=obj1.sort(list);  
         System.out.println("-------分组后的输出-----------");  
         System.out.println(map.get("A"));  
         System.out.println(map.get("B"));  
         System.out.println(map.get("C"));  
         System.out.println(map.get("D"));  
+        System.out.println(map.get("T"));
+        System.out.println(map.get("Q"));  
         System.out.println(map.get("Y"));  
       }   
         public Sort() {  
@@ -133,7 +136,7 @@ public class Sort {
                return 0;  
              }  
          }  
-     public Map<String, ArrayList<String>> sort(List<String> list){  
+     public Map<String, ArrayList<String>> sort(List<String> list){
          Map<String, ArrayList<String>> map=new HashMap<String, ArrayList<String>>();  
          ArrayList<String> arraylist=new ArrayList<String>();  
          String[] alphatableb =  

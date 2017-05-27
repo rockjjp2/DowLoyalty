@@ -8,12 +8,12 @@
 			farmer
 		(
 			ID,ChineseName,Mobile,OpenID,
-			lastUpdateDate,area,isActive
+			lastUpdateDate,area,isActive,ProvinceID
 		)
 		values
 		(
 			#{id},#{chineseName},#{mobile},#{openId},
-			#{lastUpdateDate},#{area},#{isActive}
+			#{lastUpdateDate},#{area},#{isActive},#{provinceId}
 		)
 	</insert>
 	
@@ -25,7 +25,8 @@
 			OpenID,
 			lastUpdateDate,
 			area,
-			isActive
+			isActive,
+			ProvinceID
 		from
 			farmer
 		where
@@ -34,16 +35,18 @@
 			isActive = 1
 	</select>
 	
-	<insert id="saveRelationWithProject" parameterType="com.dowloyalty.entity.RProjectFarmer">
+	<insert id="saveRelationWithProject">
 		insert into
 			rprojectfarmer
 		(
-			ID,FarmerID,projectID,IsActive
+			FarmerID,projectID,IsActive
 		)
 		values
+		<foreach collection="relations" item="relation" separator=",">
 		(
-			#{id},#{farmerId},#{projectId},#{isActive}
+			#{relation.farmerId},#{relation.projectId},#{relation.isActive}
 		)
+		</foreach>
 	</insert>
 	
 	<select id="getFarmerCountByName" parameterType="String" resultType="int">
@@ -53,6 +56,8 @@
 		  farmer
 		where
 		  ChineseName = #{name}
+		and
+		  isActive = 1
 	</select>
 	
 	<select id="getFarmerCountByMobile" parameterType="String" resultType="int">
@@ -62,6 +67,8 @@
 		  farmer
 		where
 		  Mobile = #{mobile}
+		and
+		  isActive = 1
 	</select>
 	
 	<!-- 根据手机号查询农户 -->
@@ -73,11 +80,14 @@
 		  OpenID,
 		  lastUpdateDate,
 		  area,
-		  isActive
+		  isActive,
+		  ProvinceID
 		from
 		  farmer
 		where
 		  Mobile = #{mobile}
+		and
+		  isActive = 1
 	</select>
 	
 	<resultMap type="com.dowloyalty.pojo.FarmerVo" id="FarmerVoMap">
@@ -191,10 +201,75 @@
 			OpenID,
 			lastUpdateDate,
 			area,
-			isActive
+			isActive,
+		  	ProvinceID
 		from
 			farmer
 		where
 			ID = #{id}
+		and
+			isActive = 1
 	</select>
+	
+	<select id="findByProvinceId" parameterType="int" resultType="com.dowloyalty.entity.Farmer">
+		select
+			ID,
+			ChineseName,
+			Mobile,
+			OpenID,
+			lastUpdateDate,
+			area,
+			isActive,
+		  	ProvinceID
+		from
+			farmer
+		where
+			ProvinceID = #{ProvinceID}
+		and
+			isActive = 1
+	</select>
+	
+	<select id="findNewInsertFarmerSalesRecord" resultType="com.dowloyalty.pojo.FarmerExcel">
+		select
+			farmer.ChineseName farmerName,
+			project.Name projectName,
+			farmersalesrecord.TotalPrice totalPrice,
+			date_format(farmersalesrecord.SubmitDate,'%Y.%m.%d') submitDate,
+			farmer.Mobile mobile
+		from
+			farmersalesrecord
+		left join
+			farmer
+		on
+			farmersalesrecord.FarmerID = farmer.ID
+		left join
+			project
+		on
+			farmersalesrecord.ProjectID = project.ID
+		where
+			ImporterID = #{ImporterID}
+		and
+			farmersalesrecord.ID > #{ID}
+		and
+			farmer.isActive = 1
+		and
+			project.IsActive = 1
+		order by SubmitDate desc
+	</select>
+	
+	<insert id="saveFarmerSalesRecord">
+		insert into
+			farmersalesrecord
+		(
+			FarmerID,ProjectID,TotalPrice,ImporterID,
+			SubmitDate,Mobile,Status,OppId
+		)
+		values
+		<foreach collection="list" item="item" separator=",">
+		(
+			#{item.farmerId},#{item.projectId},#{item.totalPrice},#{item.importerId},
+			#{item.submitDate},#{item.mobile},#{item.status},#{item.oppId}
+		)
+		</foreach>
+	</insert>
 </mapper>

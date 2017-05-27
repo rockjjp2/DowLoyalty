@@ -108,18 +108,18 @@
                 <li class="fa fa-mobile"></li>
             </ul>
             <span id="mobile_span">*</span>
-            <input type="text" class="mobile" name="mobile" placeholder="请输入手机号"/>
+            <input type="text" class="mobile" name="mobile" placeholder="请输入11位手机号"/>
         </div>
         <div class="clearfix item">
             <ul>
                 <li class="fa fa-map-o"></li>
             </ul>
             <span id="project_span">*</span>
-            <select class="project" name="project">
-            <option hidden>请选择参加的项目</option>
-                <c:if test="${not empty projects}">
-                <c:forEach items="${projects}" var = "project">
-	                <option value="${project.id}">${project.name}</option>
+            <select class="project" name="province">
+            <option hidden>请选择所在的省份</option>
+                <c:if test="${not empty provinces}">
+                <c:forEach items="${provinces}" var = "province">
+	                <option value="${province.id}">${province.name}</option>
                 </c:forEach>
                 </c:if>
             </select>
@@ -136,7 +136,7 @@
             <ul>
                 <li class="fa fa-tree"></li>
             </ul>
-            <input type="text" class="area" name="area" placeholder="土地面积"/>
+            <input type="text" class="area" name="area" placeholder="请输入土地面积"/>
         </div>
         <div class="clearfix" style=" margin-left: 2em;">
             <button class="col-xs-4 col-xs-offset-4 style-bg-green" id="register">注册</button>

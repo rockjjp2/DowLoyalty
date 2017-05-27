@@ -2,6 +2,8 @@ package com.dowloyalty.controller;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -20,10 +22,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.dowloyalty.entity.Farmer;
+import com.dowloyalty.entity.Project;
 import com.dowloyalty.entity.RProjectFarmer;
 import com.dowloyalty.entity.Retailer;
 import com.dowloyalty.service.FarmerService;
 import com.dowloyalty.service.IRetailerService;
+import com.dowloyalty.service.ProjectService;
 import com.dowloyalty.utils.JWTTokenUtils;
 import com.dowloyalty.utils.SimpleHttpConnectUtil;
 
@@ -34,14 +38,17 @@ public class WeChatSubscriptionLoginController {
 	private  HttpServletRequest request; 
 	@Autowired
     private HttpSession session;
-	@Autowired
-	private FarmerService farmerService;
+	
 	
 	
 	private static String APPID=TaskWeChatKeyConfiguration.APPID;
 	private static String APPSECRET=TaskWeChatKeyConfiguration.APPSECRET;
 	@Resource
 	IRetailerService iRetailerService;
+	@Autowired
+	FarmerService farmerService;
+	@Autowired
+	ProjectService projectService;
 	/**
 	 * 微信服务号进入链接
 	 * @param response
@@ -231,7 +238,7 @@ public class WeChatSubscriptionLoginController {
 	{
 		String name = request.getParameter("name");
 		String mobile = request.getParameter("mobile");
-		String projectId = request.getParameter("project");
+		String provinceId = request.getParameter("province");
 		String area = request.getParameter("area");
 		Cookie[] cookies = request.getCookies();
 		String openId = null;
@@ -249,6 +256,7 @@ public class WeChatSubscriptionLoginController {
 		farmer.setMobile(mobile);
 		farmer.setOpenId(openId);
 		farmer.setActive(true);
+		farmer.setProvinceId(Integer.parseInt(provinceId));
 		try
 		{
 			farmer.setArea(Integer.parseInt(area));
@@ -262,11 +270,21 @@ public class WeChatSubscriptionLoginController {
 		
 		Farmer existFarmer = farmerService.findFarmerByOpenId(openId);
 		
-		RProjectFarmer relation = new RProjectFarmer();
-		relation.setActive(true);
-		relation.setFarmerId(existFarmer.getId());
-		relation.setProjectId(Integer.parseInt(projectId));
-		farmerService.saveRelationWithProject(relation);
+		//将农户与选定省份下的已经开始和将要开始的项目绑定
+		List<Project> projects = projectService.findActiveAndFutureByProvinceId(Integer.parseInt(provinceId));
+		if(projects != null && !projects.isEmpty())
+		{
+			List<RProjectFarmer> relations = new ArrayList<>();
+			RProjectFarmer relation = null;
+			for (Project project : projects) {
+				relation = new RProjectFarmer();
+				relation.setActive(true);
+				relation.setFarmerId(existFarmer.getId());
+				relation.setProjectId(project.getId());
+				relations.add(relation);
+			}
+			farmerService.saveRelationWithProject(relations);
+		}
 		//创建token并返回用户
 		String token=JWTTokenUtils.getInstance().creatToken("farmer", existFarmer.getId()+"");
 		response.addCookie(new Cookie("LoyaltyToken",token ));

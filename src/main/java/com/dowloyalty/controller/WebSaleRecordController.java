@@ -24,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.dowloyalty.entity.Admin;
+import com.dowloyalty.entity.Farmer;
+import com.dowloyalty.entity.FarmerSalesRecord;
 import com.dowloyalty.entity.Points;
 import com.dowloyalty.entity.Product;
 import com.dowloyalty.entity.ProductCategory;
@@ -33,8 +35,10 @@ import com.dowloyalty.entity.Promoter;
 import com.dowloyalty.entity.Province;
 import com.dowloyalty.entity.Retailer;
 import com.dowloyalty.pojo.Excel;
+import com.dowloyalty.pojo.FarmerExcel;
 import com.dowloyalty.pojo.JsonSaleRecord;
 import com.dowloyalty.pojo.webSale;
+import com.dowloyalty.service.FarmerService;
 import com.dowloyalty.service.IImportExcelService;
 import com.dowloyalty.service.IPointsService;
 import com.dowloyalty.service.IProvinceService;
@@ -45,7 +49,7 @@ import com.dowloyalty.utils.ReadExcel;
 import com.dowloyalty.utils.UploadUtils;
 
 @Controller
-@RequestMapping({"/website","/web"})
+@RequestMapping({ "/website", "/web" })
 public class WebSaleRecordController {
 
 	@Resource
@@ -58,10 +62,12 @@ public class WebSaleRecordController {
 	private IPointsService iPointsService;
 	@Resource
 	private IProvinceService iProvinceService;
+	@Resource
+	FarmerService farmerService;
 
 	private static final String IMPORTSALESRECORD = "PC/ImportSalesRecord";
 	private static final String HISTORYSALESRECORD = "PC/HistorySalesRecord";
-	
+
 	protected final Log logger = LogFactory.getLog(this.getClass());
 
 	/**
@@ -72,17 +78,17 @@ public class WebSaleRecordController {
 	 * @return
 	 */
 	@RequestMapping("/salerecord")
-	public String enterByProject(Model model, HttpServletRequest request,HttpSession session) {
+	public String enterByProject(Model model, HttpServletRequest request, HttpSession session) {
 		int projectId = Integer.parseInt(request.getParameter("projectId"));
 		List<Project> projects;
 		int userid = 0;
 		if (session.getAttribute("USER") instanceof Admin) {
 			projects = iSearchSaleRecordService.findProject();
-		}else {
-			userid=((Promoter)session.getAttribute("USER") ).getId();
+		} else {
+			userid = ((Promoter) session.getAttribute("USER")).getId();
 			projects = iSearchSaleRecordService.findProjectByPromoterId(userid);
 		}
-		
+
 		for (Project project : projects) {
 			project.setBackgroundPath(null);
 			project.setPlacardPath(null);
@@ -94,18 +100,19 @@ public class WebSaleRecordController {
 
 	/**
 	 * 从主页面进入历史销售记录页面
+	 * 
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping("/showSaleRecord")
-	public String showSalesRecord(Model model,HttpSession session) {
+	public String showSalesRecord(Model model, HttpSession session) {
 		List<Project> projects;
 		if (session.getAttribute("USER") instanceof Admin) {
-			//当前登录人是管理员，可以查看所有项目
+			// 当前登录人是管理员，可以查看所有项目
 			projects = iSearchSaleRecordService.findProject();
-		}else {
-			//当前登录人是推广员，可以查看参与的项目
-			int userid=((Promoter)session.getAttribute("USER") ).getId();
+		} else {
+			// 当前登录人是推广员，可以查看参与的项目
+			int userid = ((Promoter) session.getAttribute("USER")).getId();
 			projects = iSearchSaleRecordService.findProjectByPromoterId(userid);
 		}
 		for (Project project : projects) {
@@ -126,20 +133,20 @@ public class WebSaleRecordController {
 	 */
 	@RequestMapping("/querySaleRecord")
 	@ResponseBody
-	public void querySalesRecord(HttpServletRequest request, HttpServletResponse response,HttpSession session) {
+	public void querySalesRecord(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		/* 获得前台传入的数据 */
 		String projectId = request.getParameter("projectId");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
 		String retailerName = request.getParameter("retailerName");
 		List<Project> projects;
-		int promoterId=0;
+		int promoterId = 0;
 		if (session.getAttribute("USER") instanceof Admin) {
-			//当前登录人是管理员，可以查看所有项目
+			// 当前登录人是管理员，可以查看所有项目
 			projects = iSearchSaleRecordService.findProject();
-		}else {
-			//当前登录人是推广员，可以查看参与的项目
-			 promoterId =((Promoter)session.getAttribute("USER") ).getId();
+		} else {
+			// 当前登录人是推广员，可以查看参与的项目
+			promoterId = ((Promoter) session.getAttribute("USER")).getId();
 			projects = iSearchSaleRecordService.findProjectByPromoterId(promoterId);
 		}
 		for (Project project : projects) {
@@ -150,12 +157,12 @@ public class WebSaleRecordController {
 		String pageNum = request.getParameter("pageNum");
 		int num = Integer.parseInt(pageNum);
 		int totalPageNum;// 总页面数
-		totalPageNum = iSearchSaleRecordService.getTotalPage(Integer.parseInt(projectId), startDate, endDate, promoterId,
-				retailerName);
+		totalPageNum = iSearchSaleRecordService.getTotalPage(Integer.parseInt(projectId), startDate, endDate,
+				promoterId, retailerName);
 		num = CompareNums.compareNums(num, totalPageNum);
 		webSales = iSearchSaleRecordService.findWebSaleRecordByQuery(Integer.parseInt(projectId), startDate, endDate,
 				promoterId, retailerName, num);
-System.out.println("查看销售记录页面"+webSales.size());
+		System.out.println("查看销售记录页面" + webSales.size());
 		String longJson = JSON.toJSONString(
 				new JsonSaleRecord(projectId, startDate, endDate, retailerName, num, totalPageNum, projects, webSales));
 		try {
@@ -180,16 +187,26 @@ System.out.println("查看销售记录页面"+webSales.size());
 	}
 
 	/**
+	 * 导入农户销售记录的入口
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/enterFarmerImportSaleRecord")
+	public String second() {
+		return "PC/farmer_importSalesRecord";
+	}
+
+	/**
 	 * 导入销售记录
 	 * 
 	 * @return
 	 */
 	@RequestMapping("/importSaleRecord")
 	public String addSaleRecord(Model model, HttpServletRequest request,
-			@RequestParam("uploadExcel") MultipartFile file,HttpSession session ) {
-		
-			//当前登录人是推广员，可以查看参与的项目
-			int promoterId =((Promoter)session.getAttribute("USER") ).getId();
+			@RequestParam("uploadExcel") MultipartFile file, HttpSession session) {
+
+		// 当前登录人是推广员，可以查看参与的项目
+		int promoterId = ((Promoter) session.getAttribute("USER")).getId();
 		int provinceId = iImportExcelService.findProvIdByPromId(promoterId);
 		UploadUtils uploadUtils = new UploadUtils();
 		uploadUtils.uploadFile(file, request);
@@ -201,14 +218,14 @@ System.out.println("查看销售记录页面"+webSales.size());
 		try {
 			// 读取导入Excel中的数据
 			excels = readExcel.readExcel(file);
-			excelData = getErrorMsg(excels,provinceId);
-			
+			excelData = getErrorMsg(excels, provinceId);
+
 			// 查找导入excel前最大的销售记录id
 			int maxId;
 			try {
 				maxId = iImportExcelService.findMaxSaleRecordID(promoterId);
 			} catch (Exception e) {
-				maxId=0;
+				maxId = 0;
 			}
 			// 如果excel中的数据全部正确，则导入数据库中，并查看导入数据
 			if (excelData.isEmpty()) {
@@ -224,8 +241,8 @@ System.out.println("查看销售记录页面"+webSales.size());
 								excel.getProductFamilyName(), excel.getCategory()).getId();
 						int retailerId = iImportExcelService.findRetailerByProvId(provinceId, excel.getRetailerName())
 								.getId();
-						iImportExcelService.addSaleRecordNoPoint(retailerId, productId, totalPrice, promoterId, sf.format(date),
-								excel.getAmount());
+						iImportExcelService.addSaleRecordNoPoint(retailerId, productId, totalPrice, promoterId,
+								sf.format(date), excel.getAmount());
 					} else {
 						// 导入参加活动的销售记录
 						int projectId = iImportExcelService.findByProjectName(excel.getProjectName(), provinceId)
@@ -236,17 +253,17 @@ System.out.println("查看销售记录页面"+webSales.size());
 								.getId();
 						Points points = iPointsService.findPointByPrjectIdAndProductId(projectId, productId);
 						if (points != null) {
-							int point= ((int)totalPrice)/points.getSalesAmount()*points.getPoints();
-						iImportExcelService.addSaleRecord(retailerId, productId, totalPrice, promoterId, sf.format(date),
-								projectId, point, excel.getAmount());
+							int point = ((int) totalPrice) / points.getSalesAmount() * points.getPoints();
+							iImportExcelService.addSaleRecord(retailerId, productId, totalPrice, promoterId,
+									sf.format(date), projectId, point, excel.getAmount());
 
+						}
 					}
-				}
-				// 导入成功后，显示新导进的销售记录
-				List<webSale> newSalesRecord = iSalesRecordService.findNewInsertSalesRecord(maxId, promoterId);
-				System.out.println("===================导入成功");
-				request.setAttribute("msg", 1);
-				model.addAttribute("newSalesRecord", newSalesRecord);
+					// 导入成功后，显示新导进的销售记录
+					List<webSale> newSalesRecord = iSalesRecordService.findNewInsertSalesRecord(maxId, promoterId);
+					System.out.println("===================导入成功");
+					request.setAttribute("msg", 1);
+					model.addAttribute("newSalesRecord", newSalesRecord);
 				}
 			} else {
 				// excel中有输入错误的数据，将错误数据显示到页面
@@ -264,8 +281,8 @@ System.out.println("查看销售记录页面"+webSales.size());
 		return IMPORTSALESRECORD;
 	}
 
-	//获取错误信息
-	public List<String> getErrorMsg(List<Excel> excels,int provinceId){
+	// 获取错误信息
+	public List<String> getErrorMsg(List<Excel> excels, int provinceId) {
 		// 存放失败的数据字段
 		List<String> excelData = new ArrayList<String>();
 		if (excels.isEmpty()) {
@@ -276,9 +293,11 @@ System.out.println("查看销售记录页面"+webSales.size());
 				Excel excel = excels.get(i);
 				System.out.println("导入输出：" + excel);
 				// 对Excel表格中的数据进行验证
-				if(excel.getRetailerName() == null || excel.getRetailerName() == "" || excel.getProductName() == null || excel.getProductName() == "" || excel.getProductFamilyName() == null || excel.getProductFamilyName() == ""
-						|| excel.getCategory() == null || excel.getCategory() == "" || excel.getTotalPrice() == 0 || excel.getAmount() == 0){
-					
+				if (excel.getRetailerName() == null || excel.getRetailerName() == "" || excel.getProductName() == null
+						|| excel.getProductName() == "" || excel.getProductFamilyName() == null
+						|| excel.getProductFamilyName() == "" || excel.getCategory() == null
+						|| excel.getCategory() == "" || excel.getTotalPrice() == 0 || excel.getAmount() == 0) {
+
 					if (excel.getRetailerName() == null || excel.getRetailerName() == "") {
 						excelData.add("第" + (i + 1) + "行，零售商：未输入或输入了非字符型数据");
 					}
@@ -296,7 +315,7 @@ System.out.println("查看销售记录页面"+webSales.size());
 					}
 					if (excel.getAmount() == 0) {
 						excelData.add("第" + (i + 1) + "行，数量：未输入或输入了非数字数据");
-				}
+					}
 				} else {
 					if (excel.getProjectName() == null || excel.getProjectName() == "") {
 						Retailer retailer = iImportExcelService.findRetailerByProvId(provinceId,
@@ -316,13 +335,13 @@ System.out.println("查看销售记录页面"+webSales.size());
 										+ excel.getRetailerName() + " 不存在");
 							}
 							if (product == null) {
-								excelData.add("第" + (i + 1) + "行，产品：" + excel.getProductName()+ " 不存在");
+								excelData.add("第" + (i + 1) + "行，产品：" + excel.getProductName() + " 不存在");
 							}
 							if (familyName == null) {
-								excelData.add("第" + (i + 1) + "行，产品家族：" + excel.getProductFamilyName()+ " 不存在");
+								excelData.add("第" + (i + 1) + "行，产品家族：" + excel.getProductFamilyName() + " 不存在");
 							}
 							if (productCategory == null) {
-								excelData.add("第" + (i + 1) + "行，产品种类：" + excel.getCategory()+ " 不存在");
+								excelData.add("第" + (i + 1) + "行，产品种类：" + excel.getCategory() + " 不存在");
 							}
 						} else if (products == null) {
 							excelData.add("第" + (i + 1) + "行，产品种类：" + excel.getCategory() + "，产品家族："
@@ -332,41 +351,41 @@ System.out.println("查看销售记录页面"+webSales.size());
 					} else {// excel.getProjectName()不为空
 						Project project = iImportExcelService.findByProjectName(excel.getProjectName(), provinceId);
 						if (project == null) {
-							excelData.add("第" + (i + 1) + "行，项目：" + excel.getProjectName()+ " 不存在");
-						}else{						
-						Retailer retailer = iImportExcelService.findByRetailerName(excel.getRetailerName(),
-								project.getId());
-						if (retailer == null) {
-							excelData.add("第" + (i + 1) + "行，零售商：" + excel.getRetailerName() + " 未参加该项活动");
-						}
-						
-						Product product = iImportExcelService.findByProductName(excel.getProductName());
-						ProductFamily familyName = iImportExcelService
-								.findByProductFamilyName(excel.getProductFamilyName());
-						ProductCategory productCategory = iImportExcelService
-								.findByProductCategoryName(excel.getCategory());
-						Product products = iImportExcelService.findProductIDByNameAndProjId(excel.getProductName(),
-								excel.getProductFamilyName(), excel.getCategory(), project.getId());
-
-						 if (project == null || product == null || familyName == null
-								|| productCategory == null) {
-							
-							if (product == null) {
-								excelData.add("第" + (i + 1) + "行，产品：" + excel.getProductName()+ " 不存在");
-							}
-							if (familyName == null) {
-								excelData.add("第" + (i + 1) + "行，产品家族：" + excel.getProductName()+ " 不存在");
-							}
-							if (productCategory == null) {
-								excelData.add("第" + (i + 1) + "行，产品种类：" + excel.getCategory()+ " 不存在");
+							excelData.add("第" + (i + 1) + "行，项目：" + excel.getProjectName() + " 不存在");
+						} else {
+							Retailer retailer = iImportExcelService.findByRetailerName(excel.getRetailerName(),
+									project.getId());
+							if (retailer == null) {
+								excelData.add("第" + (i + 1) + "行，零售商：" + excel.getRetailerName() + " 未参加该项活动");
 							}
 
-						} else{
-							if (products == null) {
-						
-							excelData.add("第" + (i + 1) + "行，产品种类：" + excel.getCategory() + "，产品家族："
-									+ excel.getProductFamilyName() + "，产品：" + excel.getProductName() + "，导入的项目产品配置有误");
-							}
+							Product product = iImportExcelService.findByProductName(excel.getProductName());
+							ProductFamily familyName = iImportExcelService
+									.findByProductFamilyName(excel.getProductFamilyName());
+							ProductCategory productCategory = iImportExcelService
+									.findByProductCategoryName(excel.getCategory());
+							Product products = iImportExcelService.findProductIDByNameAndProjId(excel.getProductName(),
+									excel.getProductFamilyName(), excel.getCategory(), project.getId());
+
+							if (project == null || product == null || familyName == null || productCategory == null) {
+
+								if (product == null) {
+									excelData.add("第" + (i + 1) + "行，产品：" + excel.getProductName() + " 不存在");
+								}
+								if (familyName == null) {
+									excelData.add("第" + (i + 1) + "行，产品家族：" + excel.getProductName() + " 不存在");
+								}
+								if (productCategory == null) {
+									excelData.add("第" + (i + 1) + "行，产品种类：" + excel.getCategory() + " 不存在");
+								}
+
+							} else {
+								if (products == null) {
+
+									excelData.add("第" + (i + 1) + "行，产品种类：" + excel.getCategory() + "，产品家族："
+											+ excel.getProductFamilyName() + "，产品：" + excel.getProductName()
+											+ "，导入的项目产品配置有误");
+								}
 							}
 						}
 
@@ -374,8 +393,152 @@ System.out.println("查看销售记录页面"+webSales.size());
 				}
 			}
 
+		}
+
+		return excelData;
+	}
+
+	/**
+	 * 导入农户销售记录
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/importFarmerSaleRecord")
+	public String addFarmerSaleRecord(Model model, HttpServletRequest request,
+			@RequestParam("uploadExcel") MultipartFile file, HttpSession session) {
+
+		// 当前登录人是推广员，可以查看参与的项目
+		int promoterId = ((Promoter) session.getAttribute("USER")).getId();
+		int provinceId = iImportExcelService.findProvIdByPromId(promoterId);
+		UploadUtils uploadUtils = new UploadUtils();
+		uploadUtils.uploadFile(file, request);
+		System.out.println("file===============================" + file);
+		// 存放失败的数据字段
+		List<String> excelData = new ArrayList<String>();
+		ReadExcel readExcel = new ReadExcel();
+		List<FarmerExcel> excels;
+		try {
+			// 读取导入Excel中的数据
+			excels = readExcel.readFarmerExcel(file);
+			excelData = getFarmerErrorMsg(excels, provinceId);
+
+			// 查找导入excel前最大的销售记录id
+			int maxId;
+			try {
+				maxId = iImportExcelService.findMaxFarmerSaleRecordID(promoterId);
+			} catch (Exception e) {
+				maxId = 0;
+			}
+			// 如果excel中的数据全部正确，则导入数据库中，并查看导入数据
+			if (excelData.isEmpty()) {
+				Date date = new Date();
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+				List<FarmerSalesRecord> list = new ArrayList<>();
+				FarmerSalesRecord record = null;
+				for (FarmerExcel excel : excels) {
+					float totalPrice = excel.getTotalPrice();
+					// 导入参加活动的销售记录
+					int projectId = iImportExcelService.findHaveFarmerByProjectName(excel.getProjectName(), provinceId).getId();
+					int farmerId = iImportExcelService.findByMobileAndProjectId(excel.getMobile(), projectId).getId();
+					record = new FarmerSalesRecord();
+					record.setFarmerId(farmerId);
+					record.setImporterId(promoterId);
+					record.setMobile(excel.getMobile());
+					record.setProjectId(projectId);
+					record.setTotalPrice(totalPrice);
+					record.setSubmitDate(sf.format(date));
+					list.add(record);
+				}	
+				farmerService.saveFarmerSalesRecord(list);
+				// 导入成功后，显示新导进的销售记录
+				List<FarmerExcel> newSalesRecord = farmerService.findNewInsertFarmerSalesRecord(promoterId,
+						maxId);
+				System.out.println("===================导入成功");
+				request.setAttribute("msg", 1);
+				model.addAttribute("newSalesRecord", newSalesRecord);
+				
+			} else {
+				// excel中有输入错误的数据，将错误数据显示到页面
+				request.setAttribute("msg", 0);
+				excelData.add("请修改Excel文件后重新上传");
+				model.addAttribute("errorData", excelData);
+				System.out.println("===================导入失败");
+			}
+		} catch (InvalidFormatException e) {
+			logger.warn("时间转换异常");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "PC/farmer_importSalesRecord";
+	}
+
+	// 获取错误信息
+	public List<String> getFarmerErrorMsg(List<FarmerExcel> excels, int provinceId) {
+		// 存放失败的数据字段
+		List<String> excelData = new ArrayList<String>();
+		if (excels.isEmpty()) 
+		{
+			excelData.add("您导入的Excel是空的！");
 		} 
-		
+		else 
+		{
+			// 按行遍历数据
+			for (int i = 0; i < excels.size(); i++) 
+			{
+				FarmerExcel excel = excels.get(i);
+				System.out.println("导入输出：" + excel);
+				// 对Excel表格中的数据进行验证
+				if (excel.getProjectName() == null || excel.getProjectName() == "" || excel.getFarmerName() == null
+						|| excel.getFarmerName() == "" || excel.getMobile() == null || excel.getMobile() == ""
+						|| excel.getTotalPrice() == 0) 
+				{
+					if (excel.getProjectName() == null || excel.getProjectName() == "") 
+					{
+						excelData.add("第" + (i + 1) + "行，项目名：未输入或输入了非字符型数据");
+					}
+					if (excel.getFarmerName() == null || excel.getFarmerName() == "") 
+					{
+						excelData.add("第" + (i + 1) + "行，农户：未输入或输入了非字符型数据");
+					}
+					if (excel.getMobile() == null || excel.getMobile() == "") 
+					{
+						excelData.add("第" + (i + 1) + "行，手机号：未输入或输入了非字符型数据");
+					}
+					if (excel.getTotalPrice() == 0) 
+					{
+						excelData.add("第" + (i + 1) + "行，销售额：未输入或输入了非数字数据");
+					}
+				} 
+				else 
+				{
+					Project project = iImportExcelService.findHaveFarmerByProjectName(excel.getProjectName(), provinceId);
+					if (project == null) 
+					{
+						excelData.add("第" + (i + 1) + "行，项目：" + excel.getProjectName() + " 不存在或未开放农户入口");
+					} 
+					else 
+					{
+						Farmer farmer = farmerService.findByMobile(excel.getMobile());
+						if (farmer == null) 
+						{
+							Province province = iProvinceService.findProvinceById(provinceId);
+							excelData.add("第" + (i + 1) + "行，" + province.getName() + "省内农户:" + excel.getFarmerName()
+									+ " 不存在");
+						} 
+						else 
+						{
+							Farmer existFarmer = iImportExcelService.findByMobileAndProjectId(excel.getMobile(),
+									project.getId());
+							if (existFarmer == null) 
+							{
+								excelData.add("第" + (i + 1) + "行，农户：" + excel.getFarmerName() + " 未参加该项活动");
+							}
+						}
+					}
+				}
+			}
+		}
 		return excelData;
 	}
 }

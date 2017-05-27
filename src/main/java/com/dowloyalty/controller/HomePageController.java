@@ -19,7 +19,9 @@ import com.dowloyalty.entity.Admin;
 import com.dowloyalty.entity.Farmer;
 import com.dowloyalty.entity.Project;
 import com.dowloyalty.entity.Promoter;
+import com.dowloyalty.entity.Province;
 import com.dowloyalty.entity.Retailer;
+import com.dowloyalty.service.IProvinceService;
 import com.dowloyalty.service.ProjectService;
 
 @Controller
@@ -28,6 +30,8 @@ public class HomePageController {
     private HttpSession session;
 	@Resource
 	ProjectService projectService;
+	@Autowired
+	IProvinceService provinceService;
 	
 	/**
 	 * 管理员页面
@@ -65,8 +69,8 @@ public class HomePageController {
 	@RequestMapping("/WeChat/Farmer_Register")
 	public String farmerLogin(Model model)
 	{
-		List<Project> list = projectService.findAllHaveFarmerProjects();
-		model.addAttribute("projects", list);
+		List<Province> list = provinceService.getAllProvince();
+		model.addAttribute("provinces", list);
 		return "/WeChat/farmer_register";
 	}
 	
@@ -90,8 +94,18 @@ public class HomePageController {
 		}
 		else if("farmer".equals(session.getAttribute("IDENTITY")))
 		{
-			map.put("farmerinfo", "账户信息");
-			map.put("farmersalesrecord", "销售记录");
+			int farmerId=((Farmer)session.getAttribute("USER")).getId();
+			Project project = projectService.findByFarmerId(farmerId);
+			if(project != null)
+			{
+				map.put("farmerinfo", "账户信息");
+				map.put("farmersalesrecord", "销售记录");
+				model.addAttribute("menunum",3);
+			}
+			else
+			{
+				model.addAttribute("msg","您所在的区域暂时没有活动");
+			}
 		}
 		else {
 			//根据权限确定相应菜单，零售商页面
