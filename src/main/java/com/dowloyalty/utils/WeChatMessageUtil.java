@@ -13,7 +13,10 @@ public class WeChatMessageUtil {
 
 	// static final String TEMPLATE_ID =
 	// "BWwoMNh9OWzE3lghFVCE10iYKvNSrEYobmxW24hdNZc";
-	static final String TEMPLATE_ID = "Z4BfbsRRBljG-N-8k2iwpf_T2h514e2uts2U6jIFwyw";
+	//测试
+//	static final String TEMPLATE_ID = "GoERNR4MDoH4_jG6r-00n5tsxqWKAxBoZ7-Mqa5b6sc";
+	//正式
+	static final String TEMPLATE_ID = "rI1tSNorqCn5_fEDhS9QRwQs2DC0D9oyNPOATgP9-8M";
 	static final String MESSAGE_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="
 			+ TaskWeChatKeyConfiguration.WECHATSUBSCRIPTIONTOKEN;
 
@@ -21,18 +24,18 @@ public class WeChatMessageUtil {
 		// 发送积分变化的推送消息给retailer
 		Map<String, Map<String, String>> firstFloor = new HashMap<>();
 		Map<String, String> sercondFloor = null;
-		// 存入项目数据
-		sercondFloor = getMap(projectName);
+		// 存入开头提示数据
+		sercondFloor = getMap("您有一笔积分到账，详情如下：");
 		firstFloor.put("first", sercondFloor);
-		// 存入产品数据
-		sercondFloor = getMap(productName);
-		firstFloor.put("keynote1", sercondFloor);
 		// 存入积分数据
 		sercondFloor = getMap(points);
-		firstFloor.put("keynote2", sercondFloor);
+		firstFloor.put("keyword1", sercondFloor);
 		// 存入当前时间数据
 		sercondFloor = getMap(new SimpleDateFormat("yyyy年MM月dd日").format(new Date()));
-		firstFloor.put("keynote3", sercondFloor);
+		firstFloor.put("keyword2", sercondFloor);
+		// 存入当前时间数据
+		sercondFloor = getMap("您在活动：" + projectName + "中购入:" + productName + ",获得相应积分:" + points);
+		firstFloor.put("keyword3", sercondFloor);
 		// 存入结尾提示数据
 		sercondFloor = getMap("请及时兑换礼品!");
 		firstFloor.put("remark", sercondFloor);

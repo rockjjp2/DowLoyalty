@@ -82,4 +82,6 @@ public class SimpleHttpConnectUtil {
         logger.info("返回信息内容为："+result);
         return result;
     }
+    
+   
 }

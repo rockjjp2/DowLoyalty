@@ -62,7 +62,7 @@ public class TestLoginController {
 	@RequestMapping(value="/WeChatRedirectPromoterDotest")
 	public String WeChatPromoterRedirectDotest(String auth_code, HttpServletResponse response) {
 		// 修改测试身份是推广员
-		String userid = "wangyuanjie";
+		String userid = "bingqian";
 		// 登陆成功
 		Promoter promoter = iPromoterService.findPromoterByUserId(userid.toString().trim());
 		// 创建token并返回用户
@@ -110,7 +110,7 @@ public class TestLoginController {
 	 */
 	@RequestMapping(value="/WeChat/LoginEnterpriseDoTest")
 	public String WeChatEnterpriseDo(String code,HttpServletResponse response){
-		String userId="wangyuanjie";
+		String userId="wangyuanjiet@163.com";
 		Promoter promoter = iPromoterService.findPromoterByUserId(userId);
 		//创建token并返回用户
 		String token=JWTTokenUtils.getInstance().creatToken("promoterWechat", promoter.getId()+"");

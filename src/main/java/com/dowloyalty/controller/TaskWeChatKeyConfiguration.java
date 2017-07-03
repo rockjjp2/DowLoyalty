@@ -21,24 +21,27 @@ import com.dowloyalty.utils.SimpleHttpConnectUtil;
 public class TaskWeChatKeyConfiguration {
 	protected final Log logger = LogFactory.getLog(this.getClass());
 	//系统发布网址
-//	private static String mainURL="http://daschinaloyalty.bceapp.com";
+	private static String mainURL="http://daschinaloyalty.bceapp.com";
 	//测试系统网址
-	private static String mainURL="http://dasdowloyalty.bceapp.com";
+//	private static String mainURL="http://dasdowloyalty.bceapp.com";
 	//微信服务号
-//	public static String APPID="wx3c840097a9200b83";
-//	public static String APPSECRET="decfb2251d9f5531341c9637fb98104a";
-//	public static String WechatSubscriptionToken="zhouToken";
+	public static String APPID="wx3c840097a9200b83";
+	public static String APPSECRET="decfb2251d9f5531341c9637fb98104a";
+	public static String WechatSubscriptionToken="zhouToken";
 	//微信测试服务号
-	public static String APPID="wx0554723b81caf5f6";
-	public static String APPSECRET="387c1897790b3b2f74f320f89d287b5e";
-	public static String WechatSubscriptionToken="yuanjie_token";
+//	public static String APPID="wx0554723b81caf5f6";
+//	public static String APPSECRET="387c1897790b3b2f74f320f89d287b5e";
+//	public static String WechatSubscriptionToken="yuanjie_token";
 	
 	//微信企业号
-//	public static String CORPID="wxf4e637680eda2902";
+	public static String CORPID="wxf4e637680eda2902";
 //	public static String CORPSECRECT="UOgiMyIjqSXMA9lZOmZQjkA8a_9c3zioB8Q_2DXnVQD12JeOgTO1FIwRlfglPLLA";
+	public static String CORPSECRECT="eqHM9mY9WlxgQbGnp0uOBroDpA44R8RxYpvT2TRRzk8";
+	
+	
 	//测试企业号 
-	public static String CORPID="wx1a69765a07594350";
-	public static String CORPSECRECT="65XaFbUwTrE8FZFYOxKuWJ8Vvq8bl8mQGGzuQNZ9zeLToKCzYwpKK8D_KVqHmJyB";
+//	public static String CORPID="wx1a69765a07594350";
+//	public static String CORPSECRECT="65XaFbUwTrE8FZFYOxKuWJ8Vvq8bl8mQGGzuQNZ9zeLToKCzYwpKK8D_KVqHmJyB";
 	//百度BOS
 	public static String BaiduBOS_ACCESS_KEY_ID="1f8b057512ce44308ff93a4bff64e28e";//百度bos keyid
 	public static String BaiduBOS_SECRET_ACCESS_KEY="e9cc9afaa4cb43238b98506b8b093bcc";//百度bos keyid

@@ -94,11 +94,60 @@ public class WechatEnterpriseLoginController {
 		}else {
 			//首次登陆
 			System.out.println("----------WeChatRedirect首次进入");
-			return new ModelAndView("redirect:https://qy.weixin.qq.com/cgi-bin/loginpage?corp_id="
-					+TaskWeChatKeyConfiguration.CORPID+ "&redirect_uri="+ TaskWeChatKeyConfiguration.MAIN_URL+ "%2FWeChatRedirectDo&state=123"
-					+ "&usertype=member");
+//			return new ModelAndView("redirect:https://qy.weixin.qq.com/cgi-bin/loginpage?corp_id="
+//					+TaskWeChatKeyConfiguration.CORPID+ "&redirect_uri="+ TaskWeChatKeyConfiguration.MAIN_URL+ "%2FWeChatRedirectDo&state=123"
+//					+ "&usertype=member");
+			return new ModelAndView("redirect:https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid="
+					+TaskWeChatKeyConfiguration.CORPID+ "&agentid=13"+"&redirect_uri="+ TaskWeChatKeyConfiguration.MAIN_URL + "%2FWeChatRedirectDo&state=123");
+//			return new ModelAndView("redirect:https://open.work.weixin.qq.com/wwopen/sso/3rd_qrConnect?appid="
+//					+TaskWeChatKeyConfiguration.CORPID+"&redirect_uri="+ "http%3A%2F%2F16z5628q38.51mypc.cn%2FWeChatRedirectDo&state=123&usertype=admin");
+//			return new ModelAndView("redirect:https://open.work.weixin.qq.com/wwopen/sso/3rd_qrConnect?appid=wxf4e637680eda2902&redirect_uri=http%3A%2F%daschinaloyalty.bceapp.com&state=web_login@gyoss9&usertype=admin");
 		}
 	}
+	
+//	/**
+//	 * 由服务器转发到微信，获得code后，以此获取用户信息
+//	 * @param auth_code
+//	 * @return
+//	 */
+//	@RequestMapping(value="/WeChatRedirectDo")
+//	public String WeChatRedirectDo(String auth_code,HttpServletResponse response){
+//		String url="https://qyapi.weixin.qq.com/cgi-bin/service/get_login_info?access_token="+ TaskWeChatKeyConfiguration.WECHATENTERPRISETOKEN;
+////		String url="https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token="+ TaskWeChatKeyConfiguration.WECHATENTERPRISETOKEN;
+//		String postString="{\"auth_code\":\""+ auth_code+ "\"}";
+//		String AccountInformation = SimpleHttpConnectUtil.getInstance().sendPost(url,postString);
+//		System.out.println(AccountInformation);
+//		//String AccountInformation="{\"usertype\":5,\"user_info\":{\"userid\":\"ssss\",\"avatar\":\"http://shp.qpic.cn/bizmp/KXd4oAtQpdjhI8QCibDjVusKA0zeWBJGjodSNVZOgSjtUsuHoNJyaiag/\"},\"corp_info\":{\"corpid\":\"wx1a69765a07594350\"}}";
+//		JSONObject accountInformationObject = JSON.parseObject(AccountInformation);
+//		if (accountInformationObject.get("user_info")!=null) {
+//			JSONObject userInformationObject=JSON.parseObject(accountInformationObject.get("user_info").toString());
+//			Object userid = userInformationObject.get("userid");
+//			if (userid!=null&& iAdminService.findAdminByUserId(userid.toString().trim())!=null) {
+//				//管理员登陆成功
+//				Admin admin=iAdminService.findAdminByUserId(userid.toString().trim());
+//				//创建token并返回用户
+//				String token=JWTTokenUtils.getInstance().creatToken("admin", admin.getId()+"");
+//				//系统保留相关信息
+//				response.addCookie(new Cookie("LoyaltyToken",token));
+//				session.setAttribute("USER", admin);
+//				session.setAttribute("IDENTITY", "admin");
+//				session.setMaxInactiveInterval(30*60);//秒
+//				return "redirect:/website/index";
+//			}else if(userid!=null && iPromoterService.UserIsPromoter( userid.toString().trim() ) ){
+//				//登陆成功
+//				Promoter promoter=iPromoterService.findPromoterByUserId(userid.toString().trim());
+//				//创建token并返回用户
+//				String token=JWTTokenUtils.getInstance().creatToken("promoter", promoter.getId()+"");
+//				response.addCookie(new Cookie("LoyaltyToken",token));
+//				//系统保留相关信息
+//				session.setAttribute("USER", promoter);
+//				session.setAttribute("IDENTITY", "promoter");
+//				session.setMaxInactiveInterval(30*60);//秒
+//				return "redirect:/web/index";
+//			}
+//		}
+//		return "redirect:/Login";
+//	}
 	
 	/**
 	 * 由服务器转发到微信，获得code后，以此获取用户信息
@@ -106,16 +155,16 @@ public class WechatEnterpriseLoginController {
 	 * @return
 	 */
 	@RequestMapping(value="/WeChatRedirectDo")
-	public String WeChatRedirectDo(String auth_code,HttpServletResponse response){
-		String url="https://qyapi.weixin.qq.com/cgi-bin/service/get_login_info?access_token="+ TaskWeChatKeyConfiguration.WECHATENTERPRISETOKEN;
-		String postString="{\"auth_code\":\""+ auth_code+ "\"}";
-		String AccountInformation = SimpleHttpConnectUtil.getInstance().sendPost(url,postString);
+	public String WeChatRedirectDo(String code,HttpServletResponse response){
+		String url="https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token="+ TaskWeChatKeyConfiguration.WECHATENTERPRISETOKEN + "&code=" + code + "&asdwad";
+		System.out.println("code=" + code);
+		System.out.println("url=" + url);
+		String AccountInformation = SimpleHttpConnectUtil.getInstance().sendPost(url,null);
 		System.out.println(AccountInformation);
 		//String AccountInformation="{\"usertype\":5,\"user_info\":{\"userid\":\"ssss\",\"avatar\":\"http://shp.qpic.cn/bizmp/KXd4oAtQpdjhI8QCibDjVusKA0zeWBJGjodSNVZOgSjtUsuHoNJyaiag/\"},\"corp_info\":{\"corpid\":\"wx1a69765a07594350\"}}";
 		JSONObject accountInformationObject = JSON.parseObject(AccountInformation);
-		if (accountInformationObject.get("user_info")!=null) {
-			JSONObject userInformationObject=JSON.parseObject(accountInformationObject.get("user_info").toString());
-			Object userid = userInformationObject.get("userid");
+		if (accountInformationObject.get("UserId")!=null) {
+			Object userid = accountInformationObject.get("UserId");
 			if (userid!=null&& iAdminService.findAdminByUserId(userid.toString().trim())!=null) {
 				//管理员登陆成功
 				Admin admin=iAdminService.findAdminByUserId(userid.toString().trim());
